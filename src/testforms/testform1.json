@@ -1,0 +1,25 @@
+{
+  "forms": [
+    {
+      "name": "form1",
+      "components": [
+        {
+          "name": "firstname",
+          "title": "First Name: ",
+          "type": "textfield",
+          "required": true
+        },
+        {
+          "name": "lastname",
+          "title": "Last Name: ",
+          "type": "textfield",
+          "required": true
+        }
+      ],
+      "title": "form1",
+      "layout": "vertical"
+    }
+  ],
+  "layout": "vertical",
+  "type": "formbox"
+}
