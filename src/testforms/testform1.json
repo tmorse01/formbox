@@ -5,15 +5,23 @@
       "components": [
         {
           "name": "firstname",
-          "title": "First Name: ",
+          "title": "First Name",
+          "help": "Enter your First Name",
           "type": "textfield",
           "required": true
         },
         {
           "name": "lastname",
-          "title": "Last Name: ",
+          "title": "Last Name",
+          "help": "Enter your Last Name",
           "type": "textfield",
           "required": true
+        },
+        {
+          "name": "submit",
+          "title": "Submit",
+          "type": "button",
+          "submit": true
         }
       ],
       "title": "form1",

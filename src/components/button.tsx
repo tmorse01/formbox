@@ -1,8 +1,19 @@
 import React from "react";
 import Button from "@mui/material/Button";
 
-const FormBoxButton = () => {
-  return <Button variant="contained">Hello1 World</Button>;
+type ButtonProps = {
+  name: string;
+  title: string;
+  submit?: boolean;
+};
+
+const FormBoxButton = ({ name, title, submit }: ButtonProps) => {
+  let buttonType: "submit" | "button" = submit ? "submit" : "button";
+  return (
+    <Button id={name} type={buttonType} variant="contained">
+      {title}
+    </Button>
+  );
 };
 
 export default FormBoxButton;

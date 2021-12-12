@@ -1,6 +1,7 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import FormBoxComponent from "./formboxcomponent";
+import { formProps } from "../types/componentType";
 import "../css/form.css";
 
 type FormState = {
@@ -8,17 +9,7 @@ type FormState = {
 };
 
 type FormProps = {
-  form: {
-    components: {
-      name: string;
-      title: string;
-      type: string;
-      required: boolean;
-    }[];
-    layout: string;
-    title: string;
-    name: string;
-  };
+  form: formProps;
 };
 
 export default class Form extends React.Component<FormProps, FormState> {
@@ -32,12 +23,16 @@ export default class Form extends React.Component<FormProps, FormState> {
           sx={{
             "& .MuiTextField-root": { m: 1, width: "25ch" },
           }}
+          onSubmit={(e) => {
+            console.log("submit", e);
+            return false;
+          }}
           noValidate
           autoComplete="off"
         >
           <h3>Form</h3>
           {components.map((component, i) => {
-            return <FormBoxComponent component={component} />;
+            return <FormBoxComponent key={i} component={component} />;
           })}
         </Box>
       </div>

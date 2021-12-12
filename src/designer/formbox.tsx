@@ -1,24 +1,9 @@
 import React from "react";
 import Container from "@mui/material/Container";
 import Form from "./form";
+import { formBoxProps } from "../types/componentType";
 
-type FormBoxProps = {
-  completeForm: {
-    forms: {
-      components: {
-        name: string;
-        title: string;
-        type: string;
-        required: boolean;
-      }[];
-      layout: string;
-      title: string;
-      name: string;
-    }[];
-    layout: string;
-    type: string;
-  };
-};
+type FormBoxProps = formBoxProps;
 
 type FormBoxState = {
   visible: true;
@@ -36,7 +21,7 @@ export default class FormBox extends React.Component<
         <Container maxWidth="sm">
           <h2>FormBox</h2>
           {forms.map((form, i) => {
-            return <Form form={form} />;
+            return <Form key={i} form={form} />;
           })}
         </Container>
       </div>
