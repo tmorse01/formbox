@@ -7,6 +7,17 @@ import testform1 from "../testforms/testform1.json";
 // import { formBoxProps } from "../types/componentType";
 
 export default class FormBuilder extends React.Component {
+  componentDidMount() {
+    console.log("form builder mounted: ", this);
+    this.callAPI();
+  }
+
+  callAPI() {
+    fetch("http://localhost:3000/api")
+      .then((res) => res.text())
+      .then((res) => console.log("result from api: ", res));
+  }
+
   render() {
     let testform = testform1;
     // console.log("testform: ", testform);

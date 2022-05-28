@@ -24,24 +24,22 @@ export default class Form extends React.Component<FormProps, FormState> {
   }
 
   componentDidMount() {
-    console.log("componentDidMount: ", this);
     let components = this.props.form.components;
     let values = this.state.values;
     components.forEach((comp) => {
       values[comp.name] = undefined;
     });
-    console.log("values: ", values);
     this.setState({ values });
   }
 
   onChange = (name: string, value: string) => {
-    console.log("form on change: ", name, value);
+    // console.log("form on change: ", name, value);
     this.setState({ values: { ...this.state.values, ...{ [name]: value } } });
     return;
   };
 
   render() {
-    console.log("form render: ", this.state.values);
+    // console.log("form render: ", this.state.values);
     let components = this.props.form.components;
     return (
       <div className="form">
