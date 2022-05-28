@@ -8,7 +8,6 @@ export type componentProps = defaultProps & {
   help?: string;
   required?: boolean;
   submit?: boolean;
-  // onChange: any;
 };
 
 export type formBoxProps = {

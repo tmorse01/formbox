@@ -14,7 +14,7 @@ export default class FormBox extends React.Component<
   FormBoxState
 > {
   render() {
-    console.log("this.props.form :", this.props);
+    // console.log("this.props.form :", this.props);
     let forms = this.props.completeForm.forms;
     return (
       <div>

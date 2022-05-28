@@ -3,19 +3,28 @@ import { FormControl, FormHelperText } from "@mui/material";
 import FormBoxButton from "../components/button";
 import FormBoxTextField from "../components/textfield";
 import { componentProps } from "../types/componentType";
+import internal from "stream";
 
 type CompState = {
   visible: true;
 };
 
 type CompProps = {
+  key: number;
   component: componentProps;
+  onChange: (name: string, value: any) => void;
 };
 
 export default class FormBoxComponent extends React.Component<
   CompProps,
   CompState
 > {
+  onChange = (e: any) => {
+    let component = this.props.component;
+    let value = e.target.value;
+    this.props.onChange(component.name, value);
+  };
+
   getComponent = (component: any) => {
     if (component.type === "textfield") {
       return (
@@ -23,7 +32,7 @@ export default class FormBoxComponent extends React.Component<
           name={component.name}
           title={component.title}
           required={component.required}
-          //onChange={this.props.onChange}
+          onChange={this.onChange}
         />
       );
     } else if (component.type === "button") {
@@ -52,7 +61,7 @@ export default class FormBoxComponent extends React.Component<
 
   render() {
     let component = this.props.component;
-    console.log("component:", component);
+    // console.log("component:", this);
     let control = this.getComponent(component);
     let formControl = this.formControl(control, component);
     return formControl;

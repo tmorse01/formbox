@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import FormBoxComponent from "./formboxcomponent";
 import { formProps } from "../types/componentType";
@@ -6,6 +6,7 @@ import "../css/form.css";
 
 type FormState = {
   visible: true;
+  values: {};
 };
 
 type FormProps = {
@@ -13,12 +14,34 @@ type FormProps = {
 };
 
 export default class Form extends React.Component<FormProps, FormState> {
-  // onChange = (e: unknown) => {
-  //   console.log("form on change: ", e);
-  // };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      visible: true,
+      values: {},
+    };
+  }
+
+  componentDidMount() {
+    console.log("componentDidMount: ", this);
+    let components = this.props.form.components;
+    let values = this.state.values;
+    components.forEach((comp) => {
+      values[comp.name] = undefined;
+    });
+    console.log("values: ", values);
+    this.setState({ values });
+  }
+
+  onChange = (name: string, value: string) => {
+    console.log("form on change: ", name, value);
+    this.setState({ values: { ...this.state.values, ...{ [name]: value } } });
+    return;
+  };
 
   render() {
-    console.log("form render: ", this.props);
+    console.log("form render: ", this.state.values);
     let components = this.props.form.components;
     return (
       <div className="form">
@@ -41,7 +64,7 @@ export default class Form extends React.Component<FormProps, FormState> {
               <FormBoxComponent
                 key={i}
                 component={component}
-                //onChange={this.onChange}
+                onChange={this.onChange}
               />
             );
           })}

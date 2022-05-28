@@ -9,7 +9,7 @@ import testform1 from "../testforms/testform1.json";
 export default class FormBuilder extends React.Component {
   render() {
     let testform = testform1;
-    console.log("testform: ", testform);
+    // console.log("testform: ", testform);
     return (
       <div>
         <FormBoxAppBar />
