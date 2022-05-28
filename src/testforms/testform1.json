@@ -25,7 +25,8 @@
         }
       ],
       "title": "form1",
-      "layout": "vertical"
+      "layout": "vertical",
+      "type": "form"
     }
   ],
   "layout": "vertical",

@@ -4,11 +4,23 @@ type TextFieldProps = {
   name: string;
   title: string;
   required?: boolean;
+  //onChange: React.ChangeEventHandler<HTMLInputElement>;
 };
 
-const FormBoxTextField = ({ name, title, required }: TextFieldProps) => {
+const FormBoxTextField = ({
+  name,
+  title,
+  required,
+}: //onChange,
+TextFieldProps) => {
   return (
-    <TextField id={name} label={title} required={required} variant="outlined" />
+    <TextField
+      id={name}
+      label={title}
+      required={required}
+      variant="outlined"
+      //onChange={onChange}
+    />
   );
 };
 

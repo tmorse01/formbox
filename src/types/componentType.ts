@@ -5,8 +5,10 @@ export type defaultProps = {
 
 export type componentProps = defaultProps & {
   type: string;
+  help?: string;
   required?: boolean;
   submit?: boolean;
+  // onChange: any;
 };
 
 export type formBoxProps = {
@@ -22,4 +24,5 @@ export type container = {
 export type formProps = defaultProps & {
   components: componentProps[];
   layout: string;
+  type: string;
 };

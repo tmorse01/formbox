@@ -1,5 +1,5 @@
 import React from "react";
-import { FormControl, InputLabel, FormHelperText } from "@mui/material";
+import { FormControl, FormHelperText } from "@mui/material";
 import FormBoxButton from "../components/button";
 import FormBoxTextField from "../components/textfield";
 import { componentProps } from "../types/componentType";
@@ -23,6 +23,7 @@ export default class FormBoxComponent extends React.Component<
           name={component.name}
           title={component.title}
           required={component.required}
+          //onChange={this.props.onChange}
         />
       );
     } else if (component.type === "button") {
@@ -41,9 +42,6 @@ export default class FormBoxComponent extends React.Component<
   formControl = (control: any, component: any) => {
     return (
       <FormControl variant="standard">
-        {/* <InputLabel htmlFor={component.name + "label"}>
-          {component.title}
-        </InputLabel> */}
         {control}
         <FormHelperText id={component.name + "helptext"}>
           {component.help}

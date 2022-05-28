@@ -9,6 +9,7 @@ type ButtonProps = {
 
 const FormBoxButton = ({ name, title, submit }: ButtonProps) => {
   let buttonType: "submit" | "button" = submit ? "submit" : "button";
+
   return (
     <Button id={name} type={buttonType} variant="contained">
       {title}
