@@ -13,9 +13,10 @@ export default class FormBuilder extends React.Component {
   }
 
   callAPI() {
-    fetch("http://localhost:3000/api")
+    fetch("http://localhost:3001/api")
       .then((res) => res.text())
-      .then((res) => console.log("result from api: ", res));
+      .then((res) => console.log("result from api: ", res))
+      .catch((res) => console.log("error from api: ", res));
   }
 
   render() {

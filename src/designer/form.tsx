@@ -4,70 +4,66 @@ import FormBoxComponent from "./formboxcomponent";
 import { formProps } from "../types/componentType";
 import "../css/form.css";
 
-type FormState = {
-  visible: true;
-  values: {};
-};
-
 type FormProps = {
   form: formProps;
 };
 
-export default class Form extends React.Component<FormProps, FormState> {
-  constructor(props) {
-    super(props);
+const Form = (props: FormProps) => {
+  const [values, setValues] = useState({});
+  const [visible, setVisible] = useState(true);
 
-    this.state = {
-      visible: true,
-      values: {},
-    };
+  // constructor(props) {
+  //   super(props);
+
+  //   this.state = {
+  //     visible: true,
+  //     values: {},
+  //   };
+  // }
+
+  // componentDidMount() {
+  //   let components = this.props.form.components;
+  //   let values = this.state.values;
+  //   components.forEach((comp) => {
+  //     values[comp.name] = undefined;
+  //   });
+  //   this.setState({ values });
+  // }
+
+  function onChange({ name, value }) {
+    setValues({ ...values, ...{ [name]: value } });
   }
 
-  componentDidMount() {
-    let components = this.props.form.components;
-    let values = this.state.values;
-    components.forEach((comp) => {
-      values[comp.name] = undefined;
-    });
-    this.setState({ values });
-  }
+  // console.log("form render: ", this.state.values);
+  let components = props.form.components;
+  return (
+    <div className="form">
+      <Box
+        component="form"
+        sx={{
+          "& .MuiTextField-root": { m: 1, width: "25ch" },
+        }}
+        onSubmit={(e) => {
+          e.preventDefault();
+          console.log("submit", values);
+          return false;
+        }}
+        noValidate
+        autoComplete="off"
+      >
+        <h3>Form</h3>
+        {components.map((component, i) => {
+          return (
+            <FormBoxComponent
+              key={i}
+              component={component}
+              onChange={onChange}
+            />
+          );
+        })}
+      </Box>
+    </div>
+  );
+};
 
-  onChange = (name: string, value: string) => {
-    // console.log("form on change: ", name, value);
-    this.setState({ values: { ...this.state.values, ...{ [name]: value } } });
-    return;
-  };
-
-  render() {
-    // console.log("form render: ", this.state.values);
-    let components = this.props.form.components;
-    return (
-      <div className="form">
-        <Box
-          component="form"
-          sx={{
-            "& .MuiTextField-root": { m: 1, width: "25ch" },
-          }}
-          onSubmit={(e) => {
-            e.preventDefault();
-            console.log("submit", e);
-            return false;
-          }}
-          noValidate
-          autoComplete="off"
-        >
-          <h3>Form</h3>
-          {components.map((component, i) => {
-            return (
-              <FormBoxComponent
-                key={i}
-                component={component}
-                onChange={this.onChange}
-              />
-            );
-          })}
-        </Box>
-      </div>
-    );
-  }
-}
+export default Form;
