@@ -17,6 +17,7 @@ export type formBoxProps = {
 export type container = {
   forms: formProps[];
   layout: string;
+  title: string;
   type: string;
 };
 

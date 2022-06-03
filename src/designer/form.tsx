@@ -6,6 +6,7 @@ import "../css/form.css";
 
 type FormProps = {
   form: formProps;
+  onFormChange: ({ formName, componentName, value }) => void;
 };
 
 const Form = (props: FormProps) => {
@@ -31,7 +32,12 @@ const Form = (props: FormProps) => {
   // }
 
   function onChange({ name, value }) {
-    setValues({ ...values, ...{ [name]: value } });
+    // setValues({ ...values, ...{ [name]: value } });
+    props.onFormChange({
+      formName: props.form.name,
+      componentName: name,
+      value: value,
+    });
   }
 
   // console.log("form render: ", this.state.values);
@@ -39,19 +45,14 @@ const Form = (props: FormProps) => {
   return (
     <div className="form">
       <Box
-        component="form"
+        component="div"
+        display="grid"
+        justifyContent="center"
         sx={{
           "& .MuiTextField-root": { m: 1, width: "25ch" },
         }}
-        onSubmit={(e) => {
-          e.preventDefault();
-          console.log("submit", values);
-          return false;
-        }}
-        noValidate
-        autoComplete="off"
       >
-        <h3>Form</h3>
+        <h3 className="form-header">{props.form.title ?? "Form"}</h3>
         {components.map((component, i) => {
           return (
             <FormBoxComponent

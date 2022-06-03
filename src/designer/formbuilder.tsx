@@ -9,14 +9,14 @@ import testform1 from "../testforms/testform1.json";
 export default class FormBuilder extends React.Component {
   componentDidMount() {
     console.log("form builder mounted: ", this);
-    this.callAPI();
+    this.connectToDb();
   }
 
-  callAPI() {
-    fetch("http://localhost:3001/api")
+  connectToDb() {
+    fetch("http://localhost:3001/connectToDb")
       .then((res) => res.text())
-      .then((res) => console.log("result from api: ", res))
-      .catch((res) => console.log("error from api: ", res));
+      .then((res) => console.log("result from connectToDb: ", res))
+      .catch((res) => console.log("error from connectToDb: ", res));
   }
 
   render() {

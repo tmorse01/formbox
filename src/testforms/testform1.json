@@ -16,19 +16,29 @@
           "help": "Enter your Last Name",
           "type": "textfield",
           "required": true
-        },
-        {
-          "name": "submit",
-          "title": "Submit",
-          "type": "button",
-          "submit": true
         }
       ],
-      "title": "form1",
+      "title": "Personal information",
+      "layout": "vertical",
+      "type": "form"
+    },
+    {
+      "name": "form2",
+      "components": [
+        {
+          "name": "phonenumber",
+          "title": "Phone Number",
+          "help": "Enter your Phone Number",
+          "type": "textfield",
+          "required": true
+        }
+      ],
+      "title": "Contact details",
       "layout": "vertical",
       "type": "form"
     }
   ],
   "layout": "vertical",
+  "title": "Sign up for paintball!",
   "type": "formbox"
 }
