@@ -1,3 +1,5 @@
+export type formBuilderProps = {};
+
 export type defaultProps = {
   name: string;
   title: string;
@@ -12,6 +14,11 @@ export type componentProps = defaultProps & {
 
 export type formBoxProps = {
   completeForm: container;
+};
+
+export type formBoxAppBarProps = {
+  completeForm: container;
+  onChange: ({ value }) => void;
 };
 
 export type container = {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Box from "@mui/material/Box";
 import FormBoxComponent from "./formboxcomponent";
 import { formProps } from "../types/componentType";
@@ -10,29 +10,7 @@ type FormProps = {
 };
 
 const Form = (props: FormProps) => {
-  const [values, setValues] = useState({});
-  const [visible, setVisible] = useState(true);
-
-  // constructor(props) {
-  //   super(props);
-
-  //   this.state = {
-  //     visible: true,
-  //     values: {},
-  //   };
-  // }
-
-  // componentDidMount() {
-  //   let components = this.props.form.components;
-  //   let values = this.state.values;
-  //   components.forEach((comp) => {
-  //     values[comp.name] = undefined;
-  //   });
-  //   this.setState({ values });
-  // }
-
   function onChange({ name, value }) {
-    // setValues({ ...values, ...{ [name]: value } });
     props.onFormChange({
       formName: props.form.name,
       componentName: name,

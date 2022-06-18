@@ -6,7 +6,6 @@ import { formBoxProps } from "../types/componentType";
 type FormBoxProps = formBoxProps;
 
 type FormBoxState = {
-  visible: true;
   values: {};
 };
 
@@ -16,7 +15,7 @@ export default class FormBox extends React.Component<
 > {
   constructor(props) {
     super(props);
-    this.state = { values: {}, visible: true };
+    this.state = { values: {} };
   }
 
   onFormChange = ({ formName, componentName, value }) => {

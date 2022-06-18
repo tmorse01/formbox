@@ -3,10 +3,27 @@ import FormBox from "./formbox";
 import FormBoxAppBar from "./appbar";
 import "../css/formbuilder.css";
 
+import { formBuilderProps } from "../types/componentType";
 import testform1 from "../testforms/testform1.json";
-// import { formBoxProps } from "../types/componentType";
+import { container } from "../types/componentType";
 
-export default class FormBuilder extends React.Component {
+type FormBuilderState = {
+  formJSON: container;
+};
+
+type FormBuilderProps = formBuilderProps;
+
+export default class FormBuilder extends React.Component<
+  FormBuilderProps,
+  FormBuilderState
+> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      formJSON: testform1,
+    };
+  }
+
   componentDidMount() {
     console.log("form builder mounted: ", this);
     this.connectToDb();
@@ -19,14 +36,20 @@ export default class FormBuilder extends React.Component {
       .catch((res) => console.log("error from connectToDb: ", res));
   }
 
+  setFormJSON = (value) => {
+    this.setState({ formJSON: value });
+  };
+
   render() {
-    let testform = testform1;
-    // console.log("testform: ", testform);
+    console.log("formbuilder: ", this.state.formJSON);
     return (
       <div>
-        <FormBoxAppBar />
+        <FormBoxAppBar
+          completeForm={this.state.formJSON}
+          onChange={this.setFormJSON}
+        />
         <div className="formBuilder">
-          <FormBox completeForm={testform} />
+          <FormBox completeForm={this.state.formJSON} />
         </div>
       </div>
     );
