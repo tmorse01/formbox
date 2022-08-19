@@ -18,6 +18,7 @@ export type formBoxProps = {
 
 export type formBoxAppBarProps = {
   completeForm: container;
+  formName: string;
   onChange: ({ value }) => void;
 };
 

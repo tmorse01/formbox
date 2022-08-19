@@ -4,7 +4,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import FormBoxJSONEditor from "./jsoneditor";
-import { Button } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 
 const style = {
   position: "absolute" as "absolute",
@@ -16,9 +16,18 @@ const style = {
   border: "2px solid #000",
   boxShadow: 24,
   p: 4,
+  gap: 4,
+  display: "grid",
 };
 
-export default function JSONEditorModal({ value, onChange, handleMenuClose }) {
+export default function JSONEditorModal({
+  formName,
+  value,
+  onChange,
+  onNameChange,
+  handleSubmit,
+  handleMenuClose,
+}) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -35,6 +44,7 @@ export default function JSONEditorModal({ value, onChange, handleMenuClose }) {
   function submitJSONChanges() {
     let value = content.json;
     onChange(value);
+    handleSubmit();
     handleMenuClose();
   }
 
@@ -47,7 +57,7 @@ export default function JSONEditorModal({ value, onChange, handleMenuClose }) {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
+        <Box component="form" sx={style} noValidate>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Formbox JSON editor
           </Typography>
@@ -55,8 +65,17 @@ export default function JSONEditorModal({ value, onChange, handleMenuClose }) {
             content={content}
             onChange={handleJSONValueChange}
           />
+          <TextField
+            placeholder="Form Name"
+            label="Form Name"
+            value={formName}
+            onChange={(e) => {
+              let formName = e.target.value;
+              onNameChange(formName);
+            }}
+          />
           <Button variant="text" onClick={submitJSONChanges}>
-            Submit
+            Save Form
           </Button>
         </Box>
       </Modal>

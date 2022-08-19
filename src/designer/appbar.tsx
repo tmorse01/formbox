@@ -11,7 +11,13 @@ import MenuItem from "@mui/material/MenuItem";
 import MenuIcon from "@mui/icons-material/Menu";
 import JSONEditorModal from "./jsoneditormodal";
 
-export default function FormBoxAppBar({ completeForm, onChange }) {
+export default function FormBoxAppBar({
+  completeForm,
+  formName,
+  onChange,
+  onNameChange,
+  handleSubmit,
+}) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -45,9 +51,12 @@ export default function FormBoxAppBar({ completeForm, onChange }) {
             }}
           >
             <JSONEditorModal
+              formName={formName}
               value={completeForm}
               onChange={onChange}
+              onNameChange={onNameChange}
               handleMenuClose={handleClose}
+              handleSubmit={handleSubmit}
             />
             <MenuItem onClick={handleClose}>Saved Forms</MenuItem>
             <MenuItem onClick={handleClose}>View Data</MenuItem>
