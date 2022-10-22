@@ -10,6 +10,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MenuIcon from "@mui/icons-material/Menu";
 import JSONEditorModal from "./jsoneditormodal";
+import FormDataGridModal from "./formdatagridmodal";
 
 export default function FormBoxAppBar({
   completeForm,
@@ -19,7 +20,7 @@ export default function FormBoxAppBar({
   handleSubmit,
 }) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+  const openJSONEditor = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -44,7 +45,7 @@ export default function FormBoxAppBar({
           <Menu
             id="basic-menu"
             anchorEl={anchorEl}
-            open={open}
+            open={openJSONEditor}
             onClose={handleClose}
             MenuListProps={{
               "aria-labelledby": "basic-button",
@@ -59,7 +60,10 @@ export default function FormBoxAppBar({
               handleSubmit={handleSubmit}
             />
             <MenuItem onClick={handleClose}>Saved Forms</MenuItem>
-            <MenuItem onClick={handleClose}>View Data</MenuItem>
+            <FormDataGridModal
+              formName={formName}
+              handleMenuClose={handleClose}
+            />
           </Menu>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             FormBox Form Builder

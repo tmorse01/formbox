@@ -1,5 +1,7 @@
 import React from "react";
 import { Container, Box, Button } from "@mui/material";
+import { v4 as uuidv4 } from "uuid";
+
 import Form from "./form";
 import { formBoxProps } from "../types/componentType";
 
@@ -33,15 +35,20 @@ export default class FormBox extends React.Component<
   };
 
   onSubmit = () => {
-    console.log("submit", this.state.values);
-    this.submitFormValues(this.state.values);
+    let formToSubmit = {
+      id: uuidv4(),
+      documentName: this.props.completeForm.name,
+      values: this.state.values,
+    };
+    console.log("submit", formToSubmit);
+    this.submitFormValues(formToSubmit);
   };
 
-  submitFormValues(values) {
+  submitFormValues(formToSubmit) {
     const requestOptions = {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(values),
+      body: JSON.stringify(formToSubmit),
     };
     fetch("http://localhost:3001/submitFormValues", requestOptions)
       .then((res) => res.text())

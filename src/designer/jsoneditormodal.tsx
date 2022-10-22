@@ -50,7 +50,7 @@ export default function JSONEditorModal({
 
   return (
     <>
-      <MenuItem onClick={handleOpen}>Formbox JSON Editor</MenuItem>
+      <MenuItem onClick={handleOpen}>JSON Editor</MenuItem>
       <Modal
         open={open}
         onClose={handleClose}

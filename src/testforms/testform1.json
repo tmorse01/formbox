@@ -40,5 +40,6 @@
   ],
   "layout": "vertical",
   "title": "Sign up for paintball!",
+  "name": "taylorspaintball",
   "type": "formbox"
 }

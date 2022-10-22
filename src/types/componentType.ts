@@ -1,5 +1,10 @@
 export type formBuilderProps = {};
 
+export type formDataProps = {
+  formName: string;
+  formJSON: object;
+};
+
 export type defaultProps = {
   name: string;
   title: string;
@@ -26,6 +31,7 @@ export type container = {
   forms: formProps[];
   layout: string;
   title: string;
+  name: string;
   type: string;
 };
 
