@@ -1,0 +1,52 @@
+{
+  "forms": [
+    {
+      "name": "form1",
+      "components": [
+        {
+          "name": "companyname",
+          "title": "Company Name",
+          "help": "Enter your company Name",
+          "type": "textfield",
+          "required": true
+        },
+        {
+          "name": "jobtitle",
+          "title": "Job title",
+          "help": "Enter your job title",
+          "type": "textfield",
+          "required": true
+        }
+      ],
+      "title": "Company information",
+      "layout": "vertical",
+      "type": "form"
+    },
+    {
+      "name": "form2",
+      "components": [
+        {
+          "name": "country",
+          "title": "Country",
+          "help": "Enter your works country of operation",
+          "type": "textfield",
+          "required": true
+        },
+        {
+          "name": "state",
+          "title": "State",
+          "help": "Enter your works state if applicable",
+          "type": "textfield",
+          "required": true
+        }
+      ],
+      "title": "Location",
+      "layout": "vertical",
+      "type": "form"
+    }
+  ],
+  "layout": "vertical",
+  "title": "Job survey",
+  "name": "companyinfo",
+  "type": "formbox"
+}

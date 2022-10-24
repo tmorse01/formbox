@@ -44,7 +44,7 @@ export default function JSONEditorModal({
   function submitJSONChanges() {
     let value = content.json;
     onChange(value);
-    handleSubmit();
+    handleSubmit(formName, value);
     handleMenuClose();
   }
 

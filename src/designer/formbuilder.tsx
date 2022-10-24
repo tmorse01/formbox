@@ -46,10 +46,10 @@ export default class FormBuilder extends React.Component<
     this.setState({ formName });
   };
 
-  saveForm = () => {
+  saveForm = (formName, formJSON) => {
     const body = {
-      formName: this.state.formName,
-      formJSON: this.state.formJSON,
+      formName,
+      formJSON,
     };
     const requestOptions = {
       method: "PUT",
@@ -63,7 +63,7 @@ export default class FormBuilder extends React.Component<
   };
 
   render() {
-    // console.log("formbuilder: ", this.state.formJSON);
+    // console.log("formbuilder: ", this);
     return (
       <div>
         <FormBoxAppBar

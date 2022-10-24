@@ -6,50 +6,28 @@ import {
 } from "@mui/x-data-grid";
 
 export default function FormDataGrid({ data }) {
-  console.log("data:", data);
-  const rows: GridRowsProp = data;
-  var valuesColumns = [
-    {
-      field: "values",
-      headerName: "Form Values",
-      width: 600,
-    },
-  ];
-  if (data.length > 0) {
-    valuesColumns = data?.map((form) => {
-      let formColumnObject = {};
-      console.log("form: ", form);
-      let subForms = Object.keys(form.values).map((subForm) => {
-        let subFormColumnObject = {
-          field: subForm,
-          headerName: subForm,
-          width: 150,
-        };
-        console.log("subForm :", subForm);
-        // var subFormValues = Object.keys(form.values[subForm].map(subFormValues) => {
-        //     return {
-        //         field: "formName",
-        //         headerName: "Form Name",
-        //         width: 150,
-        //       };
-        // });
-        return { subFormColumnObject };
-      });
+  // console.log("data:", data);
 
-      return [formColumnObject, ...subForms];
-    });
+  function createColumns() {
+    if (data.length > 0) {
+      let values = data[0];
+      return Object.keys(values)?.map((dataField) => {
+        return { field: dataField, headerName: dataField, width: 200 };
+      });
+    } else {
+      return [];
+    }
   }
 
-  const columns: GridColDef[] = [
-    { field: "id", headerName: "id", width: 150 },
-    { field: "documentName", headerName: "Document Name", width: 300 },
-    ...valuesColumns,
-  ];
-  console.log("rows:", rows, "columns: ", columns);
+  const rows: GridRowsProp = data;
+  var columns: GridColDef[] = [...createColumns()];
+
+  // console.log("rows:", rows, "columns: ", columns);
   return (
     <DataGrid
       rows={rows}
       columns={columns}
+      getRowId={(row) => row._id}
       components={{
         Toolbar: GridToolbar,
       }}

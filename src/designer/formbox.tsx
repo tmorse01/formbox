@@ -1,6 +1,5 @@
 import React from "react";
 import { Container, Box, Button } from "@mui/material";
-import { v4 as uuidv4 } from "uuid";
 
 import Form from "./form";
 import { formBoxProps } from "../types/componentType";
@@ -34,11 +33,21 @@ export default class FormBox extends React.Component<
     });
   };
 
+  processValues = (values) => {
+    let returnValues = {};
+    for (const form in values) {
+      let formValues = values[form];
+      for (const inputValue in formValues) {
+        returnValues[inputValue] = formValues[inputValue];
+      }
+    }
+    return returnValues;
+  };
+
   onSubmit = () => {
     let formToSubmit = {
-      id: uuidv4(),
       documentName: this.props.completeForm.name,
-      values: this.state.values,
+      ...this.processValues(this.state.values),
     };
     console.log("submit", formToSubmit);
     this.submitFormValues(formToSubmit);
@@ -57,7 +66,7 @@ export default class FormBox extends React.Component<
   }
 
   render() {
-    // console.log("FORMBOX render :", this.state.values);
+    // console.log("FORMBOX render :", this);
     let forms = this.props.completeForm.forms;
     return (
       <div>

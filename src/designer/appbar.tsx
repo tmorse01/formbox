@@ -7,10 +7,10 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 // Menu
 import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import MenuIcon from "@mui/icons-material/Menu";
 import JSONEditorModal from "./jsoneditormodal";
 import FormDataGridModal from "./formdatagridmodal";
+import SavedFormsModal from "./savedformsmoda";
 
 export default function FormBoxAppBar({
   completeForm,
@@ -59,7 +59,12 @@ export default function FormBoxAppBar({
               handleMenuClose={handleClose}
               handleSubmit={handleSubmit}
             />
-            <MenuItem onClick={handleClose}>Saved Forms</MenuItem>
+            <SavedFormsModal
+              formName={formName}
+              onChange={onChange}
+              onNameChange={onNameChange}
+              handleMenuClose={handleClose}
+            />
             <FormDataGridModal
               formName={formName}
               handleMenuClose={handleClose}
