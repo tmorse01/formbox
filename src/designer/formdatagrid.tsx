@@ -6,7 +6,7 @@ import {
 } from "@mui/x-data-grid";
 
 export default function FormDataGrid({ data }) {
-  // console.log("data:", data);
+  console.log("data:", data);
 
   function createColumns() {
     if (data.length > 0) {
@@ -20,9 +20,9 @@ export default function FormDataGrid({ data }) {
   }
 
   const rows: GridRowsProp = data;
-  var columns: GridColDef[] = [...createColumns()];
+  var columns: GridColDef[] = createColumns();
 
-  // console.log("rows:", rows, "columns: ", columns);
+  console.log("rows:", rows, "columns: ", columns);
   return (
     <DataGrid
       rows={rows}

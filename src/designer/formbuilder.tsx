@@ -1,11 +1,16 @@
 import React from "react";
+import { createBrowserRouter, RouterProvider, Route } from "react-router-dom";
+
+import ErrorPage from "./errorpage";
 import FormBox from "./formbox";
 import FormBoxAppBar from "./appbar";
-import "../css/formbuilder.css";
+import FormDataGridPage from "./formdatagridpage";
 
 import { formBuilderProps } from "../types/componentType";
 import testform1 from "../testforms/testform1.json";
 import { container } from "../types/componentType";
+
+import "../css/formbuilder.css";
 
 type FormBuilderState = {
   formJSON: container;
@@ -64,8 +69,20 @@ export default class FormBuilder extends React.Component<
 
   render() {
     // console.log("formbuilder: ", this);
+    const router = createBrowserRouter([
+      {
+        path: "/",
+        element: <FormBox completeForm={this.state.formJSON} />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "/gridview",
+        element: <FormDataGridPage formName={this.state.formName} />,
+        errorElement: <ErrorPage />,
+      },
+    ]);
     return (
-      <div>
+      <div className="formBuilderWrapper">
         <FormBoxAppBar
           completeForm={this.state.formJSON}
           formName={this.state.formName}
@@ -74,7 +91,9 @@ export default class FormBuilder extends React.Component<
           handleSubmit={this.saveForm}
         />
         <div className="formBuilder">
-          <FormBox completeForm={this.state.formJSON} />
+          <React.StrictMode>
+            <RouterProvider router={router} />
+          </React.StrictMode>
         </div>
       </div>
     );

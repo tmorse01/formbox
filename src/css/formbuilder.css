@@ -1,6 +1,9 @@
 .formBuilder {
-  border: 1px solid rgb(180, 180, 180);
-  border-radius: 4px;
   margin: 12px;
   padding: 12px;
+}
+
+.formBuilderWrapper {
+  height: 100vh;
+  width: 100vw;
 }
