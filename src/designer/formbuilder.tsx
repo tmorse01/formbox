@@ -5,6 +5,7 @@ import ErrorPage from "./errorpage";
 import FormBox from "./formbox";
 import FormBoxAppBar from "./appbar";
 import FormDataGridPage from "./formdatagridpage";
+import JSONEditorPage from "./jsoneditorpage";
 
 import { formBuilderProps } from "../types/componentType";
 import testform1 from "../testforms/testform1.json";
@@ -69,26 +70,39 @@ export default class FormBuilder extends React.Component<
 
   render() {
     // console.log("formbuilder: ", this);
+    let completeForm = this.state.formJSON;
+    let formName = this.state.formName;
     const router = createBrowserRouter([
       {
         path: "/",
-        element: <FormBox completeForm={this.state.formJSON} />,
+        element: <FormBox completeForm={completeForm} />,
         errorElement: <ErrorPage />,
       },
       {
         path: "/gridview",
-        element: <FormDataGridPage formName={this.state.formName} />,
+        element: <FormDataGridPage formName={formName} />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "/jsoneditor",
+        element: (
+          <JSONEditorPage
+            formName={formName}
+            value={completeForm}
+            onChange={this.setFormJSON}
+            onNameChange={this.onNameChange}
+            handleSubmit={this.saveForm}
+          />
+        ),
         errorElement: <ErrorPage />,
       },
     ]);
     return (
       <div className="formBuilderWrapper">
         <FormBoxAppBar
-          completeForm={this.state.formJSON}
-          formName={this.state.formName}
+          formName={formName}
           onNameChange={this.onNameChange}
           onChange={this.setFormJSON}
-          handleSubmit={this.saveForm}
         />
         <div className="formBuilder">
           <React.StrictMode>

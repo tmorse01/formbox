@@ -1,23 +1,25 @@
 import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
-// Menu
-import Menu from "@mui/material/Menu";
+import {
+  Divider,
+  Link,
+  Menu,
+  MenuItem,
+  AppBar,
+  Box,
+  Toolbar,
+  Typography,
+  Button,
+  IconButton,
+} from "@mui/material";
+
+// icons
 import MenuIcon from "@mui/icons-material/Menu";
-import JSONEditorModal from "./jsoneditormodal";
+
 import SavedFormsModal from "./savedformsmoda";
 
-export default function FormBoxAppBar({
-  completeForm,
-  formName,
-  onChange,
-  onNameChange,
-  handleSubmit,
-}) {
+export default function FormBoxAppBar({ formName, onChange, onNameChange }) {
+  const pages = ["DesignForm", "JSONEditor", "SavedForms", "Responses"];
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const openJSONEditor = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -50,14 +52,28 @@ export default function FormBoxAppBar({
               "aria-labelledby": "basic-button",
             }}
           >
-            <JSONEditorModal
-              formName={formName}
-              value={completeForm}
-              onChange={onChange}
-              onNameChange={onNameChange}
-              handleMenuClose={handleClose}
-              handleSubmit={handleSubmit}
-            />
+            <MenuItem key={"home"} onClick={handleClose}>
+              <Typography>
+                <Link href={"/"} color="inherit" underline="none">
+                  {"Designer Home"}
+                </Link>
+              </Typography>
+            </MenuItem>
+            <MenuItem key={"gridview"} onClick={handleClose}>
+              <Typography>
+                <Link href={"/gridview"} color="inherit" underline="none">
+                  {"View Form Responses"}
+                </Link>
+              </Typography>
+            </MenuItem>
+            <MenuItem key="jsoneditor" onClick={handleClose}>
+              <Typography>
+                <Link href={"/jsoneditor"} color="inherit" underline="none">
+                  {"Form JSON Editor"}
+                </Link>
+              </Typography>
+            </MenuItem>
+            <Divider />
             <SavedFormsModal
               formName={formName}
               onChange={onChange}

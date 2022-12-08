@@ -25,6 +25,7 @@ export default function FormDataGrid({ data }) {
   console.log("rows:", rows, "columns: ", columns);
   return (
     <DataGrid
+      autoHeight={true}
       rows={rows}
       columns={columns}
       getRowId={(row) => row._id}

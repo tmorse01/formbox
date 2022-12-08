@@ -75,7 +75,9 @@ export default function SavedFormsModal({
 
   return (
     <>
-      <MenuItem onClick={handleOpen}>Saved Forms</MenuItem>
+      <MenuItem key="savedforms" onClick={handleOpen}>
+        Saved Forms
+      </MenuItem>
       <Modal
         open={open}
         onClose={handleClose}
