@@ -15,11 +15,16 @@ import {
 // icons
 import MenuIcon from "@mui/icons-material/Menu";
 
-import SavedFormsModal from "./savedformsmoda";
+import SavedFormsModal from "./savedformsmodal";
+import LoginModal from "./loginmodal";
 
-export default function FormBoxAppBar({ formName, onChange, onNameChange }) {
-  const pages = ["DesignForm", "JSONEditor", "SavedForms", "Responses"];
-
+export default function FormBoxAppBar({
+  formName,
+  onChange,
+  onNameChange,
+  setToken,
+  token,
+}) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const openJSONEditor = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -82,7 +87,7 @@ export default function FormBoxAppBar({ formName, onChange, onNameChange }) {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1, ml: 2 }}>
             FormBox Form Builder
           </Typography>
-          <Button color="inherit">Login</Button>
+          <LoginModal setToken={setToken} token={token} />
         </Toolbar>
       </AppBar>
     </Box>

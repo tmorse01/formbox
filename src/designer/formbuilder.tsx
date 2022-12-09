@@ -16,6 +16,7 @@ import "../css/formbuilder.css";
 type FormBuilderState = {
   formJSON: container;
   formName: string;
+  token: string;
 };
 
 type FormBuilderProps = formBuilderProps;
@@ -29,13 +30,29 @@ export default class FormBuilder extends React.Component<
     this.state = {
       formJSON: testform1,
       formName: "",
+      token: this.getToken(),
     };
   }
 
   componentDidMount() {
     // console.log("form builder mounted: ", this);
     this.connectToDb();
+    console.log("token: ", this.state.token);
   }
+
+  setToken = (userToken) => {
+    sessionStorage.setItem("token", JSON.stringify(userToken));
+    this.setState({ token: userToken });
+  };
+
+  getToken = () => {
+    const tokenString = sessionStorage.getItem("token");
+    if (tokenString) {
+      return JSON.parse(tokenString)?.token;
+    } else {
+      return undefined;
+    }
+  };
 
   connectToDb() {
     fetch("http://localhost:3001/connectToDb")
@@ -69,7 +86,7 @@ export default class FormBuilder extends React.Component<
   };
 
   render() {
-    // console.log("formbuilder: ", this);
+    console.log("formbuilder: ", this);
     let completeForm = this.state.formJSON;
     let formName = this.state.formName;
     const router = createBrowserRouter([
@@ -103,6 +120,8 @@ export default class FormBuilder extends React.Component<
           formName={formName}
           onNameChange={this.onNameChange}
           onChange={this.setFormJSON}
+          setToken={this.setToken}
+          token={this.state.token}
         />
         <div className="formBuilder">
           <React.StrictMode>
