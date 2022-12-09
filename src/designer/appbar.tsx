@@ -30,7 +30,7 @@ export default function FormBoxAppBar({ formName, onChange, onNameChange }) {
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1, gap: 8 }}>
       <AppBar position="static">
         <Toolbar>
           <IconButton
@@ -38,7 +38,6 @@ export default function FormBoxAppBar({ formName, onChange, onNameChange }) {
             edge="start"
             color="inherit"
             aria-label="menu"
-            sx={{ mr: 2 }}
             onClick={handleClick}
           >
             <MenuIcon />
@@ -73,15 +72,14 @@ export default function FormBoxAppBar({ formName, onChange, onNameChange }) {
                 </Link>
               </Typography>
             </MenuItem>
-            <Divider />
-            <SavedFormsModal
-              formName={formName}
-              onChange={onChange}
-              onNameChange={onNameChange}
-              handleMenuClose={handleClose}
-            />
           </Menu>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <SavedFormsModal
+            formName={formName}
+            onChange={onChange}
+            onNameChange={onNameChange}
+            handleMenuClose={handleClose}
+          />
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1, ml: 2 }}>
             FormBox Form Builder
           </Typography>
           <Button color="inherit">Login</Button>

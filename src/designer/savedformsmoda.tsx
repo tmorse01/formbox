@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
-import Box from "@mui/material/Box";
-import MenuItem from "@mui/material/MenuItem";
-import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
+import { Box, IconButton, Typography, Modal, MenuItem } from "@mui/material";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
+import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 
 import { formDataProps } from "../types/componentType";
 type FormData = formDataProps;
@@ -75,9 +73,14 @@ export default function SavedFormsModal({
 
   return (
     <>
-      <MenuItem key="savedforms" onClick={handleOpen}>
-        Saved Forms
-      </MenuItem>
+      <IconButton
+        key="savedformsmodal"
+        color="inherit"
+        size="large"
+        onClick={handleOpen}
+      >
+        <FolderOpenIcon />
+      </IconButton>
       <Modal
         open={open}
         onClose={handleClose}
@@ -86,7 +89,7 @@ export default function SavedFormsModal({
       >
         <Box component="form" sx={style} noValidate>
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            Saved forms
+            Open a saved form
           </Typography>
           <Select
             labelId="formbox-formname-select"
