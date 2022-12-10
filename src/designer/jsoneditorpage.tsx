@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FormBoxJSONEditor from "./jsoneditor";
 import { Button, TextField, Box, Typography } from "@mui/material";
 
@@ -18,8 +18,12 @@ export default function JSONEditorPage({
   value,
   onChange,
   onNameChange,
-  handleSubmit,
+  openSnackbar,
 }) {
+  useEffect(() => {
+    setContent({ json: value, text: undefined });
+  }, [value]);
+
   const [content, setContent] = useState({
     json: value,
     text: undefined,
@@ -32,7 +36,31 @@ export default function JSONEditorPage({
   function submitJSONChanges() {
     let value = content.json;
     onChange(value);
-    handleSubmit(formName, value);
+    saveForm(formName, value);
+  }
+
+  function saveForm(formName, formJSON) {
+    const body = {
+      formName,
+      formJSON,
+    };
+    const requestOptions = {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    };
+    fetch("http://localhost:3001/saveForm", requestOptions)
+      .then((res) => res.text())
+      .then((res) => {
+        console.log("result from api: ", res);
+        const resObj = JSON.parse(res);
+        if (resObj?.error) {
+          openSnackbar("error", resObj.error);
+        } else {
+          openSnackbar("success", resObj.message);
+        }
+      })
+      .catch((res) => console.log("error from api: ", res));
   }
 
   return (
@@ -46,8 +74,7 @@ export default function JSONEditorPage({
           label="Form Name"
           value={formName}
           onChange={(e) => {
-            let formName = e.target.value;
-            onNameChange(formName);
+            onNameChange(e.target.value);
           }}
         />
         <Button variant="text" onClick={submitJSONChanges}>

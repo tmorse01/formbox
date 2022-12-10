@@ -7,16 +7,24 @@ import FormBoxAppBar from "./appbar";
 import FormDataGridPage from "./formdatagridpage";
 import JSONEditorPage from "./jsoneditorpage";
 
+import { Snackbar, Alert } from "@mui/material";
+
 import { formBuilderProps } from "../types/componentType";
 import testform1 from "../testforms/testform1.json";
 import { container } from "../types/componentType";
 
 import "../css/formbuilder.css";
+import { AlertColor } from "@mui/material/Alert";
 
 type FormBuilderState = {
   formJSON: container;
   formName: string;
   token: string;
+  snackbar: {
+    open: boolean;
+    message: string;
+    type: AlertColor;
+  };
 };
 
 type FormBuilderProps = formBuilderProps;
@@ -31,6 +39,11 @@ export default class FormBuilder extends React.Component<
       formJSON: testform1,
       formName: "",
       token: this.getToken(),
+      snackbar: {
+        open: false,
+        message: "",
+        type: "success",
+      },
     };
   }
 
@@ -39,6 +52,10 @@ export default class FormBuilder extends React.Component<
     this.connectToDb();
     console.log("token: ", this.state.token);
   }
+
+  openSnackbar = (type, message) => {
+    this.setState({ snackbar: { open: true, type, message } });
+  };
 
   setToken = (userToken) => {
     sessionStorage.setItem("token", JSON.stringify(userToken));
@@ -69,20 +86,11 @@ export default class FormBuilder extends React.Component<
     this.setState({ formName });
   };
 
-  saveForm = (formName, formJSON) => {
-    const body = {
-      formName,
-      formJSON,
-    };
-    const requestOptions = {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    };
-    fetch("http://localhost:3001/saveForm", requestOptions)
-      .then((res) => res.text())
-      .then((res) => console.log("result from api: ", res))
-      .catch((res) => console.log("error from api: ", res));
+  handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    this.setState({ snackbar: { ...this.state.snackbar, open: false } });
   };
 
   render() {
@@ -108,7 +116,7 @@ export default class FormBuilder extends React.Component<
             value={completeForm}
             onChange={this.setFormJSON}
             onNameChange={this.onNameChange}
-            handleSubmit={this.saveForm}
+            openSnackbar={this.openSnackbar}
           />
         ),
         errorElement: <ErrorPage />,
@@ -128,6 +136,19 @@ export default class FormBuilder extends React.Component<
             <RouterProvider router={router} />
           </React.StrictMode>
         </div>
+        <Snackbar
+          open={this.state.snackbar.open}
+          autoHideDuration={6000}
+          onClose={this.handleClose}
+        >
+          <Alert
+            onClose={this.handleClose}
+            severity={this.state.snackbar.type}
+            sx={{ width: "100%" }}
+          >
+            {this.state.snackbar.message}
+          </Alert>
+        </Snackbar>
       </div>
     );
   }

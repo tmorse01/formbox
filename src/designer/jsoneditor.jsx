@@ -1,4 +1,4 @@
-import { JSONEditor } from "svelte-jsoneditor/dist/jsoneditor.js";
+import { JSONEditor } from "vanilla-jsoneditor";
 import { useEffect, useRef } from "react";
 import "../css/jsoneditor.css";
 

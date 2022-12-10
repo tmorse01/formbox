@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
+// MUI
 import { Box, IconButton, Typography, Modal, MenuItem } from "@mui/material";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+
+// icons
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 
 import { formDataProps } from "../types/componentType";
@@ -91,17 +96,24 @@ export default function SavedFormsModal({
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Open a saved form
           </Typography>
-          <Select
-            labelId="formbox-formname-select"
-            id="formbox-formname-select"
-            value={formName}
-            label="Form Name"
-            onChange={handleSelectForm}
-          >
-            {listOfForms.map((form: FormData) => {
-              return <MenuItem value={form.formName}>{form.formName}</MenuItem>;
-            })}
-          </Select>
+          <FormControl fullWidth>
+            <InputLabel id="formbox-formname-select-label">
+              Form Name
+            </InputLabel>
+            <Select
+              labelId="formbox-formname-select"
+              id="formbox-formname-select"
+              value={formName}
+              label="Form Name"
+              onChange={handleSelectForm}
+            >
+              {listOfForms.map((form: FormData) => {
+                return (
+                  <MenuItem value={form.formName}>{form.formName}</MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
         </Box>
       </Modal>
     </>
