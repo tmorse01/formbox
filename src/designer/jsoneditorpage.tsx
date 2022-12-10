@@ -18,7 +18,7 @@ export default function JSONEditorPage({
   value,
   onChange,
   onNameChange,
-  openSnackbar,
+  setSnackbar,
 }) {
   useEffect(() => {
     setContent({ json: value, text: undefined });
@@ -55,9 +55,9 @@ export default function JSONEditorPage({
         console.log("result from api: ", res);
         const resObj = JSON.parse(res);
         if (resObj?.error) {
-          openSnackbar("error", resObj.error);
+          setSnackbar({ open: true, type: "error", message: resObj.error });
         } else {
-          openSnackbar("success", resObj.message);
+          setSnackbar({ open: true, type: "success", message: resObj.message });
         }
       })
       .catch((res) => console.log("error from api: ", res));

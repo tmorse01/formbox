@@ -7,14 +7,13 @@ import FormBoxAppBar from "./appbar";
 import FormDataGridPage from "./formdatagridpage";
 import JSONEditorPage from "./jsoneditorpage";
 
-import { Snackbar, Alert } from "@mui/material";
-
 import { formBuilderProps } from "../types/componentType";
 import testform1 from "../testforms/testform1.json";
 import { container } from "../types/componentType";
 
 import "../css/formbuilder.css";
 import { AlertColor } from "@mui/material/Alert";
+import FormBoxSnackbar from "./snackbar";
 
 type FormBuilderState = {
   formJSON: container;
@@ -53,8 +52,8 @@ export default class FormBuilder extends React.Component<
     console.log("token: ", this.state.token);
   }
 
-  openSnackbar = (type, message) => {
-    this.setState({ snackbar: { open: true, type, message } });
+  setSnackbar = (snackbar) => {
+    this.setState({ snackbar });
   };
 
   setToken = (userToken) => {
@@ -86,13 +85,6 @@ export default class FormBuilder extends React.Component<
     this.setState({ formName });
   };
 
-  handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    this.setState({ snackbar: { ...this.state.snackbar, open: false } });
-  };
-
   render() {
     console.log("formbuilder: ", this);
     let completeForm = this.state.formJSON;
@@ -116,7 +108,7 @@ export default class FormBuilder extends React.Component<
             value={completeForm}
             onChange={this.setFormJSON}
             onNameChange={this.onNameChange}
-            openSnackbar={this.openSnackbar}
+            setSnackbar={this.setSnackbar}
           />
         ),
         errorElement: <ErrorPage />,
@@ -136,19 +128,10 @@ export default class FormBuilder extends React.Component<
             <RouterProvider router={router} />
           </React.StrictMode>
         </div>
-        <Snackbar
-          open={this.state.snackbar.open}
-          autoHideDuration={6000}
-          onClose={this.handleClose}
-        >
-          <Alert
-            onClose={this.handleClose}
-            severity={this.state.snackbar.type}
-            sx={{ width: "100%" }}
-          >
-            {this.state.snackbar.message}
-          </Alert>
-        </Snackbar>
+        <FormBoxSnackbar
+          snackbar={this.state.snackbar}
+          setSnackbar={this.setSnackbar}
+        />
       </div>
     );
   }
