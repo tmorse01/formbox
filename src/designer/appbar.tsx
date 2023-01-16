@@ -22,6 +22,9 @@ export default function FormBoxAppBar({
   onNameChange,
   setToken,
   token,
+  setSnackbar,
+  setUsername,
+  username,
 }) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const openJSONEditor = Boolean(anchorEl);
@@ -81,11 +84,18 @@ export default function FormBoxAppBar({
             onChange={onChange}
             onNameChange={onNameChange}
             handleMenuClose={handleClose}
+            username={username}
           />
           <Typography variant="h6" component="div" sx={{ flexGrow: 1, ml: 2 }}>
             FormBox Form Builder
           </Typography>
-          <LoginModal setToken={setToken} token={token} />
+          <LoginModal
+            setToken={setToken}
+            token={token}
+            setSnackbar={setSnackbar}
+            setUsername={setUsername}
+            username={username}
+          />
         </Toolbar>
       </AppBar>
     </Box>

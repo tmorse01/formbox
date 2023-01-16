@@ -19,6 +19,7 @@ export default function JSONEditorPage({
   onChange,
   onNameChange,
   setSnackbar,
+  username,
 }) {
   useEffect(() => {
     setContent({ json: value, text: undefined });
@@ -43,6 +44,7 @@ export default function JSONEditorPage({
     const body = {
       formName,
       formJSON,
+      username: username,
     };
     const requestOptions = {
       method: "PUT",

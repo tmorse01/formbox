@@ -8,7 +8,6 @@ import FormDataGridPage from "./formdatagridpage";
 import JSONEditorPage from "./jsoneditorpage";
 
 import { formBuilderProps } from "../types/componentType";
-import testform1 from "../testforms/testform1.json";
 import { container } from "../types/componentType";
 
 import "../css/formbuilder.css";
@@ -16,9 +15,10 @@ import { AlertColor } from "@mui/material/Alert";
 import FormBoxSnackbar from "./snackbar";
 
 type FormBuilderState = {
-  formJSON: container;
+  formJSON: container | undefined;
   formName: string;
-  token: string;
+  token: string | null | undefined;
+  username: string | null | undefined;
   snackbar: {
     open: boolean;
     message: string;
@@ -35,9 +35,10 @@ export default class FormBuilder extends React.Component<
   constructor(props) {
     super(props);
     this.state = {
-      formJSON: testform1,
+      formJSON: undefined,
       formName: "",
       token: this.getToken(),
+      username: this.getUsername(),
       snackbar: {
         open: false,
         message: "",
@@ -49,7 +50,7 @@ export default class FormBuilder extends React.Component<
   componentDidMount() {
     // console.log("form builder mounted: ", this);
     this.connectToDb();
-    console.log("token: ", this.state.token);
+    // console.log("token: ", this.state.token);
   }
 
   setSnackbar = (snackbar) => {
@@ -57,17 +58,29 @@ export default class FormBuilder extends React.Component<
   };
 
   setToken = (userToken) => {
-    sessionStorage.setItem("token", JSON.stringify(userToken));
+    if (userToken === undefined) {
+      sessionStorage.removeItem("token");
+    } else {
+      sessionStorage.setItem("token", userToken);
+    }
     this.setState({ token: userToken });
   };
 
   getToken = () => {
-    const tokenString = sessionStorage.getItem("token");
-    if (tokenString) {
-      return JSON.parse(tokenString)?.token;
+    return sessionStorage.getItem("token") ?? undefined;
+  };
+
+  setUsername = (username) => {
+    if (username === undefined) {
+      sessionStorage.removeItem("username");
     } else {
-      return undefined;
+      sessionStorage.setItem("username", username);
     }
+    this.setState({ username: username });
+  };
+
+  getUsername = () => {
+    return sessionStorage.getItem("username") ?? undefined;
   };
 
   connectToDb() {
@@ -92,7 +105,7 @@ export default class FormBuilder extends React.Component<
     const router = createBrowserRouter([
       {
         path: "/",
-        element: <FormBox completeForm={completeForm} />,
+        element: completeForm ? <FormBox completeForm={completeForm} /> : <></>,
         errorElement: <ErrorPage />,
       },
       {
@@ -109,6 +122,7 @@ export default class FormBuilder extends React.Component<
             onChange={this.setFormJSON}
             onNameChange={this.onNameChange}
             setSnackbar={this.setSnackbar}
+            username={this.state.username}
           />
         ),
         errorElement: <ErrorPage />,
@@ -122,6 +136,9 @@ export default class FormBuilder extends React.Component<
           onChange={this.setFormJSON}
           setToken={this.setToken}
           token={this.state.token}
+          setSnackbar={this.setSnackbar}
+          setUsername={this.setUsername}
+          username={this.state.username}
         />
         <div className="formBuilder">
           <React.StrictMode>

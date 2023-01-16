@@ -11,6 +11,8 @@ import {
   IconButton,
 } from "@mui/material";
 
+import LoginIcon from "@mui/icons-material/Login";
+import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -36,7 +38,13 @@ interface State {
   showPassword: boolean;
 }
 
-export default function LoginModal({ setToken, token }) {
+export default function LoginModal({
+  setToken,
+  token,
+  setSnackbar,
+  setUsername,
+  username,
+}) {
   const [open, setOpen] = useState(false);
   const [values, setValues] = useState<State>({
     username: "",
@@ -84,9 +92,16 @@ export default function LoginModal({ setToken, token }) {
     fetch("http://localhost:3001/login", requestOptions)
       .then((res) => res.text())
       .then((res) => {
-        console.log("result from login api: ", res);
         const result = JSON.parse(res);
-        setToken(result.token);
+        console.log("result from login api: ", result);
+        if (result.token !== undefined) {
+          setToken(result.token);
+          setUsername(result.username);
+          handleClose();
+          setSnackbar({ open: true, type: "success", message: result.message });
+        } else {
+          setSnackbar({ open: true, type: "error", message: result.message });
+        }
       })
       .catch((res) => console.log("error from login api: ", res));
   };
@@ -107,6 +122,10 @@ export default function LoginModal({ setToken, token }) {
         console.log("result from signup api: ", res);
       })
       .catch((res) => console.log("error from signup api: ", res));
+  };
+
+  const submitLogout = () => {
+    setToken(undefined);
   };
 
   const loginForm = (
@@ -166,30 +185,35 @@ export default function LoginModal({ setToken, token }) {
     </Box>
   );
 
-  // check if user is logged in
-  if (token === "") {
-    return (
-      <>
-        <Button color="inherit" onClick={handleOpen}>
+  return (
+    <>
+      {token === undefined && (
+        <Button color="inherit" startIcon={<LoginIcon />} onClick={handleOpen}>
           Login
         </Button>
-        <Modal
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          {loginForm}
-        </Modal>
-      </>
-    );
-  } else {
-    return (
-      <>
-        <IconButton color="inherit">
-          <PersonIcon />
-        </IconButton>
-      </>
-    );
-  }
+      )}
+      {token !== undefined && (
+        <>
+          <Button color="inherit" startIcon={<PersonIcon />}>
+            {username}
+          </Button>
+          <Button
+            color="inherit"
+            onClick={submitLogout}
+            startIcon={<LogoutIcon />}
+          >
+            Logout
+          </Button>
+        </>
+      )}
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        {loginForm}
+      </Modal>
+    </>
+  );
 }

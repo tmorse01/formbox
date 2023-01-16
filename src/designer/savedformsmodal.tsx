@@ -31,6 +31,7 @@ export default function SavedFormsModal({
   onChange,
   onNameChange,
   handleMenuClose,
+  username,
 }) {
   const [listOfForms, setListOfForms] = useState<
     {
@@ -67,11 +68,12 @@ export default function SavedFormsModal({
       method: "GET",
       headers: { "Content-Type": "application/json" },
     };
-    fetch("http://localhost:3001/getForms", requestOptions)
+    fetch("http://localhost:3001/getForms?username=" + username, requestOptions)
       .then((res) => res.text())
       .then((res) => {
-        // console.log("result from getForms api: ", res);
-        setListOfForms(JSON.parse(res).results);
+        const response = JSON.parse(res);
+        console.log("result from getForms api: ", response);
+        setListOfForms(response.results);
       })
       .catch((res) => console.log("error from getForms api: ", res));
   };
@@ -109,7 +111,9 @@ export default function SavedFormsModal({
             >
               {listOfForms.map((form: FormData) => {
                 return (
-                  <MenuItem value={form.formName}>{form.formName}</MenuItem>
+                  <MenuItem key={form.formName} value={form.formName}>
+                    {form.formName}
+                  </MenuItem>
                 );
               })}
             </Select>

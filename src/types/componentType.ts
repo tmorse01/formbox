@@ -22,7 +22,7 @@ export type formBoxProps = {
 };
 
 export type formBoxAppBarProps = {
-  completeForm: container;
+  completeForm: container | undefined;
   formName: string;
   onChange: ({ value }) => void;
 };
