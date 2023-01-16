@@ -1,14 +1,8 @@
 import { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
-import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
 
-import { formDataProps } from "../types/componentType";
 import FormDataGrid from "./formdatagrid";
-type FormData = formDataProps;
 
 const style = {
   bgcolor: "background.paper",
