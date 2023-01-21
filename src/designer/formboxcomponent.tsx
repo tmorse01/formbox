@@ -11,7 +11,7 @@ type CompState = {
 type CompProps = {
   key: number;
   component: componentProps;
-  onChange: ({ name: string, value: any }) => void;
+  onChange: ({ name, value }) => void;
 };
 
 export default class FormBoxComponent extends React.Component<
@@ -40,6 +40,7 @@ export default class FormBoxComponent extends React.Component<
           name={component.name}
           title={component.title}
           submit={component.submit}
+          icon={component.icon}
         />
       );
     } else {

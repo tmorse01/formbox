@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import FormBoxJSONEditor from "./jsoneditor";
 import { Button, TextField, Box, Typography } from "@mui/material";
+import { FormBoxContext } from "./formbuilder";
 
 const style = {
   bgcolor: "background.paper",
@@ -14,30 +15,30 @@ const style = {
 };
 
 export default function JSONEditorPage({
-  formName,
-  value,
   onChange,
   onNameChange,
   setSnackbar,
-  username,
+  getForms,
 }) {
+  const { formJSON, formName, username } = useContext(FormBoxContext);
+
   useEffect(() => {
-    setContent({ json: value, text: undefined });
-  }, [value]);
+    setContent({ json: formJSON, text: undefined });
+  }, [formJSON]);
 
   const [content, setContent] = useState({
-    json: value,
+    json: formJSON,
     text: undefined,
   });
 
-  function handleJSONValueChange(value) {
-    setContent(value);
+  function handleJSONValueChange(formJSON) {
+    setContent(formJSON);
   }
 
   function submitJSONChanges() {
-    let value = content.json;
-    onChange(value);
-    saveForm(formName, value);
+    let formJSON = content.json;
+    onChange(formJSON);
+    saveForm(formName, formJSON);
   }
 
   function saveForm(formName, formJSON) {
@@ -60,6 +61,7 @@ export default function JSONEditorPage({
           setSnackbar({ open: true, type: "error", message: resObj.error });
         } else {
           setSnackbar({ open: true, type: "success", message: resObj.message });
+          getForms();
         }
       })
       .catch((res) => console.log("error from api: ", res));

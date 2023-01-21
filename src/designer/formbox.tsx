@@ -3,11 +3,23 @@ import { Container, Box, Button } from "@mui/material";
 
 import Form from "./form";
 import { formBoxProps } from "../types/componentType";
+import Typography from "@mui/material/Typography";
+
+import SaveAltIcon from "@mui/icons-material/SaveAlt";
 
 type FormBoxProps = formBoxProps;
 
 type FormBoxState = {
   values: {};
+};
+
+const style = {
+  bgcolor: "background.paper",
+  borderRadius: "8px",
+  gap: "12px",
+  display: "grid",
+  padding: "12px 0 12px 0",
+  boxShadow: "4px 4px 12px #e0e0e0",
 };
 
 export default class FormBox extends React.Component<
@@ -71,6 +83,7 @@ export default class FormBox extends React.Component<
     return (
       <div>
         <Container
+          sx={style}
           maxWidth="sm"
           component="form"
           noValidate
@@ -81,14 +94,21 @@ export default class FormBox extends React.Component<
             return false;
           }}
         >
-          <h2>{this.props.completeForm.title ?? "FormBox"}</h2>
+          <Typography sx={{ color: "text.primary" }} variant="h2">
+            {this.props.completeForm.title ?? "FormBox"}
+          </Typography>
           {forms.map((form, i) => {
             return (
               <Form key={i} form={form} onFormChange={this.onFormChange} />
             );
           })}
           <Box display="flex" justifyContent={"right"} sx={{ p: 2 }}>
-            <Button id={"submit"} type={"submit"} variant="contained">
+            <Button
+              id={"submit"}
+              type={"submit"}
+              variant="contained"
+              startIcon={<SaveAltIcon />}
+            >
               {"Submit"}
             </Button>
           </Box>

@@ -126,6 +126,7 @@ export default function LoginModal({
 
   const submitLogout = () => {
     setToken(undefined);
+    setUsername(undefined);
   };
 
   const loginForm = (

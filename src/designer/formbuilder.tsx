@@ -7,18 +7,36 @@ import FormBoxAppBar from "./appbar";
 import FormDataGridPage from "./formdatagridpage";
 import JSONEditorPage from "./jsoneditorpage";
 
-import { formBuilderProps } from "../types/componentType";
-import { container } from "../types/componentType";
+import {
+  formBuilderProps,
+  formDataProps,
+  container,
+} from "../types/componentType";
 
 import "../css/formbuilder.css";
 import { AlertColor } from "@mui/material/Alert";
 import FormBoxSnackbar from "./snackbar";
 
-type FormBuilderState = {
+// css
+import "../App.css";
+
+export const FormBoxContext = React.createContext<CurrentFormBoxContext>({
+  formJSON: undefined,
+  formName: "",
+  username: undefined,
+  token: undefined,
+  listOfForms: [],
+});
+
+type CurrentFormBoxContext = {
   formJSON: container | undefined;
   formName: string;
-  token: string | null | undefined;
   username: string | null | undefined;
+  token: string | null | undefined;
+  listOfForms: formDataProps[];
+};
+
+type FormBuilderState = CurrentFormBoxContext & {
   snackbar: {
     open: boolean;
     message: string;
@@ -44,14 +62,43 @@ export default class FormBuilder extends React.Component<
         message: "",
         type: "success",
       },
+      listOfForms: [],
     };
   }
 
   componentDidMount() {
     // console.log("form builder mounted: ", this);
     this.connectToDb();
+    if (this.state.username) {
+      this.getForms();
+    }
     // console.log("token: ", this.state.token);
   }
+
+  connectToDb() {
+    fetch("http://localhost:3001/connectToDb")
+      .then((res) => res.text())
+      .then((res) => console.log("result from connectToDb: ", res))
+      .catch((res) => console.log("error from connectToDb: ", res));
+  }
+
+  getForms = () => {
+    const requestOptions = {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    };
+    fetch(
+      "http://localhost:3001/getForms?username=" + this.state.username,
+      requestOptions
+    )
+      .then((res) => res.text())
+      .then((res) => {
+        const response = JSON.parse(res);
+        console.log("result from getForms api: ", response);
+        this.setState({ listOfForms: response.results });
+      })
+      .catch((res) => console.log("error from getForms api: ", res));
+  };
 
   setSnackbar = (snackbar) => {
     this.setState({ snackbar });
@@ -83,13 +130,6 @@ export default class FormBuilder extends React.Component<
     return sessionStorage.getItem("username") ?? undefined;
   };
 
-  connectToDb() {
-    fetch("http://localhost:3001/connectToDb")
-      .then((res) => res.text())
-      .then((res) => console.log("result from connectToDb: ", res))
-      .catch((res) => console.log("error from connectToDb: ", res));
-  }
-
   setFormJSON = (value) => {
     this.setState({ formJSON: value });
   };
@@ -110,46 +150,52 @@ export default class FormBuilder extends React.Component<
       },
       {
         path: "/gridview",
-        element: <FormDataGridPage formName={formName} />,
+        element: <FormDataGridPage />,
         errorElement: <ErrorPage />,
       },
       {
         path: "/jsoneditor",
         element: (
           <JSONEditorPage
-            formName={formName}
-            value={completeForm}
             onChange={this.setFormJSON}
             onNameChange={this.onNameChange}
             setSnackbar={this.setSnackbar}
-            username={this.state.username}
+            getForms={this.getForms}
           />
         ),
         errorElement: <ErrorPage />,
       },
     ]);
     return (
-      <div className="formBuilderWrapper">
-        <FormBoxAppBar
-          formName={formName}
-          onNameChange={this.onNameChange}
-          onChange={this.setFormJSON}
-          setToken={this.setToken}
-          token={this.state.token}
-          setSnackbar={this.setSnackbar}
-          setUsername={this.setUsername}
-          username={this.state.username}
-        />
-        <div className="formBuilder">
-          <React.StrictMode>
-            <RouterProvider router={router} />
-          </React.StrictMode>
+      <FormBoxContext.Provider
+        value={{
+          formJSON: this.state.formJSON,
+          formName: this.state.formName,
+          username: this.state.username,
+          token: this.state.token,
+          listOfForms: this.state.listOfForms,
+        }}
+      >
+        <div className="formBuilderWrapper">
+          <FormBoxAppBar
+            onNameChange={this.onNameChange}
+            onChange={this.setFormJSON}
+            setToken={this.setToken}
+            setSnackbar={this.setSnackbar}
+            setUsername={this.setUsername}
+            getForms={this.getForms}
+          />
+          <div className="formBuilder">
+            <React.StrictMode>
+              <RouterProvider router={router} />
+            </React.StrictMode>
+          </div>
+          <FormBoxSnackbar
+            snackbar={this.state.snackbar}
+            setSnackbar={this.setSnackbar}
+          />
         </div>
-        <FormBoxSnackbar
-          snackbar={this.state.snackbar}
-          setSnackbar={this.setSnackbar}
-        />
-      </div>
+      </FormBoxContext.Provider>
     );
   }
 }

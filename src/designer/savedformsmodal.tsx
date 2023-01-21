@@ -1,12 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { FormBoxContext } from "./formbuilder";
 // MUI
 import { Box, IconButton, Typography, Modal, MenuItem } from "@mui/material";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
+import { grey } from "@mui/material/colors";
 
 // icons
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 import { formDataProps } from "../types/componentType";
 type FormData = formDataProps;
@@ -17,35 +20,25 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   bgcolor: "background.paper",
-  border: "2px solid #000",
+  border: "1px solid " + grey[800],
+  borderRadius: "4px",
   boxShadow: 24,
   p: 4,
-  gap: 4,
+  gap: "8px",
   display: "grid",
-  gridTemplateRows: "min-content auto min-content",
+  gridTemplateColumns: "auto min-content",
   width: "400px",
 };
 
 export default function SavedFormsModal({
-  formName,
   onChange,
   onNameChange,
   handleMenuClose,
-  username,
+  getForms,
 }) {
-  const [listOfForms, setListOfForms] = useState<
-    {
-      _id: string;
-      formName: string;
-      formJSON: object;
-    }[]
-  >([]);
   const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    // console.log("component did mount useEffect");
-    getForms();
-  }, []);
+  const { listOfForms, formName } = useContext(FormBoxContext);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
@@ -61,21 +54,6 @@ export default function SavedFormsModal({
     console.log("documentJSON: ", documentJSON);
     onNameChange(documentName as string);
     onChange(documentJSON);
-  };
-
-  const getForms = () => {
-    const requestOptions = {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    };
-    fetch("http://localhost:3001/getForms?username=" + username, requestOptions)
-      .then((res) => res.text())
-      .then((res) => {
-        const response = JSON.parse(res);
-        console.log("result from getForms api: ", response);
-        setListOfForms(response.results);
-      })
-      .catch((res) => console.log("error from getForms api: ", res));
   };
 
   return (
@@ -95,7 +73,12 @@ export default function SavedFormsModal({
         aria-describedby="modal-modal-description"
       >
         <Box component="form" sx={style} noValidate>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
+          <Typography
+            id="modal-modal-title"
+            variant="h6"
+            component="h2"
+            sx={{ gridColumn: "1 / 3" }}
+          >
             Open a saved form
           </Typography>
           <FormControl fullWidth>
@@ -118,6 +101,9 @@ export default function SavedFormsModal({
               })}
             </Select>
           </FormControl>
+          <IconButton key="refresh" title="refresh" onClick={getForms}>
+            <RefreshIcon />
+          </IconButton>
         </Box>
       </Modal>
     </>

@@ -3,6 +3,7 @@ export type formBuilderProps = {};
 export type formDataProps = {
   formName: string;
   formJSON: object;
+  username: string;
 };
 
 export type defaultProps = {
@@ -15,6 +16,7 @@ export type componentProps = defaultProps & {
   help?: string;
   required?: boolean;
   submit?: boolean;
+  iconName: string | undefined;
 };
 
 export type formBoxProps = {

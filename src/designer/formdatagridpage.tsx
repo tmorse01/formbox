@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
 import FormDataGrid from "./formdatagrid";
+import { FormBoxContext } from "./formbuilder";
 
 const style = {
   bgcolor: "background.paper",
@@ -14,8 +15,10 @@ const style = {
   gridTemplateRows: "min-content 1fr min-content",
 };
 
-export default function FormDataGridPage({ formName }) {
+export default function FormDataGridPage() {
   const [selectedDocumentData, setSelectedDocumentData] = useState([]);
+
+  const { formName } = useContext(FormBoxContext);
 
   useEffect(() => {
     // console.log("component did mount useEffect");

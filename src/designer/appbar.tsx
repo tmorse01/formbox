@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState, useContext } from "react";
 import {
   Link,
   Menu,
@@ -16,17 +16,19 @@ import MenuIcon from "@mui/icons-material/Menu";
 import SavedFormsModal from "./savedformsmodal";
 import LoginModal from "./loginmodal";
 
+import { FormBoxContext } from "./formbuilder";
+
 export default function FormBoxAppBar({
-  formName,
   onChange,
   onNameChange,
   setToken,
-  token,
   setSnackbar,
   setUsername,
-  username,
+  getForms,
 }) {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const { formName, token, username } = useContext(FormBoxContext);
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const openJSONEditor = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -80,11 +82,10 @@ export default function FormBoxAppBar({
             </MenuItem>
           </Menu>
           <SavedFormsModal
-            formName={formName}
             onChange={onChange}
             onNameChange={onNameChange}
             handleMenuClose={handleClose}
-            username={username}
+            getForms={getForms}
           />
           <Typography variant="h6" component="div" sx={{ flexGrow: 1, ml: 2 }}>
             FormBox Form Builder
