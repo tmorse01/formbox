@@ -18,7 +18,8 @@ const style = {
 export default function FormDataGridPage() {
   const [selectedDocumentData, setSelectedDocumentData] = useState([]);
 
-  const { formName } = useContext(FormBoxContext);
+  const { formState } = useContext(FormBoxContext);
+  const { formName } = formState;
 
   useEffect(() => {
     // console.log("component did mount useEffect");

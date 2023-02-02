@@ -15,12 +15,12 @@ const style = {
 };
 
 export default function JSONEditorPage({
-  onChange,
-  onNameChange,
+  dispatchFormAction,
   setSnackbar,
   getForms,
 }) {
-  const { formJSON, formName, username } = useContext(FormBoxContext);
+  const { formState, user } = useContext(FormBoxContext);
+  const { formJSON, formName } = formState;
 
   useEffect(() => {
     setContent({ json: formJSON, text: undefined });
@@ -37,7 +37,7 @@ export default function JSONEditorPage({
 
   function submitJSONChanges() {
     let formJSON = content.json;
-    onChange(formJSON);
+    dispatchFormAction({ type: "update_JSON", payload: { formJSON } });
     saveForm(formName, formJSON);
   }
 
@@ -45,7 +45,7 @@ export default function JSONEditorPage({
     const body = {
       formName,
       formJSON,
-      username: username,
+      username: user.username,
     };
     const requestOptions = {
       method: "PUT",
@@ -78,7 +78,10 @@ export default function JSONEditorPage({
           label="Form Name"
           value={formName}
           onChange={(e) => {
-            onNameChange(e.target.value);
+            dispatchFormAction({
+              type: "update_formName",
+              payload: { formName: e.target.value },
+            });
           }}
         />
         <Button variant="text" onClick={submitJSONChanges}>

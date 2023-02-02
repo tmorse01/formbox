@@ -19,7 +19,8 @@ const style = {
 
 export default function FormBox() {
   const [values, setValues] = useState({});
-  const { formJSON } = useContext(FormBoxContext);
+  const { formState } = useContext(FormBoxContext);
+  const { formJSON, formName } = formState;
 
   function onFormChange({ formName, componentName, value }) {
     setValues({
@@ -46,7 +47,7 @@ export default function FormBox() {
 
   function onSubmit() {
     let formToSubmit = {
-      documentName: formJSON?.name,
+      documentName: formName,
       ...processValues(values),
     };
     console.log("submit", formToSubmit);

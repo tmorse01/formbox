@@ -38,13 +38,7 @@ interface State {
   showPassword: boolean;
 }
 
-export default function LoginModal({
-  setToken,
-  token,
-  setSnackbar,
-  setUsername,
-  username,
-}) {
+export default function LoginModal({ user, handleSetUser, setSnackbar }) {
   const [open, setOpen] = useState(false);
   const [values, setValues] = useState<State>({
     username: "",
@@ -95,8 +89,7 @@ export default function LoginModal({
         const result = JSON.parse(res);
         console.log("result from login api: ", result);
         if (result.token !== undefined) {
-          setToken(result.token);
-          setUsername(result.username);
+          handleSetUser({ token: result.token, username: result.username });
           handleClose();
           setSnackbar({ open: true, type: "success", message: result.message });
         } else {
@@ -125,8 +118,7 @@ export default function LoginModal({
   };
 
   const submitLogout = () => {
-    setToken(undefined);
-    setUsername(undefined);
+    handleSetUser({ token: undefined, username: undefined });
   };
 
   const loginForm = (
@@ -188,15 +180,15 @@ export default function LoginModal({
 
   return (
     <>
-      {token === undefined && (
+      {user.token === undefined && (
         <Button color="inherit" startIcon={<LoginIcon />} onClick={handleOpen}>
           Login
         </Button>
       )}
-      {token !== undefined && (
+      {user.token !== undefined && (
         <>
           <Button color="inherit" startIcon={<PersonIcon />}>
-            {username}
+            {user.username}
           </Button>
           <Button
             color="inherit"

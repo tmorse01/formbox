@@ -31,14 +31,14 @@ const style = {
 };
 
 export default function SavedFormsModal({
-  onChange,
-  onNameChange,
+  dispatchFormAction,
   handleMenuClose,
   getForms,
 }) {
   const [open, setOpen] = useState(false);
 
-  const { listOfForms, formName } = useContext(FormBoxContext);
+  const { listOfForms, formState } = useContext(FormBoxContext);
+  const { formName } = formState;
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
@@ -52,8 +52,14 @@ export default function SavedFormsModal({
       (form) => form.formName === documentName
     )?.formJSON;
     console.log("documentJSON: ", documentJSON);
-    onNameChange(documentName as string);
-    onChange(documentJSON);
+    dispatchFormAction({
+      type: "update_formName",
+      payload: { formName: documentName },
+    });
+    dispatchFormAction({
+      type: "update_JSON",
+      payload: { formJSON: documentJSON },
+    });
   };
 
   return (

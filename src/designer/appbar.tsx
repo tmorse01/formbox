@@ -19,14 +19,12 @@ import LoginModal from "./loginmodal";
 import { FormBoxContext } from "./formbuilder";
 
 export default function FormBoxAppBar({
-  onChange,
-  onNameChange,
-  setToken,
+  dispatchFormAction,
+  handleSetUser,
   setSnackbar,
-  setUsername,
   getForms,
 }) {
-  const { formName, token, username } = useContext(FormBoxContext);
+  const { user } = useContext(FormBoxContext);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const openJSONEditor = Boolean(anchorEl);
@@ -82,8 +80,7 @@ export default function FormBoxAppBar({
             </MenuItem>
           </Menu>
           <SavedFormsModal
-            onChange={onChange}
-            onNameChange={onNameChange}
+            dispatchFormAction={dispatchFormAction}
             handleMenuClose={handleClose}
             getForms={getForms}
           />
@@ -91,11 +88,9 @@ export default function FormBoxAppBar({
             FormBox Form Builder
           </Typography>
           <LoginModal
-            setToken={setToken}
-            token={token}
+            user={user}
             setSnackbar={setSnackbar}
-            setUsername={setUsername}
-            username={username}
+            handleSetUser={handleSetUser}
           />
         </Toolbar>
       </AppBar>
