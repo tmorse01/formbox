@@ -1,17 +1,12 @@
-import React from "react";
+import { useContext, useState } from "react";
 import { Container, Box, Button } from "@mui/material";
 
 import Form from "./form";
-import { formBoxProps } from "../types/componentType";
 import Typography from "@mui/material/Typography";
 
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
 
-type FormBoxProps = formBoxProps;
-
-type FormBoxState = {
-  values: {};
-};
+import { FormBoxContext } from "./formbuilder";
 
 const style = {
   bgcolor: "background.paper",
@@ -22,30 +17,23 @@ const style = {
   boxShadow: "4px 4px 12px #e0e0e0",
 };
 
-export default class FormBox extends React.Component<
-  FormBoxProps,
-  FormBoxState
-> {
-  constructor(props) {
-    super(props);
-    this.state = { values: {} };
-  }
+export default function FormBox() {
+  const [values, setValues] = useState({});
+  const { formJSON } = useContext(FormBoxContext);
 
-  onFormChange = ({ formName, componentName, value }) => {
-    this.setState({
-      values: {
-        ...this.state.values,
-        ...{
-          [formName]: {
-            ...this.state.values?.[formName],
-            ...{ [componentName]: value },
-          },
+  function onFormChange({ formName, componentName, value }) {
+    setValues({
+      ...values,
+      ...{
+        [formName]: {
+          ...values?.[formName],
+          ...{ [componentName]: value },
         },
       },
     });
-  };
+  }
 
-  processValues = (values) => {
+  function processValues(values) {
     let returnValues = {};
     for (const form in values) {
       let formValues = values[form];
@@ -54,18 +42,18 @@ export default class FormBox extends React.Component<
       }
     }
     return returnValues;
-  };
+  }
 
-  onSubmit = () => {
+  function onSubmit() {
     let formToSubmit = {
-      documentName: this.props.completeForm.name,
-      ...this.processValues(this.state.values),
+      documentName: formJSON?.name,
+      ...processValues(values),
     };
     console.log("submit", formToSubmit);
-    this.submitFormValues(formToSubmit);
-  };
+    submitFormValues(formToSubmit);
+  }
 
-  submitFormValues(formToSubmit) {
+  function submitFormValues(formToSubmit) {
     const requestOptions = {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -77,43 +65,39 @@ export default class FormBox extends React.Component<
       .catch((res) => console.log("error from api: ", res));
   }
 
-  render() {
-    // console.log("FORMBOX render :", this);
-    let forms = this.props.completeForm.forms;
-    return (
-      <div>
-        <Container
-          sx={style}
-          maxWidth="sm"
-          component="form"
-          noValidate
-          autoComplete="off"
-          onSubmit={(e) => {
-            e.preventDefault();
-            this.onSubmit();
-            return false;
-          }}
-        >
-          <Typography sx={{ color: "text.primary" }} variant="h2">
-            {this.props.completeForm.title ?? "FormBox"}
-          </Typography>
-          {forms.map((form, i) => {
-            return (
-              <Form key={i} form={form} onFormChange={this.onFormChange} />
-            );
-          })}
-          <Box display="flex" justifyContent={"right"} sx={{ p: 2 }}>
-            <Button
-              id={"submit"}
-              type={"submit"}
-              variant="contained"
-              startIcon={<SaveAltIcon />}
-            >
-              {"Submit"}
-            </Button>
-          </Box>
-        </Container>
-      </div>
-    );
-  }
+  // console.log("FORMBOX render :", this);
+  let forms = formJSON?.forms;
+  return (
+    <div>
+      <Container
+        sx={style}
+        maxWidth="sm"
+        component="form"
+        noValidate
+        autoComplete="off"
+        onSubmit={(e) => {
+          e.preventDefault();
+          onSubmit();
+          return false;
+        }}
+      >
+        <Typography sx={{ color: "text.primary" }} variant="h2">
+          {formJSON?.title ?? "FormBox"}
+        </Typography>
+        {forms?.map((form, i) => {
+          return <Form key={i} form={form} onFormChange={onFormChange} />;
+        })}
+        <Box display="flex" justifyContent={"right"} sx={{ p: 2 }}>
+          <Button
+            id={"submit"}
+            type={"submit"}
+            variant="contained"
+            startIcon={<SaveAltIcon />}
+          >
+            {"Submit"}
+          </Button>
+        </Box>
+      </Container>
+    </div>
+  );
 }

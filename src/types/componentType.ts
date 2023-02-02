@@ -19,10 +19,6 @@ export type componentProps = defaultProps & {
   iconName: string | undefined;
 };
 
-export type formBoxProps = {
-  completeForm: container;
-};
-
 export type formBoxAppBarProps = {
   completeForm: container | undefined;
   formName: string;

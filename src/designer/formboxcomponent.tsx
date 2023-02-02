@@ -1,12 +1,7 @@
-import React from "react";
 import { FormControl, FormHelperText } from "@mui/material";
 import FormBoxButton from "../components/button";
 import FormBoxTextField from "../components/textfield";
 import { componentProps } from "../types/componentType";
-
-type CompState = {
-  visible: true;
-};
 
 type CompProps = {
   key: number;
@@ -14,24 +9,21 @@ type CompProps = {
   onChange: ({ name, value }) => void;
 };
 
-export default class FormBoxComponent extends React.Component<
-  CompProps,
-  CompState
-> {
-  onChange = (e: any) => {
-    let component = this.props.component;
+const FormBoxComponent = (props: CompProps) => {
+  function onChange(e: any) {
+    let component = props.component;
     let value = e.target.value;
-    this.props.onChange({ name: component.name, value: value });
-  };
+    props.onChange({ name: component.name, value: value });
+  }
 
-  getComponent = (component: any) => {
+  function getComponent(component: any) {
     if (component.type === "textfield") {
       return (
         <FormBoxTextField
           name={component.name}
           title={component.title}
           required={component.required}
-          onChange={this.onChange}
+          onChange={onChange}
         />
       );
     } else if (component.type === "button") {
@@ -46,9 +38,9 @@ export default class FormBoxComponent extends React.Component<
     } else {
       return <div>FormBoxComponent</div>;
     }
-  };
+  }
 
-  formControl = (control: any, component: any) => {
+  function getFormControl(control: any, component: any) {
     return (
       <FormControl variant="standard">
         {control}
@@ -57,13 +49,13 @@ export default class FormBoxComponent extends React.Component<
         </FormHelperText>
       </FormControl>
     );
-  };
-
-  render() {
-    let component = this.props.component;
-    // console.log("component:", this);
-    let control = this.getComponent(component);
-    let formControl = this.formControl(control, component);
-    return formControl;
   }
-}
+
+  let component = props.component;
+  // console.log("component:", this);
+  let control = getComponent(component);
+  let componentObject = getFormControl(control, component);
+  return componentObject;
+};
+
+export default FormBoxComponent;

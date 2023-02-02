@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useReducer } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import ErrorPage from "./errorpage";
@@ -145,7 +145,7 @@ export default class FormBuilder extends React.Component<
     const router = createBrowserRouter([
       {
         path: "/",
-        element: completeForm ? <FormBox completeForm={completeForm} /> : <></>,
+        element: completeForm ? <FormBox /> : <></>,
         errorElement: <ErrorPage />,
       },
       {
