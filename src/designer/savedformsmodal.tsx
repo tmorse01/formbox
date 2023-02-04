@@ -1,4 +1,5 @@
 import { useEffect, useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { FormBoxContext } from "./formbuilder";
 // MUI
 import { Box, IconButton, Typography, Modal, MenuItem } from "@mui/material";
@@ -30,45 +31,42 @@ const style = {
   width: "400px",
 };
 
-export default function SavedFormsModal({
-  dispatchFormAction,
-  handleMenuClose,
-  getForms,
-}) {
+export default function SavedFormsModal({ dispatchFormAction, getForms }) {
   const [open, setOpen] = useState(false);
 
-  const { listOfForms, formState } = useContext(FormBoxContext);
+  const { listOfForms, formState, user } = useContext(FormBoxContext);
   const { formName } = formState;
+
+  const navigate = useNavigate();
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
-    handleMenuClose();
   };
 
   const handleSelectForm = (event: SelectChangeEvent) => {
-    const documentName = event.target.value;
-    const documentJSON = listOfForms.find(
-      (form) => form.formName === documentName
-    )?.formJSON;
-    console.log("documentJSON: ", documentJSON);
-    dispatchFormAction({
-      type: "update_formName",
-      payload: { formName: documentName },
-    });
-    dispatchFormAction({
-      type: "update_JSON",
-      payload: { formJSON: documentJSON },
-    });
+    const formName = event.target.value;
+    var location = window.location;
+    var pathname = location.pathname;
+    if (pathname !== "/") {
+      var splitPathname = pathname.split("/");
+      splitPathname.pop();
+      splitPathname.push(formName);
+      navigate(splitPathname.join("/"));
+    } else {
+      navigate("/form/" + formName);
+    }
   };
 
   return (
     <>
       <IconButton
         key="savedformsmodal"
+        title="Open Form"
         color="inherit"
         size="large"
         onClick={handleOpen}
+        disabled={user.username === undefined}
       >
         <FolderOpenIcon />
       </IconButton>

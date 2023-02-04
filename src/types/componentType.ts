@@ -42,7 +42,7 @@ export type formProps = defaultProps & {
 export type FormBoxContextType = {
   formState: {
     formJSON: container | undefined;
-    formName: string;
+    formName: string | undefined;
   };
   user: {
     username: string | null | undefined;

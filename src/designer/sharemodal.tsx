@@ -32,15 +32,12 @@ const ShareModal = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [link, setLink] = useState<URL>();
 
-  const { formState } = useContext(FormBoxContext);
+  const { formState, user } = useContext(FormBoxContext);
   const { formName } = formState;
 
   useEffect(() => {
     //generate share url
-    let baseURL = window.location.protocol + "//" + window.location.hostname;
-    if (window.location.port) {
-      baseURL += ":" + window.location.port;
-    }
+    let baseURL = window.location.origin;
     let shareURL = new URL("/form/" + formName, baseURL);
     setLink(shareURL);
   }, [formName]);
@@ -71,6 +68,8 @@ const ShareModal = () => {
         edge="start"
         color="inherit"
         aria-label="share"
+        title="Share Form"
+        disabled={formName === undefined}
         onClick={() => setOpen(true)}
       >
         <ShareIcon />

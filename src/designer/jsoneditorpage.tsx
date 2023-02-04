@@ -1,7 +1,9 @@
 import { useEffect, useState, useContext } from "react";
+import { useParams } from "react-router-dom";
 import FormBoxJSONEditor from "./jsoneditor";
 import { Button, TextField, Box, Typography } from "@mui/material";
 import { FormBoxContext } from "./formbuilder";
+import { loadForm } from "../helpers/formrequest";
 
 const style = {
   bgcolor: "background.paper",
@@ -21,6 +23,23 @@ export default function JSONEditorPage({
 }) {
   const { formState, user } = useContext(FormBoxContext);
   const { formJSON, formName } = formState;
+
+  const { form } = useParams();
+  useEffect(() => {
+    if (form) {
+      loadForm(form).then((loadedFormState) => {
+        dispatchFormAction({
+          type: "update_formState",
+          payload: {
+            formState: {
+              formJSON: loadedFormState.formJSON,
+              formName: loadedFormState.formName,
+            },
+          },
+        });
+      });
+    }
+  }, [form]);
 
   useEffect(() => {
     setContent({ json: formJSON, text: undefined });
@@ -55,7 +74,7 @@ export default function JSONEditorPage({
     fetch("http://localhost:3001/saveForm", requestOptions)
       .then((res) => res.text())
       .then((res) => {
-        console.log("result from api: ", res);
+        // console.log("result from api: ", res);
         const resObj = JSON.parse(res);
         if (resObj?.error) {
           setSnackbar({ open: true, type: "error", message: resObj.error });
@@ -66,7 +85,6 @@ export default function JSONEditorPage({
       })
       .catch((res) => console.log("error from api: ", res));
   }
-
   return (
     <>
       <Box component="form" sx={style} noValidate>
@@ -76,7 +94,7 @@ export default function JSONEditorPage({
         <TextField
           placeholder="Form Name"
           label="Form Name"
-          value={formName}
+          value={formName || ""}
           onChange={(e) => {
             dispatchFormAction({
               type: "update_formName",

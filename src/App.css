@@ -10,3 +10,9 @@
   background-image: url("./assets/ffflux.svg");
   background-size: cover;
 }
+
+.AppBarLogo {
+  display: grid;
+  grid-template-columns: repeat(2, min-content);
+  align-items: center;
+}

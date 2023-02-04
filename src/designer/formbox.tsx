@@ -2,6 +2,7 @@ import { useContext, useState, useEffect } from "react";
 import { Container, Box, Button } from "@mui/material";
 import { useParams } from "react-router-dom";
 
+import { loadForm } from "../helpers/formrequest";
 import Form from "./form";
 import Typography from "@mui/material/Typography";
 
@@ -27,32 +28,19 @@ export default function FormBox({ dispatchFormAction }) {
   const { form } = useParams();
   useEffect(() => {
     if (form) {
-      loadForm(form);
-    }
-  }, [form]);
-
-  const loadForm = (form) => {
-    const requestOptions = {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    };
-    fetch("http://localhost:3001/getForm?form=" + form, requestOptions)
-      .then((res) => res.text())
-      .then((res) => {
-        const response = JSON.parse(res);
-        // console.log("result from getForm api: ", response);
+      loadForm(form).then((loadedFormState) => {
         dispatchFormAction({
           type: "update_formState",
           payload: {
             formState: {
-              formJSON: response.results.formJSON,
-              formName: response.results.formName,
+              formJSON: loadedFormState.formJSON,
+              formName: loadedFormState.formName,
             },
           },
         });
-      })
-      .catch((res) => console.log("error from getForm api: ", res));
-  };
+      });
+    }
+  }, [form]);
 
   function onFormChange({ formName, componentName, value }) {
     setValues({
@@ -79,7 +67,7 @@ export default function FormBox({ dispatchFormAction }) {
 
   function onSubmit() {
     let formToSubmit = {
-      documentName: formName,
+      formName: formName,
       ...processValues(values),
     };
     console.log("submit", formToSubmit);

@@ -87,7 +87,7 @@ export default function LoginModal({ user, handleSetUser, setSnackbar }) {
       .then((res) => res.text())
       .then((res) => {
         const result = JSON.parse(res);
-        console.log("result from login api: ", result);
+        // console.log("result from login api: ", result);
         if (result.token !== undefined) {
           handleSetUser({ token: result.token, username: result.username });
           handleClose();
@@ -112,7 +112,7 @@ export default function LoginModal({ user, handleSetUser, setSnackbar }) {
     fetch("http://localhost:3001/signup", requestOptions)
       .then((res) => res.text())
       .then((res) => {
-        console.log("result from signup api: ", res);
+        // console.log("result from signup api: ", res);
       })
       .catch((res) => console.log("error from signup api: ", res));
   };

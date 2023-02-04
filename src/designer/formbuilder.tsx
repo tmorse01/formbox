@@ -41,7 +41,7 @@ const theme = createTheme({
 export const FormBoxContext = React.createContext<FormBoxContextType>({
   formState: {
     formJSON: undefined,
-    formName: "",
+    formName: undefined,
   },
   user: {
     username: undefined,
@@ -54,7 +54,7 @@ export const FormBoxContext = React.createContext<FormBoxContextType>({
 function createInitialFormState() {
   return {
     JSON: undefined,
-    formName: "",
+    formName: undefined,
   };
 }
 
@@ -99,7 +99,7 @@ const FormBuilder = () => {
     formStateReducer,
     {
       formJSON: undefined,
-      formName: "",
+      formName: undefined,
     },
     createInitialFormState
   );
@@ -149,7 +149,7 @@ const FormBuilder = () => {
       .then((res) => res.text())
       .then((res) => {
         const response = JSON.parse(res);
-        console.log("result from getForms api: ", response);
+        // console.log("result from getForms api: ", response);
         setListOfForms(response.results);
       })
       .catch((res) => console.log("error from getForms api: ", res));
@@ -172,25 +172,42 @@ const FormBuilder = () => {
 
   // Router
 
+  const wrapRoute = (control) => {
+    return (
+      <div className="formBuilderWrapper">
+        <FormBoxAppBar
+          dispatchFormAction={dispatchFormAction}
+          handleSetUser={handleSetUser}
+          setSnackbar={setSnackbar}
+          getForms={getForms}
+        />
+        <div className="formBuilder">{control}</div>
+        <FormBoxSnackbar snackbar={snackbar} setSnackbar={setSnackbar} />
+      </div>
+    );
+  };
+
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <FormBox dispatchFormAction={dispatchFormAction} />,
+      element: wrapRoute(<></>),
       errorElement: <ErrorPage />,
     },
     {
       path: "/form/:form",
-      element: <FormBox dispatchFormAction={dispatchFormAction} />,
+      element: wrapRoute(<FormBox dispatchFormAction={dispatchFormAction} />),
       errorElement: <ErrorPage />,
     },
     {
-      path: "/gridview",
-      element: <FormDataGridPage />,
+      path: "/responses/:form",
+      element: wrapRoute(
+        <FormDataGridPage dispatchFormAction={dispatchFormAction} />
+      ),
       errorElement: <ErrorPage />,
     },
     {
-      path: "/jsoneditor",
-      element: (
+      path: "/jsoneditor/:form",
+      element: wrapRoute(
         <JSONEditorPage
           dispatchFormAction={dispatchFormAction}
           setSnackbar={setSnackbar}
@@ -201,7 +218,6 @@ const FormBuilder = () => {
     },
   ]);
 
-  console.log("formbuilder");
   // JSX element
   return (
     <FormBoxContext.Provider
@@ -212,20 +228,9 @@ const FormBuilder = () => {
       }}
     >
       <ThemeProvider theme={theme}>
-        <div className="formBuilderWrapper">
-          <FormBoxAppBar
-            dispatchFormAction={dispatchFormAction}
-            handleSetUser={handleSetUser}
-            setSnackbar={setSnackbar}
-            getForms={getForms}
-          />
-          <div className="formBuilder">
-            <React.StrictMode>
-              <RouterProvider router={router} />
-            </React.StrictMode>
-          </div>
-          <FormBoxSnackbar snackbar={snackbar} setSnackbar={setSnackbar} />
-        </div>
+        <React.StrictMode>
+          <RouterProvider router={router} />
+        </React.StrictMode>
       </ThemeProvider>
     </FormBoxContext.Provider>
   );
