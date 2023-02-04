@@ -38,3 +38,15 @@ export type formProps = defaultProps & {
   layout: string;
   type: string;
 };
+
+export type FormBoxContextType = {
+  formState: {
+    formJSON: container | undefined;
+    formName: string;
+  };
+  user: {
+    username: string | null | undefined;
+    token: string | null | undefined;
+  };
+  listOfForms: formDataProps[];
+};

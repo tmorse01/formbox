@@ -1,4 +1,4 @@
-import React, { useReducer, useState, useEffect, useCallback } from "react";
+import React, { useReducer, useState, useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import ErrorPage from "./errorpage";
@@ -7,7 +7,7 @@ import FormBoxAppBar from "./appbar";
 import FormDataGridPage from "./formdatagridpage";
 import JSONEditorPage from "./jsoneditorpage";
 
-import { formDataProps, container } from "../types/componentType";
+import { FormBoxContextType } from "../types/componentType";
 
 import "../css/formbuilder.css";
 import FormBoxSnackbar from "./snackbar";
@@ -15,7 +15,26 @@ import FormBoxSnackbar from "./snackbar";
 // css
 import "../App.css";
 
-export const FormBoxContext = React.createContext<CurrentFormBoxContext>({
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      light: "#4dabf5",
+      main: "#2196f3",
+      dark: "#1769aa",
+      contrastText: "#fff",
+    },
+    secondary: {
+      light: "#ffa733",
+      main: "#ff9100",
+      dark: "#b26500",
+      contrastText: "#fff",
+    },
+  },
+});
+
+export const FormBoxContext = React.createContext<FormBoxContextType>({
   formState: {
     formJSON: undefined,
     formName: "",
@@ -27,18 +46,7 @@ export const FormBoxContext = React.createContext<CurrentFormBoxContext>({
   listOfForms: [],
 });
 
-type CurrentFormBoxContext = {
-  formState: {
-    formJSON: container | undefined;
-    formName: string;
-  };
-  user: {
-    username: string | null | undefined;
-    token: string | null | undefined;
-  };
-  listOfForms: formDataProps[];
-};
-
+// Global functions
 function createInitialFormState() {
   return {
     JSON: undefined,
@@ -76,6 +84,7 @@ const getUsername = () => {
 };
 
 const FormBuilder = () => {
+  // State
   const [formState, dispatchFormAction] = useReducer(
     formStateReducer,
     {
@@ -96,15 +105,20 @@ const FormBuilder = () => {
   });
   const [listOfForms, setListOfForms] = useState([]);
 
+  // Effects
+
   useEffect(() => {
     connectToDb();
-    if (user.username) {
-      getForms();
-    }
     return () => {
       //disconnectDb();
     };
   }, []);
+
+  useEffect(() => {
+    getForms();
+  }, [user]);
+
+  // Requests
 
   const connectToDb = () => {
     fetch("http://localhost:3001/connectToDb")
@@ -131,6 +145,7 @@ const FormBuilder = () => {
       .catch((res) => console.log("error from getForms api: ", res));
   };
 
+  // Setters
   const handleSetUser = (user) => {
     if (user.token === undefined) {
       sessionStorage.removeItem("token");
@@ -144,6 +159,8 @@ const FormBuilder = () => {
     }
     setUser(user);
   };
+
+  // Router
 
   const router = createBrowserRouter([
     {
@@ -170,6 +187,7 @@ const FormBuilder = () => {
   ]);
 
   console.log("formbuilder");
+  // JSX element
   return (
     <FormBoxContext.Provider
       value={{
@@ -178,20 +196,22 @@ const FormBuilder = () => {
         listOfForms: listOfForms,
       }}
     >
-      <div className="formBuilderWrapper">
-        <FormBoxAppBar
-          dispatchFormAction={dispatchFormAction}
-          handleSetUser={handleSetUser}
-          setSnackbar={setSnackbar}
-          getForms={getForms}
-        />
-        <div className="formBuilder">
-          <React.StrictMode>
-            <RouterProvider router={router} />
-          </React.StrictMode>
+      <ThemeProvider theme={theme}>
+        <div className="formBuilderWrapper">
+          <FormBoxAppBar
+            dispatchFormAction={dispatchFormAction}
+            handleSetUser={handleSetUser}
+            setSnackbar={setSnackbar}
+            getForms={getForms}
+          />
+          <div className="formBuilder">
+            <React.StrictMode>
+              <RouterProvider router={router} />
+            </React.StrictMode>
+          </div>
+          <FormBoxSnackbar snackbar={snackbar} setSnackbar={setSnackbar} />
         </div>
-        <FormBoxSnackbar snackbar={snackbar} setSnackbar={setSnackbar} />
-      </div>
+      </ThemeProvider>
     </FormBoxContext.Provider>
   );
 };

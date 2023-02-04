@@ -93,6 +93,7 @@ export default function FormBox() {
             id={"submit"}
             type={"submit"}
             variant="contained"
+            color="secondary"
             startIcon={<SaveAltIcon />}
           >
             {"Submit"}

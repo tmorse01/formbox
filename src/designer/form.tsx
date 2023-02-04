@@ -1,4 +1,3 @@
-import React from "react";
 import Box from "@mui/material/Box";
 import FormBoxComponent from "./formboxcomponent";
 import { formProps } from "../types/componentType";
