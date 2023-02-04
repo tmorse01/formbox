@@ -2,7 +2,7 @@
 
 :root {
   --main-bg-color: #bbdefb;
-  --border-color: #616161;
+  --border-color: rgba(0, 0, 0, 0.23);
 }
 
 .App {

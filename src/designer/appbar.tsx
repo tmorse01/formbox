@@ -13,6 +13,7 @@ import {
 // icons
 import MenuIcon from "@mui/icons-material/Menu";
 
+import ShareModal from "./sharemodal";
 import SavedFormsModal from "./savedformsmodal";
 import LoginModal from "./loginmodal";
 
@@ -25,7 +26,6 @@ export default function FormBoxAppBar({
   getForms,
 }) {
   const { user } = useContext(FormBoxContext);
-
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const openJSONEditor = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -48,6 +48,12 @@ export default function FormBoxAppBar({
           >
             <MenuIcon />
           </IconButton>
+          <SavedFormsModal
+            dispatchFormAction={dispatchFormAction}
+            handleMenuClose={handleClose}
+            getForms={getForms}
+          />
+          <ShareModal />
           <Menu
             id="basic-menu"
             anchorEl={anchorEl}
@@ -79,11 +85,6 @@ export default function FormBoxAppBar({
               </Typography>
             </MenuItem>
           </Menu>
-          <SavedFormsModal
-            dispatchFormAction={dispatchFormAction}
-            handleMenuClose={handleClose}
-            getForms={getForms}
-          />
           <Typography variant="h6" component="div" sx={{ flexGrow: 1, ml: 2 }}>
             FormBox Form Builder
           </Typography>

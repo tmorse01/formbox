@@ -1,5 +1,6 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { Container, Box, Button } from "@mui/material";
+import { useParams } from "react-router-dom";
 
 import Form from "./form";
 import Typography from "@mui/material/Typography";
@@ -17,10 +18,41 @@ const style = {
   boxShadow: "4px 4px 12px #e0e0e0",
 };
 
-export default function FormBox() {
+export default function FormBox({ dispatchFormAction }) {
   const [values, setValues] = useState({});
   const { formState } = useContext(FormBoxContext);
   const { formJSON, formName } = formState;
+
+  // handle form loading from url param for share links
+  const { form } = useParams();
+  useEffect(() => {
+    if (form) {
+      loadForm(form);
+    }
+  }, [form]);
+
+  const loadForm = (form) => {
+    const requestOptions = {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    };
+    fetch("http://localhost:3001/getForm?form=" + form, requestOptions)
+      .then((res) => res.text())
+      .then((res) => {
+        const response = JSON.parse(res);
+        // console.log("result from getForm api: ", response);
+        dispatchFormAction({
+          type: "update_formState",
+          payload: {
+            formState: {
+              formJSON: response.results.formJSON,
+              formName: response.results.formName,
+            },
+          },
+        });
+      })
+      .catch((res) => console.log("error from getForm api: ", res));
+  };
 
   function onFormChange({ formName, componentName, value }) {
     setValues({
@@ -68,38 +100,42 @@ export default function FormBox() {
 
   // console.log("FORMBOX render :", this);
   let forms = formJSON?.forms;
-  return (
-    <div>
-      <Container
-        sx={style}
-        maxWidth="sm"
-        component="form"
-        noValidate
-        autoComplete="off"
-        onSubmit={(e) => {
-          e.preventDefault();
-          onSubmit();
-          return false;
-        }}
-      >
-        <Typography sx={{ color: "text.primary" }} variant="h2">
-          {formJSON?.title ?? "FormBox"}
-        </Typography>
-        {forms?.map((form, i) => {
-          return <Form key={i} form={form} onFormChange={onFormChange} />;
-        })}
-        <Box display="flex" justifyContent={"right"} sx={{ p: 2 }}>
-          <Button
-            id={"submit"}
-            type={"submit"}
-            variant="contained"
-            color="secondary"
-            startIcon={<SaveAltIcon />}
-          >
-            {"Submit"}
-          </Button>
-        </Box>
-      </Container>
-    </div>
-  );
+  if (formJSON) {
+    return (
+      <div>
+        <Container
+          sx={style}
+          maxWidth="sm"
+          component="form"
+          noValidate
+          autoComplete="off"
+          onSubmit={(e) => {
+            e.preventDefault();
+            onSubmit();
+            return false;
+          }}
+        >
+          <Typography sx={{ color: "text.primary" }} variant="h2">
+            {formJSON?.title}
+          </Typography>
+          {forms?.map((form, i) => {
+            return <Form key={i} form={form} onFormChange={onFormChange} />;
+          })}
+          <Box display="flex" justifyContent={"right"} sx={{ p: 2 }}>
+            <Button
+              id={"submit"}
+              type={"submit"}
+              variant="contained"
+              color="secondary"
+              startIcon={<SaveAltIcon />}
+            >
+              {"Submit"}
+            </Button>
+          </Box>
+        </Container>
+      </div>
+    );
+  } else {
+    return <></>;
+  }
 }

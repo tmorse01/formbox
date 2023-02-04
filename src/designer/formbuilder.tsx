@@ -1,5 +1,9 @@
 import React, { useReducer, useState, useEffect } from "react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  useParams,
+} from "react-router-dom";
 
 import ErrorPage from "./errorpage";
 import FormBox from "./formbox";
@@ -66,6 +70,12 @@ function formStateReducer(state, action) {
       return {
         ...state,
         formJSON: action.payload.formJSON,
+      };
+    }
+    case "update_formState": {
+      return {
+        ...state,
+        ...action.payload.formState,
       };
     }
     default: {
@@ -165,7 +175,12 @@ const FormBuilder = () => {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: formState.formJSON ? <FormBox /> : <></>,
+      element: <FormBox dispatchFormAction={dispatchFormAction} />,
+      errorElement: <ErrorPage />,
+    },
+    {
+      path: "/form/:form",
+      element: <FormBox dispatchFormAction={dispatchFormAction} />,
       errorElement: <ErrorPage />,
     },
     {
