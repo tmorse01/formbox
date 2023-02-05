@@ -27,26 +27,30 @@ export default function FormBoxAppBar({
   getForms,
 }) {
   const { user, formState } = useContext(FormBoxContext);
+
   const pages = [
     {
       key: "form",
       title: "Form",
       path: "/form/" + formState.formName,
-      disabled: formState.formName === undefined,
+      disabled: formState.formName === undefined || user.username === undefined,
       icon: <DynamicFormIcon />,
     },
     {
       key: "responses",
       title: "Responses",
       path: "/responses/" + formState.formName,
-      disabled: formState.formName === undefined,
+      disabled: formState.formName === undefined || user.username === undefined,
       icon: <TableRowsIcon />,
     },
     {
       key: "jsoneditor",
       title: "Editor",
-      path: "/jsoneditor/" + formState.formName,
-      disabled: formState.formName === undefined,
+      path: formState.formName
+        ? "/jsoneditor/" + formState.formName
+        : "/jsoneditor/",
+      disabled: user.username === undefined,
+
       icon: <DataArrayIcon />,
     },
   ];

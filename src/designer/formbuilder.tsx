@@ -7,6 +7,8 @@ import FormBoxAppBar from "./appbar";
 import FormDataGridPage from "./formdatagridpage";
 import JSONEditorPage from "./jsoneditorpage";
 
+import { getForms } from "../helpers/formrequest";
+
 import { FormBoxContextType } from "../types/componentType";
 
 import "../css/formbuilder.css";
@@ -121,31 +123,18 @@ const FormBuilder = () => {
   }, []);
 
   useEffect(() => {
-    getForms();
+    getForms(user.username).then((forms) => {
+      setListOfForms(forms);
+    });
   }, [user]);
 
   // Requests
 
   const connectToDb = () => {
-    fetch("/connectToDb")
+    fetch(process.env.REACT_APP_FORMBOX_API + "/connectToDb")
       .then((res) => res.text())
       .then((res) => console.log("result from connectToDb: ", res))
       .catch((res) => console.log("error from connectToDb: ", res));
-  };
-
-  const getForms = () => {
-    const requestOptions = {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    };
-    fetch("/getForms?username=" + user.username, requestOptions)
-      .then((res) => res.text())
-      .then((res) => {
-        const response = JSON.parse(res);
-        // console.log("result from getForms api: ", response);
-        setListOfForms(response.results);
-      })
-      .catch((res) => console.log("error from getForms api: ", res));
   };
 
   // Setters
@@ -199,6 +188,17 @@ const FormBuilder = () => {
     },
     {
       path: "/jsoneditor/:form",
+      element: wrapRoute(
+        <JSONEditorPage
+          dispatchFormAction={dispatchFormAction}
+          setSnackbar={setSnackbar}
+          getForms={getForms}
+        />
+      ),
+      errorElement: <ErrorPage />,
+    },
+    {
+      path: "/jsoneditor/",
       element: wrapRoute(
         <JSONEditorPage
           dispatchFormAction={dispatchFormAction}

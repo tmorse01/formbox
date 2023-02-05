@@ -39,7 +39,7 @@ export default function JSONEditorPage({
         });
       });
     }
-  }, [form]);
+  }, [form, dispatchFormAction]);
 
   useEffect(() => {
     setContent({ json: formJSON, text: undefined });
@@ -71,7 +71,7 @@ export default function JSONEditorPage({
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     };
-    fetch("/saveForm", requestOptions)
+    fetch(process.env.REACT_APP_FORMBOX_API + "/saveForm", requestOptions)
       .then((res) => res.text())
       .then((res) => {
         // console.log("result from api: ", res);

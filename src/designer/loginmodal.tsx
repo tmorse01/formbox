@@ -17,10 +17,6 @@ import PersonIcon from "@mui/icons-material/Person";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
-import * as dotenv from "dotenv";
-
-dotenv.config();
-
 const style = {
   position: "absolute" as "absolute",
   top: "50%",
@@ -87,8 +83,7 @@ export default function LoginModal({ user, handleSetUser, setSnackbar }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     };
-    console.log("FORMBOX_SERVER", process.env, process.env.FORMBOX_SERVER);
-    fetch(process.env.FORMBOX_SERVER + "/login", requestOptions)
+    fetch(process.env.REACT_APP_FORMBOX_API + "/login", requestOptions)
       .then((res) => res.text())
       .then((res) => {
         const result = JSON.parse(res);
@@ -114,7 +109,7 @@ export default function LoginModal({ user, handleSetUser, setSnackbar }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     };
-    fetch("/signup", requestOptions)
+    fetch(process.env.REACT_APP_FORMBOX_API + "/signup", requestOptions)
       .then((res) => res.text())
       .then((res) => {
         // console.log("result from signup api: ", res);

@@ -40,7 +40,7 @@ const FormBox = ({ dispatchFormAction }) => {
         });
       });
     }
-  }, [form]);
+  }, [form, dispatchFormAction]);
 
   function onFormChange({ formName, componentName, value }) {
     setValues({
@@ -80,7 +80,10 @@ const FormBox = ({ dispatchFormAction }) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formToSubmit),
     };
-    fetch("/submitFormValues", requestOptions)
+    fetch(
+      process.env.REACT_APP_FORMBOX_API + "/submitFormValues",
+      requestOptions
+    )
       .then((res) => res.text())
       .then((res) => console.log("result from api: ", res))
       .catch((res) => console.log("error from api: ", res));

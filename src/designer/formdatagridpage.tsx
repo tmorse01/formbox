@@ -38,7 +38,7 @@ export default function FormDataGridPage({ dispatchFormAction }) {
         });
       });
     }
-  }, [form]);
+  }, [form, dispatchFormAction]);
 
   useEffect(() => {
     // console.log("component did mount useEffect");
@@ -53,7 +53,7 @@ export default function FormDataGridPage({ dispatchFormAction }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ formName }),
     };
-    fetch("/getFormData", requestOptions)
+    fetch(process.env.REACT_APP_FORMBOX_API + "/getFormData", requestOptions)
       .then((res) => res.text())
       .then((res) => {
         // console.log("result from getFormData api: ", res);
