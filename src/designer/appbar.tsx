@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { Fragment, useContext } from "react";
 import {
   Button,
   Container,
@@ -103,7 +103,7 @@ export default function FormBoxAppBar({
           >
             {pages.map((page) => {
               return (
-                <>
+                <Fragment key={page.key}>
                   <Typography>
                     <Button
                       onClick={() => navigateToPath(page.path)}
@@ -114,7 +114,7 @@ export default function FormBoxAppBar({
                       {page.title}
                     </Button>
                   </Typography>
-                </>
+                </Fragment>
               );
             })}
           </Box>

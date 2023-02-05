@@ -1,3 +1,17 @@
+export function connectToDb() {
+  fetch(process.env.REACT_APP_FORMBOX_API + "/connectToDb")
+    .then((res) => res.text())
+    .then((res) => console.log("result from connectToDb: ", res))
+    .catch((res) => console.log("error from connectToDb: ", res));
+}
+
+export function disconnectDb() {
+  fetch(process.env.REACT_APP_FORMBOX_API + "/disconnectDb")
+    .then((res) => res.text())
+    .then((res) => console.log("result from disconnectDb: ", res))
+    .catch((res) => console.log("error from disconnectDb: ", res));
+}
+
 export function loadForm(form) {
   const requestOptions = {
     method: "GET",

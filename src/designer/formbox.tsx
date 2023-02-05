@@ -19,7 +19,7 @@ const style = {
   boxShadow: "4px 4px 12px #e0e0e0",
 };
 
-const FormBox = ({ dispatchFormAction }) => {
+const FormBox = ({ dispatchFormAction, setSnackbar }) => {
   const [values, setValues] = useState({});
   const { formState } = useContext(FormBoxContext);
   const { formJSON, formName } = formState;
@@ -85,7 +85,15 @@ const FormBox = ({ dispatchFormAction }) => {
       requestOptions
     )
       .then((res) => res.text())
-      .then((res) => console.log("result from api: ", res))
+      .then((res) => {
+        console.log("result from submitFormValues: ", res);
+        const resObj = JSON.parse(res);
+        if (resObj?.error) {
+          setSnackbar({ open: true, type: "error", message: resObj.error });
+        } else {
+          setSnackbar({ open: true, type: "success", message: resObj.message });
+        }
+      })
       .catch((res) => console.log("error from api: ", res));
   }
 

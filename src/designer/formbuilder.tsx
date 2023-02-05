@@ -7,7 +7,7 @@ import FormBoxAppBar from "./appbar";
 import FormDataGridPage from "./formdatagridpage";
 import JSONEditorPage from "./jsoneditorpage";
 
-import { getForms } from "../helpers/formrequest";
+import { getForms, connectToDb, disconnectDb } from "../helpers/formrequest";
 
 import { FormBoxContextType } from "../types/componentType";
 
@@ -118,7 +118,7 @@ const FormBuilder = () => {
   useEffect(() => {
     connectToDb();
     return () => {
-      //disconnectDb();
+      disconnectDb();
     };
   }, []);
 
@@ -127,15 +127,6 @@ const FormBuilder = () => {
       setListOfForms(forms);
     });
   }, [user]);
-
-  // Requests
-
-  const connectToDb = () => {
-    fetch(process.env.REACT_APP_FORMBOX_API + "/connectToDb")
-      .then((res) => res.text())
-      .then((res) => console.log("result from connectToDb: ", res))
-      .catch((res) => console.log("error from connectToDb: ", res));
-  };
 
   // Setters
   const handleSetUser = (user) => {
@@ -176,7 +167,12 @@ const FormBuilder = () => {
     },
     {
       path: "/form/:form",
-      element: wrapRoute(<FormBox dispatchFormAction={dispatchFormAction} />),
+      element: wrapRoute(
+        <FormBox
+          dispatchFormAction={dispatchFormAction}
+          setSnackbar={setSnackbar}
+        />
+      ),
       errorElement: <ErrorPage />,
     },
     {

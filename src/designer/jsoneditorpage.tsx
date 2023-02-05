@@ -80,7 +80,7 @@ export default function JSONEditorPage({
           setSnackbar({ open: true, type: "error", message: resObj.error });
         } else {
           setSnackbar({ open: true, type: "success", message: resObj.message });
-          getForms();
+          getForms(user.username);
         }
       })
       .catch((res) => console.log("error from api: ", res));

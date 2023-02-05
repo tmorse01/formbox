@@ -105,7 +105,11 @@ export default function SavedFormsModal({ getForms }) {
               })}
             </Select>
           </FormControl>
-          <IconButton key="refresh" title="refresh" onClick={getForms}>
+          <IconButton
+            key="refresh"
+            title="refresh"
+            onClick={() => getForms(user.username)}
+          >
             <RefreshIcon />
           </IconButton>
         </Box>
