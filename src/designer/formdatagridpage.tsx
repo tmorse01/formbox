@@ -53,7 +53,7 @@ export default function FormDataGridPage({ dispatchFormAction }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ formName }),
     };
-    fetch(process.env.FORMBOX_SERVER + "/getFormData", requestOptions)
+    fetch("/getFormData", requestOptions)
       .then((res) => res.text())
       .then((res) => {
         // console.log("result from getFormData api: ", res);

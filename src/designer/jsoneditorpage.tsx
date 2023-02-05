@@ -71,7 +71,7 @@ export default function JSONEditorPage({
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     };
-    fetch(process.env.FORMBOX_SERVER + "/saveForm", requestOptions)
+    fetch("/saveForm", requestOptions)
       .then((res) => res.text())
       .then((res) => {
         // console.log("result from api: ", res);
