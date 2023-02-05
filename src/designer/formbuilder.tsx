@@ -123,9 +123,11 @@ const FormBuilder = () => {
   }, []);
 
   useEffect(() => {
-    getForms(user.username).then((forms) => {
-      setListOfForms(forms);
-    });
+    if (user.username) {
+      getForms(user.username).then((forms) => {
+        setListOfForms(forms);
+      });
+    }
   }, [user]);
 
   // Setters
