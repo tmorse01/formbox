@@ -32,7 +32,7 @@ const ShareModal = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [link, setLink] = useState<URL>();
 
-  const { formState, user } = useContext(FormBoxContext);
+  const { formState } = useContext(FormBoxContext);
   const { formName } = formState;
 
   useEffect(() => {

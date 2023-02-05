@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { FormBoxContext } from "./formbuilder";
 // MUI
@@ -31,7 +31,7 @@ const style = {
   width: "400px",
 };
 
-export default function SavedFormsModal({ dispatchFormAction, getForms }) {
+export default function SavedFormsModal({ getForms }) {
   const [open, setOpen] = useState(false);
 
   const { listOfForms, formState, user } = useContext(FormBoxContext);

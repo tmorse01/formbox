@@ -1,9 +1,5 @@
 import React, { useReducer, useState, useEffect } from "react";
-import {
-  createBrowserRouter,
-  RouterProvider,
-  useParams,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import ErrorPage from "./errorpage";
 import FormBox from "./formbox";
@@ -176,7 +172,6 @@ const FormBuilder = () => {
     return (
       <div className="formBuilderWrapper">
         <FormBoxAppBar
-          dispatchFormAction={dispatchFormAction}
           handleSetUser={handleSetUser}
           setSnackbar={setSnackbar}
           getForms={getForms}
