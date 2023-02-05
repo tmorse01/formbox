@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Container, Box, Button } from "@mui/material";
 import { useParams } from "react-router-dom";
 
@@ -19,7 +19,7 @@ const style = {
   boxShadow: "4px 4px 12px #e0e0e0",
 };
 
-export default function FormBox({ dispatchFormAction }) {
+const FormBox = ({ dispatchFormAction }) => {
   const [values, setValues] = useState({});
   const { formState } = useContext(FormBoxContext);
   const { formJSON, formName } = formState;
@@ -80,7 +80,7 @@ export default function FormBox({ dispatchFormAction }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formToSubmit),
     };
-    fetch("http://localhost:3001/submitFormValues", requestOptions)
+    fetch("/submitFormValues", requestOptions)
       .then((res) => res.text())
       .then((res) => console.log("result from api: ", res))
       .catch((res) => console.log("error from api: ", res));
@@ -126,4 +126,6 @@ export default function FormBox({ dispatchFormAction }) {
   } else {
     return <></>;
   }
-}
+};
+
+export default FormBox;

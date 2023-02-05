@@ -127,7 +127,7 @@ const FormBuilder = () => {
   // Requests
 
   const connectToDb = () => {
-    fetch("http://localhost:3001/connectToDb")
+    fetch("/connectToDb")
       .then((res) => res.text())
       .then((res) => console.log("result from connectToDb: ", res))
       .catch((res) => console.log("error from connectToDb: ", res));
@@ -138,10 +138,7 @@ const FormBuilder = () => {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     };
-    fetch(
-      "http://localhost:3001/getForms?username=" + user.username,
-      requestOptions
-    )
+    fetch("/getForms?username=" + user.username, requestOptions)
       .then((res) => res.text())
       .then((res) => {
         const response = JSON.parse(res);

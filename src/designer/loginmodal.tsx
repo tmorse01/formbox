@@ -83,7 +83,7 @@ export default function LoginModal({ user, handleSetUser, setSnackbar }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     };
-    fetch("http://localhost:3001/login", requestOptions)
+    fetch(process.env.FORMBOX_SERVER + "/login", requestOptions)
       .then((res) => res.text())
       .then((res) => {
         const result = JSON.parse(res);
@@ -109,7 +109,7 @@ export default function LoginModal({ user, handleSetUser, setSnackbar }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     };
-    fetch("http://localhost:3001/signup", requestOptions)
+    fetch(process.env.FORMBOX_SERVER + "/signup", requestOptions)
       .then((res) => res.text())
       .then((res) => {
         // console.log("result from signup api: ", res);
