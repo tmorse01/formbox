@@ -17,6 +17,8 @@ import PersonIcon from "@mui/icons-material/Person";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
+import { userSignup } from "../helpers/formrequest";
+
 const style = {
   position: "absolute" as "absolute",
   top: "50%",
@@ -100,21 +102,13 @@ export default function LoginModal({ user, handleSetUser, setSnackbar }) {
   };
 
   const submitSignup = () => {
-    const body = {
-      username: values.username,
-      password: values.password,
-    };
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    };
-    fetch(process.env.REACT_APP_FORMBOX_API + "/signup", requestOptions)
-      .then((res) => res.text())
-      .then((res) => {
-        // console.log("result from signup api: ", res);
-      })
-      .catch((res) => console.log("error from signup api: ", res));
+    userSignup(values).then((result) => {
+      if (result.errors === undefined) {
+        setSnackbar({ open: true, type: "success", message: result.message });
+      } else {
+        setSnackbar({ open: true, type: "error", message: result.error });
+      }
+    });
   };
 
   const submitLogout = () => {

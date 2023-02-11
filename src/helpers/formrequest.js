@@ -50,3 +50,22 @@ export function getForms(username) {
     })
     .catch((res) => console.log("error from getForms api: ", res));
 }
+
+export function userSignup(values) {
+  const body = {
+    username: values.username,
+    password: values.password,
+  };
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  };
+  return fetch(process.env.REACT_APP_FORMBOX_API + "/signup", requestOptions)
+    .then((res) => res.text())
+    .then((res) => {
+      console.log("result from signup api: ", res);
+      return JSON.parse(res);
+    })
+    .catch((res) => console.log("error from signup api: ", res));
+}
