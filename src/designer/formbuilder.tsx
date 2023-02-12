@@ -1,5 +1,5 @@
 import React, { useReducer, useState, useEffect } from "react";
-import { createHashRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import ErrorPage from "./errorpage";
 import FormBox from "./formbox";
@@ -162,7 +162,7 @@ const FormBuilder = () => {
     );
   };
 
-  const router = createHashRouter([
+  const router = createBrowserRouter([
     {
       path: "/",
       element: wrapRoute(<></>),

@@ -49,13 +49,8 @@ const ShareModal = () => {
       </Typography>
       <Box sx={{ display: "grid", gridTemplateColumns: "1fr" }}>
         <FormControl sx={{ m: 1 }} variant="outlined">
-          <InputLabel htmlFor="username">Username</InputLabel>
-          <OutlinedInput
-            id="link"
-            type={"text"}
-            value={link}
-            label="Username"
-          />
+          <InputLabel htmlFor="link">Link</InputLabel>
+          <OutlinedInput id="link" type={"text"} value={link} label="link" />
         </FormControl>
       </Box>
     </Box>
