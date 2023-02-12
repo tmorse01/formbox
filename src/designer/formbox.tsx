@@ -2,13 +2,12 @@ import React, { useContext, useState, useEffect } from "react";
 import { Container, Box, Button } from "@mui/material";
 import { useParams } from "react-router-dom";
 
+import { FormBoxContext } from "./formbuilder";
 import { loadForm } from "../helpers/formrequest";
 import Form from "./form";
+
 import Typography from "@mui/material/Typography";
-
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
-
-import { FormBoxContext } from "./formbuilder";
 
 const style = {
   bgcolor: "background.paper",
@@ -28,19 +27,28 @@ const FormBox = ({ dispatchFormAction, setSnackbar }) => {
   const { form } = useParams();
   useEffect(() => {
     if (form) {
-      loadForm(form).then((loadedFormState) => {
-        dispatchFormAction({
-          type: "update_formState",
-          payload: {
-            formState: {
-              formJSON: loadedFormState.formJSON,
-              formName: loadedFormState.formName,
+      loadForm(form).then((response) => {
+        if (response.success === true) {
+          var results = response.results;
+          dispatchFormAction({
+            type: "update_formState",
+            payload: {
+              formState: {
+                formJSON: results.formJSON,
+                formName: results.formName,
+              },
             },
-          },
-        });
+          });
+        } else {
+          setSnackbar({
+            open: true,
+            message: response.error.message,
+            type: "error",
+          });
+        }
       });
     }
-  }, [form, dispatchFormAction]);
+  }, [form, dispatchFormAction, setSnackbar]);
 
   function onFormChange({ formName, componentName, value }) {
     setValues({

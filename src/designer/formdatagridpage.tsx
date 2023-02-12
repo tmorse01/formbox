@@ -17,7 +17,7 @@ const style = {
   gridTemplateRows: "min-content 1fr min-content",
 };
 
-export default function FormDataGridPage({ dispatchFormAction }) {
+export default function FormDataGridPage({ dispatchFormAction, setSnackbar }) {
   const [selectedDocumentData, setSelectedDocumentData] = useState([]);
 
   const { formState } = useContext(FormBoxContext);
@@ -26,19 +26,30 @@ export default function FormDataGridPage({ dispatchFormAction }) {
   const { form } = useParams();
   useEffect(() => {
     if (form) {
-      loadForm(form).then((loadedFormState) => {
-        dispatchFormAction({
-          type: "update_formState",
-          payload: {
-            formState: {
-              formJSON: loadedFormState.formJSON,
-              formName: loadedFormState.formName,
-            },
-          },
+      if (form) {
+        loadForm(form).then((response) => {
+          if (response.success === true) {
+            var results = response.results;
+            dispatchFormAction({
+              type: "update_formState",
+              payload: {
+                formState: {
+                  formJSON: results.formJSON,
+                  formName: results.formName,
+                },
+              },
+            });
+          } else {
+            setSnackbar({
+              open: true,
+              message: response.error.message,
+              type: "error",
+            });
+          }
         });
-      });
+      }
     }
-  }, [form, dispatchFormAction]);
+  }, [form, dispatchFormAction, setSnackbar]);
 
   useEffect(() => {
     // console.log("component did mount useEffect");
@@ -59,7 +70,7 @@ export default function FormDataGridPage({ dispatchFormAction }) {
         // console.log("result from getFormData api: ", res);
         setSelectedDocumentData(JSON.parse(res).results);
       })
-      .catch((res) => console.log("error from getForms api: ", res));
+      .catch((res) => console.log("error from getFormData api: ", res));
   };
 
   return (

@@ -5,13 +5,13 @@ export default function FormBoxSnackbar({ snackbar, setSnackbar }) {
     if (reason === "clickaway") {
       return;
     }
-    setSnackbar({ snackbar: { ...snackbar, open: false } });
+    setSnackbar({ ...snackbar, open: false });
   }
 
   return (
     <Snackbar
       open={snackbar.open}
-      autoHideDuration={6000}
+      autoHideDuration={2000}
       onClose={handleClose}
     >
       <Alert

@@ -19,7 +19,7 @@ const style = {
 export default function JSONEditorPage({
   dispatchFormAction,
   setSnackbar,
-  getForms,
+  getUserFormList,
 }) {
   const { formState, user } = useContext(FormBoxContext);
   const { formJSON, formName } = formState;
@@ -27,19 +27,30 @@ export default function JSONEditorPage({
   const { form } = useParams();
   useEffect(() => {
     if (form) {
-      loadForm(form).then((loadedFormState) => {
-        dispatchFormAction({
-          type: "update_formState",
-          payload: {
-            formState: {
-              formJSON: loadedFormState.formJSON,
-              formName: loadedFormState.formName,
-            },
-          },
+      if (form) {
+        loadForm(form).then((response) => {
+          if (response.success === true) {
+            var results = response.results;
+            dispatchFormAction({
+              type: "update_formState",
+              payload: {
+                formState: {
+                  formJSON: results.formJSON,
+                  formName: results.formName,
+                },
+              },
+            });
+          } else {
+            setSnackbar({
+              open: true,
+              message: response.error.message,
+              type: "error",
+            });
+          }
         });
-      });
+      }
     }
-  }, [form, dispatchFormAction]);
+  }, [form, dispatchFormAction, setSnackbar]);
 
   useEffect(() => {
     setContent({ json: formJSON, text: undefined });
@@ -80,7 +91,7 @@ export default function JSONEditorPage({
           setSnackbar({ open: true, type: "error", message: resObj.error });
         } else {
           setSnackbar({ open: true, type: "success", message: resObj.message });
-          getForms(user.username);
+          getUserFormList();
         }
       })
       .catch((res) => console.log("error from api: ", res));

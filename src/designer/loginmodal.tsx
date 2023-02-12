@@ -103,10 +103,15 @@ export default function LoginModal({ user, handleSetUser, setSnackbar }) {
 
   const submitSignup = () => {
     userSignup(values).then((result) => {
-      if (result.errors === undefined) {
+      console.log("Result from sign up", result);
+      if (result.success === true) {
         setSnackbar({ open: true, type: "success", message: result.message });
       } else {
-        setSnackbar({ open: true, type: "error", message: result.error });
+        setSnackbar({
+          open: true,
+          type: "error",
+          message: result.error.message,
+        });
       }
     });
   };

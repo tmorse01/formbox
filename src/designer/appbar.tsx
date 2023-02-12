@@ -24,7 +24,7 @@ import { useNavigate } from "react-router-dom";
 export default function FormBoxAppBar({
   handleSetUser,
   setSnackbar,
-  getForms,
+  getUserFormList,
 }) {
   const { user, formState } = useContext(FormBoxContext);
 
@@ -124,7 +124,7 @@ export default function FormBoxAppBar({
               gridTemplateColumns: "repeat(4, min-content)",
             }}
           >
-            <SavedFormsModal getForms={getForms} />
+            <SavedFormsModal getUserFormList={getUserFormList} />
             <ShareModal />
             <LoginModal
               user={user}

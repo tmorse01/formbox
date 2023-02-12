@@ -24,8 +24,8 @@ export function loadForm(form) {
     .then((res) => res.text())
     .then((res) => {
       const response = JSON.parse(res);
-      // console.log("result from getForm api: ", response);
-      return response.results;
+      console.log("result from getForm api: ", response);
+      return response;
     })
     .catch((res) => {
       console.error("error from getForm api: ", res);
@@ -45,7 +45,7 @@ export function getForms(username) {
     .then((res) => res.text())
     .then((res) => {
       const response = JSON.parse(res);
-      // console.log("result from getForms api: ", response);
+      console.log("result from getForms api: ", response);
       return response.results;
     })
     .catch((res) => console.log("error from getForms api: ", res));

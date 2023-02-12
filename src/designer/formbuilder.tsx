@@ -1,5 +1,5 @@
 import React, { useReducer, useState, useEffect } from "react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createHashRouter, RouterProvider } from "react-router-dom";
 
 import ErrorPage from "./errorpage";
 import FormBox from "./formbox";
@@ -122,14 +122,6 @@ const FormBuilder = () => {
     };
   }, []);
 
-  useEffect(() => {
-    if (user.username) {
-      getForms(user.username).then((forms) => {
-        setListOfForms(forms);
-      });
-    }
-  }, [user]);
-
   // Setters
   const handleSetUser = (user) => {
     if (user.token === undefined) {
@@ -145,6 +137,15 @@ const FormBuilder = () => {
     setUser(user);
   };
 
+  // Getters
+  const getUserFormList = () => {
+    if (user.username) {
+      getForms(user.username).then((forms) => {
+        setListOfForms(forms);
+      });
+    }
+  };
+
   // Router
 
   const wrapRoute = (control) => {
@@ -153,7 +154,7 @@ const FormBuilder = () => {
         <FormBoxAppBar
           handleSetUser={handleSetUser}
           setSnackbar={setSnackbar}
-          getForms={getForms}
+          getUserFormList={getUserFormList}
         />
         <div className="formBuilder">{control}</div>
         <FormBoxSnackbar snackbar={snackbar} setSnackbar={setSnackbar} />
@@ -161,7 +162,7 @@ const FormBuilder = () => {
     );
   };
 
-  const router = createBrowserRouter([
+  const router = createHashRouter([
     {
       path: "/",
       element: wrapRoute(<></>),
@@ -180,7 +181,10 @@ const FormBuilder = () => {
     {
       path: "/responses/:form",
       element: wrapRoute(
-        <FormDataGridPage dispatchFormAction={dispatchFormAction} />
+        <FormDataGridPage
+          dispatchFormAction={dispatchFormAction}
+          setSnackbar={setSnackbar}
+        />
       ),
       errorElement: <ErrorPage />,
     },
@@ -190,7 +194,7 @@ const FormBuilder = () => {
         <JSONEditorPage
           dispatchFormAction={dispatchFormAction}
           setSnackbar={setSnackbar}
-          getForms={getForms}
+          getUserFormList={getUserFormList}
         />
       ),
       errorElement: <ErrorPage />,
@@ -201,7 +205,7 @@ const FormBuilder = () => {
         <JSONEditorPage
           dispatchFormAction={dispatchFormAction}
           setSnackbar={setSnackbar}
-          getForms={getForms}
+          getUserFormList={getUserFormList}
         />
       ),
       errorElement: <ErrorPage />,

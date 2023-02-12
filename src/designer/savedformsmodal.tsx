@@ -31,7 +31,7 @@ const style = {
   width: "400px",
 };
 
-export default function SavedFormsModal({ getForms }) {
+export default function SavedFormsModal({ getUserFormList }) {
   const [open, setOpen] = useState(false);
 
   const { listOfForms, formState, user } = useContext(FormBoxContext);
@@ -39,7 +39,10 @@ export default function SavedFormsModal({ getForms }) {
 
   const navigate = useNavigate();
 
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    getUserFormList();
+    setOpen(true);
+  };
   const handleClose = () => {
     setOpen(false);
   };
@@ -92,7 +95,7 @@ export default function SavedFormsModal({ getForms }) {
             <Select
               labelId="formbox-formname-select"
               id="formbox-formname-select"
-              value={formName}
+              value={formName ?? ""}
               label="Form Name"
               onChange={handleSelectForm}
             >
@@ -108,7 +111,7 @@ export default function SavedFormsModal({ getForms }) {
           <IconButton
             key="refresh"
             title="refresh"
-            onClick={() => getForms(user.username)}
+            onClick={() => getUserFormList()}
           >
             <RefreshIcon />
           </IconButton>
