@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 
 import ShareIcon from "@mui/icons-material/Share";
+import copy from "clipboard-copy";
 
 import { FormBoxContext } from "./formbuilder";
 
@@ -28,7 +29,7 @@ const style = {
   width: "400px",
 };
 
-const ShareModal = () => {
+const ShareModal = ({ setSnackbar }) => {
   const [open, setOpen] = useState<boolean>(false);
   const [link, setLink] = useState<URL>();
 
@@ -42,6 +43,18 @@ const ShareModal = () => {
     setLink(shareURL);
   }, [formName]);
 
+  const handleFocus = (e) => {
+    if (link !== undefined) {
+      e.target.select();
+      copy(link.toString());
+      setSnackbar({
+        open: true,
+        message: "Link copied to clickboard",
+        type: "success",
+      });
+    }
+  };
+
   const shareForm = (
     <Box component="form" sx={style}>
       <Typography id="modal-modal-title" variant="h6" component="h2">
@@ -50,7 +63,13 @@ const ShareModal = () => {
       <Box sx={{ display: "grid", gridTemplateColumns: "1fr" }}>
         <FormControl sx={{ m: 1 }} variant="outlined">
           <InputLabel htmlFor="link">Link</InputLabel>
-          <OutlinedInput id="link" type={"text"} value={link} label="link" />
+          <OutlinedInput
+            id="link"
+            type={"text"}
+            value={link}
+            label="link"
+            onFocus={handleFocus}
+          />
         </FormControl>
       </Box>
     </Box>

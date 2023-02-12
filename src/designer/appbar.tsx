@@ -125,7 +125,7 @@ export default function FormBoxAppBar({
             }}
           >
             <SavedFormsModal getUserFormList={getUserFormList} />
-            <ShareModal />
+            <ShareModal setSnackbar={setSnackbar} />
             <LoginModal
               user={user}
               setSnackbar={setSnackbar}
