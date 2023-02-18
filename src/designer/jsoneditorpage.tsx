@@ -4,6 +4,7 @@ import FormBoxJSONEditor from "./jsoneditor";
 import { Button, TextField, Box, Typography } from "@mui/material";
 import { FormBoxContext } from "./formbuilder";
 import { loadForm } from "../helpers/formrequest";
+import exampleFormJSON from "../exampleforms/jobposition.json";
 
 const style = {
   bgcolor: "background.paper",
@@ -26,29 +27,37 @@ export default function JSONEditorPage({
 
   const { form } = useParams();
   useEffect(() => {
-    if (form) {
-      if (form) {
-        loadForm(form).then((response) => {
-          if (response.success === true) {
-            var results = response.results;
-            dispatchFormAction({
-              type: "update_formState",
-              payload: {
-                formState: {
-                  formJSON: results.formJSON,
-                  formName: results.formName,
-                },
+    if (form === "formBoxExample") {
+      dispatchFormAction({
+        type: "update_formState",
+        payload: {
+          formState: {
+            formJSON: exampleFormJSON,
+            formName: exampleFormJSON.name,
+          },
+        },
+      });
+    } else if (form) {
+      loadForm(form).then((response) => {
+        if (response.success === true) {
+          var results = response.results;
+          dispatchFormAction({
+            type: "update_formState",
+            payload: {
+              formState: {
+                formJSON: results.formJSON,
+                formName: results.formName,
               },
-            });
-          } else {
-            setSnackbar({
-              open: true,
-              message: response.error.message,
-              type: "error",
-            });
-          }
-        });
-      }
+            },
+          });
+        } else {
+          setSnackbar({
+            open: true,
+            message: response.error.message,
+            type: "error",
+          });
+        }
+      });
     }
   }, [form, dispatchFormAction, setSnackbar]);
 
