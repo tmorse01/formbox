@@ -4,21 +4,21 @@
       "name": "form1",
       "components": [
         {
-          "name": "companyname",
-          "title": "Company Name",
-          "help": "Enter your company Name",
+          "name": "firstname",
+          "title": "First Name",
+          "help": "Enter your first name",
           "type": "textfield",
           "required": true
         },
         {
-          "name": "jobtitle",
-          "title": "Job title",
-          "help": "Enter your job title",
+          "name": "lastname",
+          "title": "Last Name",
+          "help": "Enter your last name",
           "type": "textfield",
           "required": true
         }
       ],
-      "title": "Company information",
+      "title": "Name",
       "layout": "vertical",
       "type": "form"
     },
@@ -26,27 +26,27 @@
       "name": "form2",
       "components": [
         {
-          "name": "country",
-          "title": "Country",
-          "help": "Enter your works country of operation",
+          "name": "companyname",
+          "title": "Company Name",
+          "help": "Name of the company you work for",
           "type": "textfield",
           "required": true
         },
         {
-          "name": "state",
-          "title": "State",
-          "help": "Enter your works state if applicable",
+          "name": "jobposition",
+          "title": "Job Position",
+          "help": "Your current job position",
           "type": "textfield",
           "required": true
         }
       ],
-      "title": "Location",
+      "title": "Job Position",
       "layout": "vertical",
       "type": "form"
     }
   ],
   "layout": "vertical",
-  "title": "Job survey",
-  "name": "companyinfo",
+  "title": "Job Survey",
+  "name": "formBoxExample",
   "type": "formbox"
 }

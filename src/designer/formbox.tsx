@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { FormBoxContext } from "./formbuilder";
 import { loadForm } from "../helpers/formrequest";
 import Form from "./form";
+import exampleFormJSON from "../exampleforms/jobposition.json";
 
 import Typography from "@mui/material/Typography";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
@@ -12,7 +13,6 @@ import SaveAltIcon from "@mui/icons-material/SaveAlt";
 const style = {
   bgcolor: "background.paper",
   borderRadius: "8px",
-  gap: "12px",
   display: "grid",
   padding: "12px 0 12px 0",
   boxShadow: "4px 4px 12px #e0e0e0",
@@ -26,7 +26,17 @@ const FormBox = ({ dispatchFormAction, setSnackbar }) => {
   // handle form loading from url param for share links
   const { form } = useParams();
   useEffect(() => {
-    if (form) {
+    if (form === "formBoxExample") {
+      dispatchFormAction({
+        type: "update_formState",
+        payload: {
+          formState: {
+            formJSON: exampleFormJSON,
+            formName: exampleFormJSON.name,
+          },
+        },
+      });
+    } else if (form) {
       loadForm(form).then((response) => {
         if (response.success === true) {
           var results = response.results;
