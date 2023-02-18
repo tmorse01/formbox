@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from "react";
+import React, { useContext } from "react";
 import {
   Button,
   Container,
@@ -42,6 +42,7 @@ export default function FormBoxAppBar({
       title: "Form",
       path: "/form/" + formState.formName,
       disabled: formState.formName === undefined,
+      tooltip: "Select a form from the top right open menu.",
       icon: <DynamicFormIcon />,
     },
     {
@@ -61,7 +62,7 @@ export default function FormBoxAppBar({
         ? "/jsoneditor/" + formState.formName
         : "/jsoneditor/",
       disabled: formState.formName === undefined,
-
+      tooltip: "Select a form to view the JSON that describes it.",
       icon: <DataArrayIcon />,
     },
   ];
@@ -153,10 +154,12 @@ export default function FormBoxAppBar({
                     disabled={page.disabled}
                     onClick={() => navigateToPath(page.path)}
                   >
-                    <Typography textAlign="center">
-                      {page.icon}
-                      {page.title}
-                    </Typography>
+                    <Tooltip title={page.tooltip}>
+                      <Typography textAlign="center">
+                        {page.icon}
+                        {page.title}
+                      </Typography>
+                    </Tooltip>
                   </MenuItem>
                 );
               })}
@@ -166,7 +169,7 @@ export default function FormBoxAppBar({
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => {
               return (
-                <Fragment key={page.key}>
+                <Tooltip title={page.tooltip}>
                   <Typography>
                     <Button
                       onClick={() => navigateToPath(page.path)}
@@ -177,7 +180,7 @@ export default function FormBoxAppBar({
                       {page.title}
                     </Button>
                   </Typography>
-                </Fragment>
+                </Tooltip>
               );
             })}
           </Box>
