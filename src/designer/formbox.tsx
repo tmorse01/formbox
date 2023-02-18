@@ -109,38 +109,40 @@ const FormBox = ({ dispatchFormAction, setSnackbar }) => {
   let forms = formJSON?.forms;
   if (formJSON) {
     return (
-      <div>
-        <Container
-          sx={style}
-          maxWidth="sm"
-          component="form"
-          noValidate
-          autoComplete="off"
-          onSubmit={(e) => {
-            e.preventDefault();
-            onSubmit();
-            return false;
-          }}
+      <Container
+        sx={style}
+        maxWidth="sm"
+        component="form"
+        noValidate
+        autoComplete="off"
+        onSubmit={(e) => {
+          e.preventDefault();
+          onSubmit();
+          return false;
+        }}
+      >
+        <Typography sx={{ color: "text.primary", ml: 2 }} variant="h2">
+          {formJSON?.title}
+        </Typography>
+        {forms?.map((form, i) => {
+          return <Form key={i} form={form} onFormChange={onFormChange} />;
+        })}
+        <Box
+          display="flex"
+          justifyContent={"right"}
+          sx={{ m: 2, height: "40px" }}
         >
-          <Typography sx={{ color: "text.primary" }} variant="h2">
-            {formJSON?.title}
-          </Typography>
-          {forms?.map((form, i) => {
-            return <Form key={i} form={form} onFormChange={onFormChange} />;
-          })}
-          <Box display="flex" justifyContent={"right"} sx={{ p: 2 }}>
-            <Button
-              id={"submit"}
-              type={"submit"}
-              variant="contained"
-              color="secondary"
-              startIcon={<SaveAltIcon />}
-            >
-              {"Submit"}
-            </Button>
-          </Box>
-        </Container>
-      </div>
+          <Button
+            id={"submit"}
+            type={"submit"}
+            variant="contained"
+            color="secondary"
+            startIcon={<SaveAltIcon />}
+          >
+            {"Submit"}
+          </Button>
+        </Box>
+      </Container>
     );
   } else {
     return <></>;
