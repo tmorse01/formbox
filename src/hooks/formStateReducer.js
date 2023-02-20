@@ -8,7 +8,7 @@ function createInitialFormState() {
 }
 
 function updateComponentByName({ formJSON, name, state }) {
-  // console.log("updateComponentByName", { formJSON, name, state });
+  console.log("updateComponentByName", { formJSON, name, state });
   if (formJSON.name === name) {
     return { ...formJSON, ...state };
   } else if (formJSON.forms?.length > 0) {
@@ -28,6 +28,7 @@ function updateComponentByName({ formJSON, name, state }) {
       var comp = components[i];
       if (comp.name === name) {
         components[i] = { ...comp, ...state };
+        console.log("found component :", components[i]);
         return;
       }
     }
@@ -43,6 +44,7 @@ function reducer(state, action) {
         name: action.payload.name,
         state: action.payload.state,
       });
+      console.log("after comp update:", formJSON);
       return { ...state, formJSON: formJSON };
     }
     case "update_formName": {

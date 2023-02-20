@@ -7,6 +7,8 @@ import FormBoxAppBar from "./appbar";
 import FormDataGridPage from "./formdatagridpage";
 import JSONEditorPage from "./jsoneditorpage";
 import FormBoxSnackbar from "./snackbar";
+import Form from "./form";
+import FormBoxComponent from "./formboxcomponent";
 
 import { getForms, connectToDb, disconnectDb } from "../helpers/formrequest";
 import { useFormStateReducer } from "../hooks/formStateReducer";
@@ -134,7 +136,23 @@ const FormBuilder = () => {
         <FormBox
           dispatchFormAction={dispatchFormAction}
           setSnackbar={setSnackbar}
-        />
+        >
+          {formState.formJSON.forms?.map((form) => {
+            return (
+              <Form key={form.name} form={form}>
+                {form.components?.map((component) => {
+                  return (
+                    <FormBoxComponent
+                      key={component.name}
+                      component={component}
+                      dispatchFormAction={dispatchFormAction}
+                    />
+                  );
+                })}
+              </Form>
+            );
+          })}
+        </FormBox>
       ),
       errorElement: <ErrorPage />,
     },

@@ -20,7 +20,7 @@ const FormBoxTextField = ({
   const handleChange = (e) => {
     dispatchFormAction({
       type: "update_componentProp",
-      payload: { componentName: name, state: { value: e.target.value } },
+      payload: { name: name, state: { value: e.target.value } },
     });
     // onChange({ name, value: e.target.value });
   };

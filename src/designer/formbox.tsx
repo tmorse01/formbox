@@ -4,7 +4,6 @@ import { useParams } from "react-router-dom";
 
 import { FormBoxContext } from "./formbuilder";
 import { loadForm } from "../helpers/formrequest";
-import Form from "./form";
 import exampleFormJSON from "../exampleforms/jobposition.json";
 
 import Typography from "@mui/material/Typography";
@@ -18,7 +17,7 @@ const style = {
   boxShadow: "4px 4px 12px #e0e0e0",
 };
 
-const FormBox = ({ dispatchFormAction, setSnackbar }) => {
+const FormBox = ({ dispatchFormAction, setSnackbar, children }) => {
   const [values, setValues] = useState({});
   const { formState } = useContext(FormBoxContext);
   const { formJSON, formName } = formState;
@@ -104,7 +103,6 @@ const FormBox = ({ dispatchFormAction, setSnackbar }) => {
   }
 
   console.log("FORMBOX render :", formJSON);
-  let forms = formJSON?.forms;
   if (formJSON) {
     return (
       <Container
@@ -122,15 +120,7 @@ const FormBox = ({ dispatchFormAction, setSnackbar }) => {
         <Typography sx={{ color: "text.primary", ml: 2 }} variant="h2">
           {formJSON?.title}
         </Typography>
-        {forms?.map((form) => {
-          return (
-            <Form
-              key={form.name}
-              form={form}
-              dispatchFormAction={dispatchFormAction}
-            />
-          );
-        })}
+        {children}
         <Box
           display="flex"
           justifyContent={"right"}

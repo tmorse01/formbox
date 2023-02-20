@@ -4,6 +4,7 @@ import FormBoxComponent from "./formboxcomponent";
 import { dispatchType, formProps } from "../types/componentType";
 import "../css/form.css";
 import Typography from "@mui/material/Typography";
+import { JsxElement } from "typescript";
 
 const style = {
   "& .MuiTextField-root": { mt: 1, mb: 1, width: "25ch" },
@@ -16,12 +17,11 @@ const style = {
 
 type FormProps = {
   form: formProps;
-} & dispatchType;
+  children: JSX.Element[];
+};
 
-const Form = (props: FormProps) => {
-  console.log("form render: ", props.form);
-  let components = props.form.components;
-  const dispatchFormAction = useCallback(props.dispatchFormAction, []);
+const Form = ({ form, children }: FormProps) => {
+  console.log("form render: ", form);
   return (
     <Box component="div" display="grid" justifyContent="center" sx={style}>
       <Typography
@@ -29,24 +29,9 @@ const Form = (props: FormProps) => {
         sx={{ color: "text.primary" }}
         variant="h5"
       >
-        {props.form.title ?? "Form"}
+        {form.title ?? "Form"}
       </Typography>
-      {components.map((component) => {
-        return (
-          <FormBoxComponent
-            key={component.name}
-            name={component.name}
-            title={component.title}
-            help={component.help}
-            type={component.type}
-            required={component.required}
-            value={component.value}
-            icon={component.icon}
-            submit={component.submit}
-            dispatchFormAction={dispatchFormAction}
-          />
-        );
-      })}
+      {children}
     </Box>
   );
 };

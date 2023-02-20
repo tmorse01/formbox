@@ -1,12 +1,12 @@
-import { useEffect } from "react";
+import { memo } from "react";
 import { FormControl, FormHelperText } from "@mui/material";
 import { componentProps, dispatchType } from "../types/componentType";
 import FormBoxControl from "../designer/formboxcontrol";
 
 type CompProps = {
   key: string;
-} & componentProps &
-  dispatchType;
+  component: componentProps;
+} & dispatchType;
 
 const WrapFormControl = ({ children, name, help }) => (
   <FormControl variant="standard">
@@ -15,37 +15,25 @@ const WrapFormControl = ({ children, name, help }) => (
   </FormControl>
 );
 
+// const arePropsEqual = (prevProps, newProps) => {
+//   console.log("arePropsEqual: ", prevProps, newProps);
+//   return true;
+// };
+
 const FormBoxComponent: React.FC<CompProps> = ({
-  name,
-  title,
-  help,
-  type,
-  required,
-  value,
-  submit,
-  icon,
+  component,
   dispatchFormAction,
 }) => {
-  console.log("component render:", name);
+  console.log("component render:", component.name);
   return (
-    <WrapFormControl name={name} help={help}>
+    <WrapFormControl name={component.name} help={component.help}>
       <FormBoxControl
-        key={name}
-        name={name}
-        title={title}
-        help={help}
-        type={type}
-        required={required}
-        value={value}
-        icon={icon}
-        submit={submit}
+        key={component.name}
+        component={component}
         dispatchFormAction={dispatchFormAction}
       />
     </WrapFormControl>
   );
 };
 
-// const MemoizedComponent: React.FC<CompProps> = (props) => {
-//   return useMemo(() => <FormBoxComponent {...props} />, [props.component]);
-// };
 export default FormBoxComponent;
