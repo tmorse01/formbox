@@ -20,11 +20,11 @@ type FormProps = {
 
 const Form = (props: FormProps) => {
   function onChange({ name, value }) {
-    props.onFormChange({
-      formName: props.form.name,
-      componentName: name,
-      value: value,
-    });
+    // props.onFormChange({
+    //   formName: props.form.name,
+    //   componentName: name,
+    //   value: value,
+    // });
   }
 
   // console.log("form render: ", this.state.values);
