@@ -16,7 +16,8 @@ export type componentProps = defaultProps & {
   help?: string;
   required?: boolean;
   submit?: boolean;
-  iconName: string | undefined;
+  icon: string | undefined;
+  value: any | undefined;
 };
 
 export type formBoxAppBarProps = {
@@ -49,4 +50,8 @@ export type FormBoxContextType = {
     token: string | null | undefined;
   };
   listOfForms: formDataProps[];
+};
+
+export type dispatchType = {
+  dispatchFormAction: ({ type, payload }) => void;
 };

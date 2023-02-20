@@ -2,13 +2,49 @@ import { useReducer } from "react";
 
 function createInitialFormState() {
   return {
-    JSON: undefined,
+    formJSON: undefined,
     formName: undefined,
   };
 }
 
+function updateComponentByName({ formJSON, name, state }) {
+  // console.log("updateComponentByName", { formJSON, name, state });
+  if (formJSON.name === name) {
+    return { ...formJSON, ...state };
+  } else if (formJSON.forms?.length > 0) {
+    var forms = formJSON.forms;
+    for (var i = 0; i < forms.length; i++) {
+      var form = forms[i];
+      if (form.name === name) {
+        forms[i] = { ...form, ...state };
+        return;
+      } else {
+        updateComponentByName({ formJSON: form, name, state });
+      }
+    }
+  } else if (formJSON.components?.length > 0) {
+    var components = formJSON.components;
+    for (var i = 0; i < components.length; i++) {
+      var comp = components[i];
+      if (comp.name === name) {
+        components[i] = { ...comp, ...state };
+        return;
+      }
+    }
+  }
+}
+
 function reducer(state, action) {
   switch (action.type) {
+    case "update_componentProp": {
+      var formJSON = state.formJSON;
+      updateComponentByName({
+        formJSON: formJSON,
+        name: action.payload.name,
+        state: action.payload.state,
+      });
+      return { ...state, formJSON: formJSON };
+    }
     case "update_formName": {
       return {
         ...state,
@@ -35,11 +71,10 @@ function reducer(state, action) {
 }
 
 const initialState = {
-  JSON: undefined,
+  formJSON: undefined,
   formName: undefined,
 };
 
 export const useFormStateReducer = () => {
   return useReducer(reducer, initialState, createInitialFormState);
-  //   return [ formState, dispatchFormAction ];
 };

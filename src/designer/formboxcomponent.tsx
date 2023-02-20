@@ -1,61 +1,51 @@
+import { useEffect } from "react";
 import { FormControl, FormHelperText } from "@mui/material";
-import FormBoxButton from "../components/button";
-import FormBoxTextField from "../components/textfield";
-import { componentProps } from "../types/componentType";
+import { componentProps, dispatchType } from "../types/componentType";
+import FormBoxControl from "../designer/formboxcontrol";
 
 type CompProps = {
-  key: number;
-  component: componentProps;
-  onChange: ({ name, value }) => void;
+  key: string;
+} & componentProps &
+  dispatchType;
+
+const WrapFormControl = ({ children, name, help }) => (
+  <FormControl variant="standard">
+    {children}
+    <FormHelperText id={name + "helptext"}>{help}</FormHelperText>
+  </FormControl>
+);
+
+const FormBoxComponent: React.FC<CompProps> = ({
+  name,
+  title,
+  help,
+  type,
+  required,
+  value,
+  submit,
+  icon,
+  dispatchFormAction,
+}) => {
+  console.log("component render:", name);
+  return (
+    <WrapFormControl name={name} help={help}>
+      <FormBoxControl
+        key={name}
+        name={name}
+        title={title}
+        help={help}
+        type={type}
+        required={required}
+        value={value}
+        icon={icon}
+        submit={submit}
+        dispatchFormAction={dispatchFormAction}
+      />
+    </WrapFormControl>
+  );
 };
 
-const FormBoxComponent = (props: CompProps) => {
-  function onChange(e: any) {
-    let component = props.component;
-    let value = e.target.value;
-    props.onChange({ name: component.name, value: value });
-  }
-
-  function getComponent(component: any) {
-    if (component.type === "textfield") {
-      return (
-        <FormBoxTextField
-          name={component.name}
-          title={component.title}
-          required={component.required}
-          onChange={onChange}
-        />
-      );
-    } else if (component.type === "button") {
-      return (
-        <FormBoxButton
-          name={component.name}
-          title={component.title}
-          submit={component.submit}
-          icon={component.icon}
-        />
-      );
-    } else {
-      return <div>FormBoxComponent</div>;
-    }
-  }
-
-  function getFormControl(control: any, component: any) {
-    return (
-      <FormControl variant="standard">
-        {control}
-        <FormHelperText id={component.name + "helptext"}>
-          {component.help}
-        </FormHelperText>
-      </FormControl>
-    );
-  }
-
-  let component = props.component;
-  // console.log("component:", this);
-  let control = getComponent(component);
-  let componentObject = getFormControl(control, component);
-  return componentObject;
-};
-
+// const MemoizedComponent: React.FC<CompProps> = (props) => {
+//   return useMemo(() => <FormBoxComponent {...props} />, [props.component]);
+// };
 export default FormBoxComponent;

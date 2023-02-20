@@ -60,18 +60,6 @@ const FormBox = ({ dispatchFormAction, setSnackbar }) => {
     }
   }, [form, dispatchFormAction, setSnackbar]);
 
-  function onFormChange({ formName, componentName, value }) {
-    setValues({
-      ...values,
-      ...{
-        [formName]: {
-          ...values?.[formName],
-          ...{ [componentName]: value },
-        },
-      },
-    });
-  }
-
   function processValues(values) {
     let returnValues = {};
     for (const form in values) {
@@ -115,7 +103,7 @@ const FormBox = ({ dispatchFormAction, setSnackbar }) => {
       .catch((res) => console.log("error from api: ", res));
   }
 
-  // console.log("FORMBOX render :", this);
+  console.log("FORMBOX render :", formJSON);
   let forms = formJSON?.forms;
   if (formJSON) {
     return (
@@ -134,8 +122,14 @@ const FormBox = ({ dispatchFormAction, setSnackbar }) => {
         <Typography sx={{ color: "text.primary", ml: 2 }} variant="h2">
           {formJSON?.title}
         </Typography>
-        {forms?.map((form, i) => {
-          return <Form key={i} form={form} onFormChange={onFormChange} />;
+        {forms?.map((form) => {
+          return (
+            <Form
+              key={form.name}
+              form={form}
+              dispatchFormAction={dispatchFormAction}
+            />
+          );
         })}
         <Box
           display="flex"

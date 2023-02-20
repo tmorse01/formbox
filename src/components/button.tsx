@@ -5,7 +5,7 @@ type ButtonProps = {
   name: string;
   title: string;
   submit?: boolean;
-  icon: string;
+  icon: string | undefined;
 };
 
 const FormBoxButton = ({ name, title, submit, icon }: ButtonProps) => {

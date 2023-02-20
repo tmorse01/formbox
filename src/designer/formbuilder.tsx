@@ -61,6 +61,7 @@ const getUsername = () => {
 const FormBuilder = () => {
   // State
   const [formState, dispatchFormAction] = useFormStateReducer();
+  console.log("formBuilder", formState);
   const [user, setUser] = useState({
     username: getUsername(),
     token: getToken(),
