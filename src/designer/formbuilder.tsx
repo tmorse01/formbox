@@ -137,7 +137,7 @@ const FormBuilder = () => {
           dispatchFormAction={dispatchFormAction}
           setSnackbar={setSnackbar}
         >
-          {formState.formJSON.forms?.map((form) => {
+          {formState.formJSON?.forms?.map((form) => {
             return (
               <Form key={form.name} form={form}>
                 {form.components?.map((component) => {
