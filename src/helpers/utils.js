@@ -30,3 +30,14 @@ export function processValues(formState) {
   });
   return { formName: formState.formName, values, errors };
 }
+
+export function getInitialValues(formJSON) {
+  const values = {};
+  const objects = flattenFormJSON(formJSON);
+  objects.forEach((object) => {
+    if (object.defaultValue !== undefined) {
+      values[object.name] = object.defaultValue;
+    }
+  });
+  return values;
+}

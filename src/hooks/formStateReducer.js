@@ -1,5 +1,4 @@
 import { useReducer } from "react";
-import { isEmptyValue } from "../helpers/utils";
 
 function createInitialFormState() {
   return {
@@ -40,22 +39,6 @@ function reducer(state, action) {
         name: action.payload.name,
         state: action.payload.state,
       });
-      return { ...state, formJSON: formJSON };
-    }
-    case "update_componentValue": {
-      var formJSON = state.formJSON;
-      const { title, value, required } = action.payload;
-      const error = {};
-      if (required === true && isEmptyValue(value)) {
-        error.message = title + " is required";
-      }
-      console.log("value update: ", value, error);
-      updateComponentByName({
-        formJSON: formJSON,
-        name: action.payload.name,
-        state: { value, error },
-      });
-
       return { ...state, formJSON: formJSON };
     }
     case "update_formName": {

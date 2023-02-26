@@ -1,27 +1,26 @@
 import TextField from "@mui/material/TextField";
+import { TextFieldProps } from "../types/componentType";
 
-type TextFieldProps = {
-  name: string;
-  title: string;
-  required?: boolean;
-  value: string | undefined;
-};
-
-const FormBoxTextField = ({ name, title, required, value }: TextFieldProps) => {
-  // console.log("render text field", name, value);
-
-  const handleChange = (e) => {};
-
+const FormBoxTextField = ({
+  name,
+  title,
+  help,
+  required,
+  register,
+  error,
+}: TextFieldProps) => {
+  // console.log("render text field", name);
   return (
     <TextField
       id={name}
       label={title}
       required={required}
       variant="outlined"
-      onChange={handleChange}
-      value={value ?? ""}
-      // error={!!error}
-      // helperText={!error?.message}
+      {...register(name, {
+        required: name + " is required.",
+      })}
+      error={!!error}
+      helperText={error?.message ?? help}
     />
   );
 };

@@ -12,8 +12,6 @@ import { getForms, connectToDb, disconnectDb } from "../helpers/formrequest";
 import { useFormStateReducer } from "../hooks/formStateReducer";
 import { FormBoxContextType } from "../types/componentType";
 
-import { processValues } from "../helpers/utils";
-
 import "../css/formbuilder.css";
 
 // css
@@ -105,15 +103,6 @@ const FormBuilder = () => {
     }
   };
 
-  const getFormToSubmit = () => {
-    const formToSubmit = processValues(formState);
-    const hasErrors = Object.keys(formToSubmit.errors).length !== 0;
-    if (hasErrors) {
-      // setFormErrors(formToSubmit.errors);
-    }
-    return formToSubmit;
-  };
-
   // Router
 
   const wrapRoute = (control) => {
@@ -144,7 +133,6 @@ const FormBuilder = () => {
           formState={formState}
           dispatchFormAction={dispatchFormAction}
           setSnackbar={setSnackbar}
-          getFormToSubmit={getFormToSubmit}
         />
       ),
       errorElement: <ErrorPage />,

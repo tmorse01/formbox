@@ -4,8 +4,6 @@ import "../css/form.css";
 import Typography from "@mui/material/Typography";
 import FormBoxComponent from "./formboxcomponent";
 
-import { useForm } from "react-hook-form";
-
 const style = {
   "& .MuiTextField-root": { mt: 1, mb: 1, width: "25ch" },
   color: "text.secondary",
@@ -15,16 +13,9 @@ const style = {
   m: 2,
 };
 
-const Form = ({ form }: form) => {
-  // console.log("form render: ", name);
-  // const formValues = {};
-  // components.forEach(comp => {
-  //   formValues[comp.name] = comp.defaultValue ?? "";
-  // })
-  // const { control, setValue } = useForm({
-  //   defaultValues: children.,
-  //   mode,
-  // });
+const Form = ({ form, register, errors }: form) => {
+  // console.log("form render: ", form.title);
+
   return (
     <Box component="div" display="grid" justifyContent="center" sx={style}>
       <Typography
@@ -35,7 +26,12 @@ const Form = ({ form }: form) => {
         {form.title ?? "Form"}
       </Typography>
       {form.components?.map((component) => (
-        <FormBoxComponent key={component.name} component={component} />
+        <FormBoxComponent
+          key={component.name}
+          component={component}
+          register={register}
+          error={errors[component.name]}
+        />
       ))}
     </Box>
   );

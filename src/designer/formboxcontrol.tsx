@@ -2,16 +2,18 @@ import FormBoxButton from "../components/button";
 import FormBoxTextField from "../components/textfield";
 import { CompProps } from "../types/componentType";
 
-function FormBoxControl({ component }: CompProps) {
-  const { name, title, type, value, required, submit, icon } = component;
+function FormBoxControl({ component, register, error }: CompProps) {
+  const { name, title, help, type, required, submit, icon } = component;
 
   if (type === "textfield") {
     return (
       <FormBoxTextField
         name={name}
         title={title}
+        help={help}
         required={required}
-        value={value}
+        register={register}
+        error={error}
       />
     );
   } else if (type === "button") {

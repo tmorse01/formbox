@@ -1,7 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { Container, Box, Button } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { useForm, FieldValues } from "react-hook-form";
 
 import { loadForm } from "../helpers/formrequest";
 import exampleFormJSON from "../exampleforms/jobposition.json";
@@ -10,6 +10,7 @@ import Form from "./form";
 
 import Typography from "@mui/material/Typography";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
+import { getInitialValues } from "../helpers/utils";
 
 const style = {
   bgcolor: "background.paper",
@@ -19,14 +20,8 @@ const style = {
   boxShadow: "4px 4px 12px #e0e0e0",
 };
 
-const FormBox = ({
-  formState,
-  dispatchFormAction,
-  setSnackbar,
-  getFormToSubmit,
-}) => {
+const FormBox = ({ formState, dispatchFormAction, setSnackbar }) => {
   const { formJSON } = formState;
-  const { handleSubmit } = useForm();
 
   // handle form loading from url param for share links
   const { form } = useParams();
@@ -65,23 +60,34 @@ const FormBox = ({
     }
   }, [form, dispatchFormAction, setSnackbar]);
 
-  function onSubmit() {
-    const formToSubmit = getFormToSubmit();
-    const hasErrors = Object.keys(formToSubmit.errors).length !== 0;
-    if (!hasErrors) {
-      console.log("submit", formToSubmit);
-      submitFormValues(formToSubmit);
-    } else {
-      const errors = formToSubmit.errors;
-      console.error("Form submitted contains errors: ", errors);
+  const initialValues: FieldValues = useMemo(() => {
+    return getInitialValues(formJSON);
+  }, [formJSON]);
 
-      setSnackbar({
-        open: true,
-        message: "Error submitting form. Check form validation.",
-        type: "error",
-      });
-    }
-  }
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: initialValues,
+    mode: "onSubmit",
+  });
+
+  const onSubmit = (data, e) => {
+    console.log("onSubmit", data, e);
+    e.preventDefault();
+    const formToSubmit = { formName: formState.formName, values: data };
+    submitFormValues(formToSubmit);
+  };
+
+  const onError = (values) => {
+    console.error("Form submitted contains errors: ", values);
+    setSnackbar({
+      open: true,
+      message: "Error submitting form. Check form validation.",
+      type: "error",
+    });
+  };
 
   function submitFormValues(formToSubmit) {
     const requestOptions = {
@@ -116,20 +122,19 @@ const FormBox = ({
         component="form"
         noValidate
         autoComplete="off"
-        onSubmit={(e) => {
-          e.preventDefault();
-          onSubmit();
-          return false;
-        }}
+        onSubmit={handleSubmit(onSubmit, onError)}
       >
         <Typography sx={{ color: "text.primary", ml: 2 }} variant="h2">
           {formJSON.title}
         </Typography>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          {formJSON?.forms?.map((form) => (
-            <Form key={form.name} form={form} />
-          ))}
-        </form>
+        {formJSON?.forms?.map((form) => (
+          <Form
+            key={form.name}
+            form={form}
+            register={register}
+            errors={errors}
+          />
+        ))}
         <Box
           display="flex"
           justifyContent={"right"}

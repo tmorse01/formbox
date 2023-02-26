@@ -1,3 +1,10 @@
+import {
+  FieldValues,
+  UseFormRegister,
+  DeepMap,
+  FieldError,
+} from "react-hook-form";
+
 export type formBuilderProps = {};
 
 export type formDataProps = {
@@ -14,6 +21,8 @@ export type defaultProps = {
 export type CompProps = {
   key: string;
   component: componentProps;
+  register: UseFormRegister<FieldValues>;
+  error: FieldError;
 };
 
 export type componentProps = defaultProps & {
@@ -22,7 +31,7 @@ export type componentProps = defaultProps & {
   required?: boolean;
   submit?: boolean;
   icon: string | undefined;
-  value: any | undefined;
+  defaultValue: any | undefined;
 };
 
 export type formBoxAppBarProps = {
@@ -41,12 +50,15 @@ export type container = {
 
 export type form = {
   form: FormProps;
+  register: UseFormRegister<FieldValues>;
+  errors: FieldErrors;
 };
 
 export type FormProps = defaultProps & {
   components: componentProps[];
   layout: string;
   type: string;
+  mode: "onChange" | "onBlur" | "onSubmit" | "onTouched" | "all" | undefined;
 };
 
 export type FormState = {
@@ -69,3 +81,15 @@ export type dispatchType = {
 export type Error = {
   message: String;
 };
+
+export type TextFieldProps = {
+  name: string;
+  title: string;
+  help: string | undefined;
+  required?: boolean;
+  register: UseFormRegister<FieldValues>;
+  error: FieldError;
+};
+
+export type FieldErrors<TFieldValues extends FieldValues = FieldValues> =
+  DeepMap<TFieldValues, FieldError>;
