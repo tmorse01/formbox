@@ -1,7 +1,10 @@
 import Box from "@mui/material/Box";
-import { FormProps } from "../types/componentType";
+import { form } from "../types/componentType";
 import "../css/form.css";
 import Typography from "@mui/material/Typography";
+import FormBoxComponent from "./formboxcomponent";
+
+import { useForm } from "react-hook-form";
 
 const style = {
   "& .MuiTextField-root": { mt: 1, mb: 1, width: "25ch" },
@@ -12,8 +15,16 @@ const style = {
   m: 2,
 };
 
-const Form = ({ name, title, layout, children }: FormProps) => {
+const Form = ({ form }: form) => {
   // console.log("form render: ", name);
+  // const formValues = {};
+  // components.forEach(comp => {
+  //   formValues[comp.name] = comp.defaultValue ?? "";
+  // })
+  // const { control, setValue } = useForm({
+  //   defaultValues: children.,
+  //   mode,
+  // });
   return (
     <Box component="div" display="grid" justifyContent="center" sx={style}>
       <Typography
@@ -21,9 +32,11 @@ const Form = ({ name, title, layout, children }: FormProps) => {
         sx={{ color: "text.primary" }}
         variant="h5"
       >
-        {title ?? "Form"}
+        {form.title ?? "Form"}
       </Typography>
-      {children}
+      {form.components?.map((component) => (
+        <FormBoxComponent key={component.name} component={component} />
+      ))}
     </Box>
   );
 };

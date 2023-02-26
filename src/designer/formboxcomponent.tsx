@@ -10,20 +10,11 @@ const WrapFormControl = ({ children, name, help }) => (
   </FormControl>
 );
 
-const FormBoxComponent: React.FC<CompProps> = ({
-  component,
-  error,
-  dispatchFormAction,
-}) => {
+const FormBoxComponent: React.FC<CompProps> = ({ component }) => {
   // console.log("component render:", component.name);
   return (
     <WrapFormControl name={component.name} help={component.help}>
-      <FormBoxControl
-        key={component.name}
-        component={component}
-        error={error}
-        dispatchFormAction={dispatchFormAction}
-      />
+      <FormBoxControl key={component.name} component={component} />
     </WrapFormControl>
   );
 };

@@ -13,9 +13,8 @@ export type defaultProps = {
 
 export type CompProps = {
   key: string;
-  error: Error;
   component: componentProps;
-} & dispatchType;
+};
 
 export type componentProps = defaultProps & {
   type: string;
@@ -40,8 +39,12 @@ export type container = {
   type: string;
 };
 
+export type form = {
+  form: FormProps;
+};
+
 export type FormProps = defaultProps & {
-  children: JSX.Element[];
+  components: componentProps[];
   layout: string;
   type: string;
 };

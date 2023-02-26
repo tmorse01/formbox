@@ -1,9 +1,12 @@
 import { useEffect } from "react";
 import { Container, Box, Button } from "@mui/material";
 import { useParams } from "react-router-dom";
+import { useForm } from "react-hook-form";
 
 import { loadForm } from "../helpers/formrequest";
 import exampleFormJSON from "../exampleforms/jobposition.json";
+
+import Form from "./form";
 
 import Typography from "@mui/material/Typography";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
@@ -17,12 +20,14 @@ const style = {
 };
 
 const FormBox = ({
-  title,
+  formState,
   dispatchFormAction,
   setSnackbar,
   getFormToSubmit,
-  children,
 }) => {
+  const { formJSON } = formState;
+  const { handleSubmit } = useForm();
+
   // handle form loading from url param for share links
   const { form } = useParams();
   useEffect(() => {
@@ -103,40 +108,48 @@ const FormBox = ({
 
   // console.log("FORMBOX render :", formJSON);
 
-  return (
-    <Container
-      sx={style}
-      maxWidth="sm"
-      component="form"
-      noValidate
-      autoComplete="off"
-      onSubmit={(e) => {
-        e.preventDefault();
-        onSubmit();
-        return false;
-      }}
-    >
-      <Typography sx={{ color: "text.primary", ml: 2 }} variant="h2">
-        {title}
-      </Typography>
-      {children}
-      <Box
-        display="flex"
-        justifyContent={"right"}
-        sx={{ m: 2, height: "40px" }}
+  if (formJSON !== undefined) {
+    return (
+      <Container
+        sx={style}
+        maxWidth="sm"
+        component="form"
+        noValidate
+        autoComplete="off"
+        onSubmit={(e) => {
+          e.preventDefault();
+          onSubmit();
+          return false;
+        }}
       >
-        <Button
-          id={"submit"}
-          type={"submit"}
-          variant="contained"
-          color="secondary"
-          startIcon={<SaveAltIcon />}
+        <Typography sx={{ color: "text.primary", ml: 2 }} variant="h2">
+          {formJSON.title}
+        </Typography>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          {formJSON?.forms?.map((form) => (
+            <Form key={form.name} form={form} />
+          ))}
+        </form>
+        <Box
+          display="flex"
+          justifyContent={"right"}
+          sx={{ m: 2, height: "40px" }}
         >
-          {"Submit"}
-        </Button>
-      </Box>
-    </Container>
-  );
+          <Button
+            id={"submit"}
+            type={"submit"}
+            variant="contained"
+            color="secondary"
+            startIcon={<SaveAltIcon />}
+          >
+            {"Submit"}
+          </Button>
+        </Box>
+      </Container>
+    );
+  } else {
+    return <></>;
+  }
 };
 
 export default FormBox;

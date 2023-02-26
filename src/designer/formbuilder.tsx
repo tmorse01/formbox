@@ -7,8 +7,6 @@ import FormBoxAppBar from "./appbar";
 import FormDataGridPage from "./formdatagridpage";
 import JSONEditorPage from "./jsoneditorpage";
 import FormBoxSnackbar from "./snackbar";
-import Form from "./form";
-import FormBoxComponent from "./formboxcomponent";
 
 import { getForms, connectToDb, disconnectDb } from "../helpers/formrequest";
 import { useFormStateReducer } from "../hooks/formStateReducer";
@@ -61,7 +59,7 @@ const getUsername = () => {
 const FormBuilder = () => {
   // State
   const [formState, dispatchFormAction] = useFormStateReducer();
-  const [formErrors, setFormErrors] = useState({});
+
   // console.log("formBuilder", formState);
   const [user, setUser] = useState({
     username: getUsername(),
@@ -82,14 +80,6 @@ const FormBuilder = () => {
       disconnectDb();
     };
   }, []);
-
-  useEffect(() => {
-    // form validation check if fields in error are now valid
-    getFormToSubmit();
-    // cant do this because it triggers onInit basically when we populate formState
-    // maybe hide behind flag if form has been submitted?
-    console.log("form validation effect");
-  }, [formState]);
 
   // Setters
   const handleSetUser = (user) => {
@@ -119,7 +109,7 @@ const FormBuilder = () => {
     const formToSubmit = processValues(formState);
     const hasErrors = Object.keys(formToSubmit.errors).length !== 0;
     if (hasErrors) {
-      setFormErrors(formToSubmit.errors);
+      // setFormErrors(formToSubmit.errors);
     }
     return formToSubmit;
   };
@@ -151,30 +141,11 @@ const FormBuilder = () => {
       path: "/form/:form",
       element: wrapRoute(
         <FormBox
-          title={formState.title}
+          formState={formState}
           dispatchFormAction={dispatchFormAction}
           setSnackbar={setSnackbar}
           getFormToSubmit={getFormToSubmit}
-        >
-          {formState.formJSON?.forms?.map((form) => (
-            <Form
-              key={form.name}
-              name={form.name}
-              type={form.type}
-              layout={form.layout}
-              title={form.title}
-            >
-              {form.components?.map((component) => (
-                <FormBoxComponent
-                  key={component.name}
-                  component={component}
-                  dispatchFormAction={dispatchFormAction}
-                  error={formErrors[component.name]}
-                />
-              ))}
-            </Form>
-          ))}
-        </FormBox>
+        />
       ),
       errorElement: <ErrorPage />,
     },
