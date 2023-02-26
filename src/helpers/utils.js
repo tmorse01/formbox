@@ -9,3 +9,24 @@ export function flattenFormJSON(formJSON, arrayOfObjects = []) {
   }
   return arrayOfObjects;
 }
+
+export function isEmptyValue(value) {
+  if (value === "" || value === undefined || value === null) return true;
+  else return false;
+}
+
+export function processValues(formState) {
+  const objects = flattenFormJSON(formState.formJSON);
+  const values = {};
+  const errors = {};
+  objects.forEach((object) => {
+    if (object.required === true && isEmptyValue(object.value)) {
+      errors[object.name] = {
+        message: object.title + " is required.",
+      };
+    } else if (object.value !== undefined) {
+      values[object.name] = object.value;
+    }
+  });
+  return { formName: formState.formName, values, errors };
+}

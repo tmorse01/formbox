@@ -11,7 +11,7 @@ export default function FormBoxSnackbar({ snackbar, setSnackbar }) {
   return (
     <Snackbar
       open={snackbar.open}
-      autoHideDuration={2000}
+      autoHideDuration={2500}
       onClose={handleClose}
     >
       <Alert

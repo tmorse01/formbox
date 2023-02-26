@@ -11,6 +11,12 @@ export type defaultProps = {
   title: string;
 };
 
+export type CompProps = {
+  key: string;
+  error: Error;
+  component: componentProps;
+} & dispatchType;
+
 export type componentProps = defaultProps & {
   type: string;
   help?: string;
@@ -40,11 +46,12 @@ export type FormProps = defaultProps & {
   type: string;
 };
 
+export type FormState = {
+  formJSON: container | undefined;
+  formName: string | undefined;
+};
+
 export type FormBoxContextType = {
-  formState: {
-    formJSON: container | undefined;
-    formName: string | undefined;
-  };
   user: {
     username: string | null | undefined;
     token: string | null | undefined;
@@ -54,4 +61,8 @@ export type FormBoxContextType = {
 
 export type dispatchType = {
   dispatchFormAction: ({ type, payload }) => void;
+};
+
+export type Error = {
+  message: String;
 };

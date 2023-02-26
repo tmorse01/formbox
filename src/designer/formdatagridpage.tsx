@@ -1,10 +1,9 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { useParams } from "react-router-dom";
 
 import FormDataGrid from "./formdatagrid";
-import { FormBoxContext } from "./formbuilder";
 import { loadForm } from "../helpers/formrequest";
 
 const style = {
@@ -17,11 +16,12 @@ const style = {
   gridTemplateRows: "min-content 1fr min-content",
 };
 
-export default function FormDataGridPage({ dispatchFormAction, setSnackbar }) {
+export default function FormDataGridPage({
+  formName,
+  dispatchFormAction,
+  setSnackbar,
+}) {
   const [selectedDocumentData, setSelectedDocumentData] = useState([]);
-
-  const { formState } = useContext(FormBoxContext);
-  const { formName } = formState;
 
   const { form } = useParams();
   useEffect(() => {

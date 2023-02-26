@@ -1,12 +1,7 @@
 import { memo } from "react";
 import { FormControl, FormHelperText } from "@mui/material";
-import { componentProps, dispatchType } from "../types/componentType";
+import { CompProps } from "../types/componentType";
 import FormBoxControl from "../designer/formboxcontrol";
-
-type CompProps = {
-  key: string;
-  component: componentProps;
-} & dispatchType;
 
 const WrapFormControl = ({ children, name, help }) => (
   <FormControl variant="standard">
@@ -17,6 +12,7 @@ const WrapFormControl = ({ children, name, help }) => (
 
 const FormBoxComponent: React.FC<CompProps> = ({
   component,
+  error,
   dispatchFormAction,
 }) => {
   // console.log("component render:", component.name);
@@ -25,6 +21,7 @@ const FormBoxComponent: React.FC<CompProps> = ({
       <FormBoxControl
         key={component.name}
         component={component}
+        error={error}
         dispatchFormAction={dispatchFormAction}
       />
     </WrapFormControl>

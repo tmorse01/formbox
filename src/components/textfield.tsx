@@ -1,17 +1,19 @@
 import TextField from "@mui/material/TextField";
-import { dispatchType } from "../types/componentType";
+import { dispatchType, Error } from "../types/componentType";
 
 type TextFieldProps = {
   name: string;
   title: string;
   required?: boolean;
   value: string | undefined;
+  error: Error;
 } & dispatchType;
 
 const FormBoxTextField = ({
   name,
   title,
   required,
+  error,
   dispatchFormAction,
   value,
 }: TextFieldProps) => {
@@ -32,6 +34,8 @@ const FormBoxTextField = ({
       variant="outlined"
       onChange={handleChange}
       value={value ?? ""}
+      error={!!error}
+      helperText={error?.message}
     />
   );
 };

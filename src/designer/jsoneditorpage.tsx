@@ -18,11 +18,12 @@ const style = {
 };
 
 export default function JSONEditorPage({
+  formState,
   dispatchFormAction,
   setSnackbar,
   getUserFormList,
 }) {
-  const { formState, user } = useContext(FormBoxContext);
+  const { user } = useContext(FormBoxContext);
   const { formJSON, formName } = formState;
 
   const { form } = useParams();

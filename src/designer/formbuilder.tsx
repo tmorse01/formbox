@@ -14,6 +14,8 @@ import { getForms, connectToDb, disconnectDb } from "../helpers/formrequest";
 import { useFormStateReducer } from "../hooks/formStateReducer";
 import { FormBoxContextType } from "../types/componentType";
 
+import { processValues } from "../helpers/utils";
+
 import "../css/formbuilder.css";
 
 // css
@@ -39,10 +41,6 @@ const theme = createTheme({
 });
 
 export const FormBoxContext = React.createContext<FormBoxContextType>({
-  formState: {
-    formJSON: undefined,
-    formName: undefined,
-  },
   user: {
     username: undefined,
     token: undefined,
@@ -63,6 +61,7 @@ const getUsername = () => {
 const FormBuilder = () => {
   // State
   const [formState, dispatchFormAction] = useFormStateReducer();
+  const [formErrors, setFormErrors] = useState({});
   // console.log("formBuilder", formState);
   const [user, setUser] = useState({
     username: getUsername(),
@@ -83,6 +82,14 @@ const FormBuilder = () => {
       disconnectDb();
     };
   }, []);
+
+  useEffect(() => {
+    // form validation check if fields in error are now valid
+    getFormToSubmit();
+    // cant do this because it triggers onInit basically when we populate formState
+    // maybe hide behind flag if form has been submitted?
+    console.log("form validation effect");
+  }, [formState]);
 
   // Setters
   const handleSetUser = (user) => {
@@ -108,12 +115,22 @@ const FormBuilder = () => {
     }
   };
 
+  const getFormToSubmit = () => {
+    const formToSubmit = processValues(formState);
+    const hasErrors = Object.keys(formToSubmit.errors).length !== 0;
+    if (hasErrors) {
+      setFormErrors(formToSubmit.errors);
+    }
+    return formToSubmit;
+  };
+
   // Router
 
   const wrapRoute = (control) => {
     return (
       <div className="formBuilderWrapper">
         <FormBoxAppBar
+          formName={formState.formName}
           handleSetUser={handleSetUser}
           setSnackbar={setSnackbar}
           getUserFormList={getUserFormList}
@@ -134,8 +151,10 @@ const FormBuilder = () => {
       path: "/form/:form",
       element: wrapRoute(
         <FormBox
+          title={formState.title}
           dispatchFormAction={dispatchFormAction}
           setSnackbar={setSnackbar}
+          getFormToSubmit={getFormToSubmit}
         >
           {formState.formJSON?.forms?.map((form) => (
             <Form
@@ -150,6 +169,7 @@ const FormBuilder = () => {
                   key={component.name}
                   component={component}
                   dispatchFormAction={dispatchFormAction}
+                  error={formErrors[component.name]}
                 />
               ))}
             </Form>
@@ -162,6 +182,7 @@ const FormBuilder = () => {
       path: "/responses/:form",
       element: wrapRoute(
         <FormDataGridPage
+          formName={formState.formName}
           dispatchFormAction={dispatchFormAction}
           setSnackbar={setSnackbar}
         />
@@ -172,6 +193,7 @@ const FormBuilder = () => {
       path: "/jsoneditor/:form",
       element: wrapRoute(
         <JSONEditorPage
+          formState={formState}
           dispatchFormAction={dispatchFormAction}
           setSnackbar={setSnackbar}
           getUserFormList={getUserFormList}
@@ -183,6 +205,7 @@ const FormBuilder = () => {
       path: "/jsoneditor/",
       element: wrapRoute(
         <JSONEditorPage
+          formState={formState}
           dispatchFormAction={dispatchFormAction}
           setSnackbar={setSnackbar}
           getUserFormList={getUserFormList}
@@ -196,7 +219,6 @@ const FormBuilder = () => {
   return (
     <FormBoxContext.Provider
       value={{
-        formState: formState,
         user: user,
         listOfForms: listOfForms,
       }}

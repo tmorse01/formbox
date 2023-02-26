@@ -1,10 +1,12 @@
 import FormBoxButton from "../components/button";
 import FormBoxTextField from "../components/textfield";
-import { componentProps, dispatchType } from "../types/componentType";
+import {
+  CompProps,
+  componentProps,
+  dispatchType,
+} from "../types/componentType";
 
-type CompProps = { component: componentProps } & dispatchType;
-
-function FormBoxControl({ component, dispatchFormAction }: CompProps) {
+function FormBoxControl({ component, error, dispatchFormAction }: CompProps) {
   const { name, title, type, value, required, submit, icon } = component;
 
   if (type === "textfield") {
@@ -13,6 +15,7 @@ function FormBoxControl({ component, dispatchFormAction }: CompProps) {
         name={name}
         title={title}
         required={required}
+        error={error}
         dispatchFormAction={dispatchFormAction}
         value={value}
       />
