@@ -27,15 +27,15 @@ export type formBoxAppBarProps = {
 };
 
 export type container = {
-  forms: formProps[];
+  forms: FormProps[];
   layout: string;
   title: string;
   name: string;
   type: string;
 };
 
-export type formProps = defaultProps & {
-  components: componentProps[];
+export type FormProps = defaultProps & {
+  children: JSX.Element[];
   layout: string;
   type: string;
 };

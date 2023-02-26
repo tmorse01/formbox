@@ -63,7 +63,7 @@ const getUsername = () => {
 const FormBuilder = () => {
   // State
   const [formState, dispatchFormAction] = useFormStateReducer();
-  console.log("formBuilder", formState);
+  // console.log("formBuilder", formState);
   const [user, setUser] = useState({
     username: getUsername(),
     token: getToken(),
@@ -137,21 +137,23 @@ const FormBuilder = () => {
           dispatchFormAction={dispatchFormAction}
           setSnackbar={setSnackbar}
         >
-          {formState.formJSON?.forms?.map((form) => {
-            return (
-              <Form key={form.name} form={form}>
-                {form.components?.map((component) => {
-                  return (
-                    <FormBoxComponent
-                      key={component.name}
-                      component={component}
-                      dispatchFormAction={dispatchFormAction}
-                    />
-                  );
-                })}
-              </Form>
-            );
-          })}
+          {formState.formJSON?.forms?.map((form) => (
+            <Form
+              key={form.name}
+              name={form.name}
+              type={form.type}
+              layout={form.layout}
+              title={form.title}
+            >
+              {form.components?.map((component) => (
+                <FormBoxComponent
+                  key={component.name}
+                  component={component}
+                  dispatchFormAction={dispatchFormAction}
+                />
+              ))}
+            </Form>
+          ))}
         </FormBox>
       ),
       errorElement: <ErrorPage />,

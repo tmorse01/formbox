@@ -6,7 +6,6 @@ type CompProps = { component: componentProps } & dispatchType;
 
 function FormBoxControl({ component, dispatchFormAction }: CompProps) {
   const { name, title, type, value, required, submit, icon } = component;
-  console.log("FormBoxcontrol: ", name);
 
   if (type === "textfield") {
     return (

@@ -1,10 +1,7 @@
-import { useCallback } from "react";
 import Box from "@mui/material/Box";
-import FormBoxComponent from "./formboxcomponent";
-import { dispatchType, formProps } from "../types/componentType";
+import { FormProps } from "../types/componentType";
 import "../css/form.css";
 import Typography from "@mui/material/Typography";
-import { JsxElement } from "typescript";
 
 const style = {
   "& .MuiTextField-root": { mt: 1, mb: 1, width: "25ch" },
@@ -15,13 +12,8 @@ const style = {
   m: 2,
 };
 
-type FormProps = {
-  form: formProps;
-  children: JSX.Element[];
-};
-
-const Form = ({ form, children }: FormProps) => {
-  console.log("form render: ", form);
+const Form = ({ name, title, layout, children }: FormProps) => {
+  // console.log("form render: ", name);
   return (
     <Box component="div" display="grid" justifyContent="center" sx={style}>
       <Typography
@@ -29,7 +21,7 @@ const Form = ({ form, children }: FormProps) => {
         sx={{ color: "text.primary" }}
         variant="h5"
       >
-        {form.title ?? "Form"}
+        {title ?? "Form"}
       </Typography>
       {children}
     </Box>

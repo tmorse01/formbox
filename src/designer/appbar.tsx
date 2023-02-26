@@ -169,7 +169,7 @@ export default function FormBoxAppBar({
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => {
               return (
-                <Tooltip title={page.tooltip}>
+                <Tooltip key={page.path} title={page.tooltip}>
                   <Typography>
                     <Button
                       onClick={() => navigateToPath(page.path)}

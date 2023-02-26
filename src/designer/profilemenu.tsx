@@ -113,10 +113,7 @@ export default function ProfileMenu({ user, handleSetUser, setSnackbar }) {
     <Box>
       <Tooltip title="User Profile">
         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-          <Avatar
-            alt={user.username ?? undefined}
-            src="/static/images/avatar/2.jpg"
-          />
+          <Avatar alt={user.username ?? undefined}>{user.username?.[0]}</Avatar>
         </IconButton>
       </Tooltip>
       <Menu

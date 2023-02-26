@@ -15,16 +15,11 @@ const WrapFormControl = ({ children, name, help }) => (
   </FormControl>
 );
 
-// const arePropsEqual = (prevProps, newProps) => {
-//   console.log("arePropsEqual: ", prevProps, newProps);
-//   return true;
-// };
-
 const FormBoxComponent: React.FC<CompProps> = ({
   component,
   dispatchFormAction,
 }) => {
-  console.log("component render:", component.name);
+  // console.log("component render:", component.name);
   return (
     <WrapFormControl name={component.name} help={component.help}>
       <FormBoxControl
@@ -36,4 +31,6 @@ const FormBoxComponent: React.FC<CompProps> = ({
   );
 };
 
-export default FormBoxComponent;
+const memoizedFormBoxComponent: React.FC<CompProps> = memo(FormBoxComponent);
+
+export default memoizedFormBoxComponent;

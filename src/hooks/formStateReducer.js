@@ -8,30 +8,25 @@ function createInitialFormState() {
 }
 
 function updateComponentByName({ formJSON, name, state }) {
-  console.log("updateComponentByName", { formJSON, name, state });
+  // console.log("updateComponentByName", { formJSON, name, state });
   if (formJSON.name === name) {
     return { ...formJSON, ...state };
   } else if (formJSON.forms?.length > 0) {
-    var forms = formJSON.forms;
-    for (var i = 0; i < forms.length; i++) {
-      var form = forms[i];
+    formJSON.forms.forEach((form, i) => {
       if (form.name === name) {
-        forms[i] = { ...form, ...state };
+        formJSON.forms[i] = { ...form, ...state };
         return;
       } else {
         updateComponentByName({ formJSON: form, name, state });
       }
-    }
+    });
   } else if (formJSON.components?.length > 0) {
-    var components = formJSON.components;
-    for (var i = 0; i < components.length; i++) {
-      var comp = components[i];
+    formJSON.components.forEach((comp, j) => {
       if (comp.name === name) {
-        components[i] = { ...comp, ...state };
-        console.log("found component :", components[i]);
+        formJSON.components[j] = { ...comp, ...state };
         return;
       }
-    }
+    });
   }
 }
 
@@ -44,7 +39,7 @@ function reducer(state, action) {
         name: action.payload.name,
         state: action.payload.state,
       });
-      console.log("after comp update:", formJSON);
+      // console.log("after comp update:", formJSON);
       return { ...state, formJSON: formJSON };
     }
     case "update_formName": {

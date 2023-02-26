@@ -15,14 +15,13 @@ const FormBoxTextField = ({
   dispatchFormAction,
   value,
 }: TextFieldProps) => {
-  console.log("render text field", name, value);
+  // console.log("render text field", name, value);
 
   const handleChange = (e) => {
     dispatchFormAction({
       type: "update_componentProp",
       payload: { name: name, state: { value: e.target.value } },
     });
-    // onChange({ name, value: e.target.value });
   };
 
   return (
@@ -32,7 +31,7 @@ const FormBoxTextField = ({
       required={required}
       variant="outlined"
       onChange={handleChange}
-      value={value}
+      value={value ?? ""}
     />
   );
 };
