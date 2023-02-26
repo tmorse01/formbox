@@ -1,4 +1,4 @@
-import React, { useReducer, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import ErrorPage from "./errorpage";
@@ -6,13 +6,15 @@ import FormBox from "./formbox";
 import FormBoxAppBar from "./appbar";
 import FormDataGridPage from "./formdatagridpage";
 import JSONEditorPage from "./jsoneditorpage";
+import FormBoxSnackbar from "./snackbar";
+import Form from "./form";
+import FormBoxComponent from "./formboxcomponent";
 
 import { getForms, connectToDb, disconnectDb } from "../helpers/formrequest";
-
+import { useFormStateReducer } from "../hooks/formStateReducer";
 import { FormBoxContextType } from "../types/componentType";
 
 import "../css/formbuilder.css";
-import FormBoxSnackbar from "./snackbar";
 
 // css
 import "../App.css";
@@ -49,39 +51,6 @@ export const FormBoxContext = React.createContext<FormBoxContextType>({
 });
 
 // Global functions
-function createInitialFormState() {
-  return {
-    JSON: undefined,
-    formName: undefined,
-  };
-}
-
-function formStateReducer(state, action) {
-  switch (action.type) {
-    case "update_formName": {
-      return {
-        ...state,
-        formName: action.payload.formName,
-      };
-    }
-    case "update_JSON": {
-      return {
-        ...state,
-        formJSON: action.payload.formJSON,
-      };
-    }
-    case "update_formState": {
-      return {
-        ...state,
-        ...action.payload.formState,
-      };
-    }
-    default: {
-      console.error("Unknown action:", action);
-      throw Error("Unknown action: " + action.type);
-    }
-  }
-}
 
 const getToken = () => {
   return sessionStorage.getItem("token") ?? undefined;
@@ -93,15 +62,8 @@ const getUsername = () => {
 
 const FormBuilder = () => {
   // State
-  const [formState, dispatchFormAction] = useReducer(
-    formStateReducer,
-    {
-      formJSON: undefined,
-      formName: undefined,
-    },
-    createInitialFormState
-  );
-
+  const [formState, dispatchFormAction] = useFormStateReducer();
+  // console.log("formBuilder", formState);
   const [user, setUser] = useState({
     username: getUsername(),
     token: getToken(),
@@ -174,7 +136,25 @@ const FormBuilder = () => {
         <FormBox
           dispatchFormAction={dispatchFormAction}
           setSnackbar={setSnackbar}
-        />
+        >
+          {formState.formJSON?.forms?.map((form) => (
+            <Form
+              key={form.name}
+              name={form.name}
+              type={form.type}
+              layout={form.layout}
+              title={form.title}
+            >
+              {form.components?.map((component) => (
+                <FormBoxComponent
+                  key={component.name}
+                  component={component}
+                  dispatchFormAction={dispatchFormAction}
+                />
+              ))}
+            </Form>
+          ))}
+        </FormBox>
       ),
       errorElement: <ErrorPage />,
     },

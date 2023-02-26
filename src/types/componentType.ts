@@ -16,7 +16,8 @@ export type componentProps = defaultProps & {
   help?: string;
   required?: boolean;
   submit?: boolean;
-  iconName: string | undefined;
+  icon: string | undefined;
+  value: any | undefined;
 };
 
 export type formBoxAppBarProps = {
@@ -26,15 +27,15 @@ export type formBoxAppBarProps = {
 };
 
 export type container = {
-  forms: formProps[];
+  forms: FormProps[];
   layout: string;
   title: string;
   name: string;
   type: string;
 };
 
-export type formProps = defaultProps & {
-  components: componentProps[];
+export type FormProps = defaultProps & {
+  children: JSX.Element[];
   layout: string;
   type: string;
 };
@@ -49,4 +50,8 @@ export type FormBoxContextType = {
     token: string | null | undefined;
   };
   listOfForms: formDataProps[];
+};
+
+export type dispatchType = {
+  dispatchFormAction: ({ type, payload }) => void;
 };
