@@ -1,23 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
+// pages
 import ErrorPage from "./errorpage";
 import FormBox from "./formbox";
 import FormBoxAppBar from "./appbar";
 import FormDataGridPage from "./formdatagridpage";
 import JSONEditorPage from "./jsoneditorpage";
 import FormBoxSnackbar from "./snackbar";
-import Form from "./form";
-import FormBoxComponent from "./formboxcomponent";
 
+// helpers
 import { getForms, connectToDb, disconnectDb } from "../helpers/formrequest";
 import { useFormStateReducer } from "../hooks/formStateReducer";
 import { FormBoxContextType } from "../types/componentType";
 
-import "../css/formbuilder.css";
-
 // css
 import "../App.css";
+import "../css/formbuilder.css";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
@@ -39,10 +38,6 @@ const theme = createTheme({
 });
 
 export const FormBoxContext = React.createContext<FormBoxContextType>({
-  formState: {
-    formJSON: undefined,
-    formName: undefined,
-  },
   user: {
     username: undefined,
     token: undefined,
@@ -63,6 +58,7 @@ const getUsername = () => {
 const FormBuilder = () => {
   // State
   const [formState, dispatchFormAction] = useFormStateReducer();
+
   // console.log("formBuilder", formState);
   const [user, setUser] = useState({
     username: getUsername(),
@@ -114,6 +110,7 @@ const FormBuilder = () => {
     return (
       <div className="formBuilderWrapper">
         <FormBoxAppBar
+          formName={formState.formName}
           handleSetUser={handleSetUser}
           setSnackbar={setSnackbar}
           getUserFormList={getUserFormList}
@@ -134,27 +131,10 @@ const FormBuilder = () => {
       path: "/form/:form",
       element: wrapRoute(
         <FormBox
+          formState={formState}
           dispatchFormAction={dispatchFormAction}
           setSnackbar={setSnackbar}
-        >
-          {formState.formJSON?.forms?.map((form) => (
-            <Form
-              key={form.name}
-              name={form.name}
-              type={form.type}
-              layout={form.layout}
-              title={form.title}
-            >
-              {form.components?.map((component) => (
-                <FormBoxComponent
-                  key={component.name}
-                  component={component}
-                  dispatchFormAction={dispatchFormAction}
-                />
-              ))}
-            </Form>
-          ))}
-        </FormBox>
+        />
       ),
       errorElement: <ErrorPage />,
     },
@@ -162,6 +142,7 @@ const FormBuilder = () => {
       path: "/responses/:form",
       element: wrapRoute(
         <FormDataGridPage
+          formName={formState.formName}
           dispatchFormAction={dispatchFormAction}
           setSnackbar={setSnackbar}
         />
@@ -172,6 +153,7 @@ const FormBuilder = () => {
       path: "/jsoneditor/:form",
       element: wrapRoute(
         <JSONEditorPage
+          formState={formState}
           dispatchFormAction={dispatchFormAction}
           setSnackbar={setSnackbar}
           getUserFormList={getUserFormList}
@@ -183,6 +165,7 @@ const FormBuilder = () => {
       path: "/jsoneditor/",
       element: wrapRoute(
         <JSONEditorPage
+          formState={formState}
           dispatchFormAction={dispatchFormAction}
           setSnackbar={setSnackbar}
           getUserFormList={getUserFormList}
@@ -196,7 +179,6 @@ const FormBuilder = () => {
   return (
     <FormBoxContext.Provider
       value={{
-        formState: formState,
         user: user,
         listOfForms: listOfForms,
       }}

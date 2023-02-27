@@ -1,27 +1,23 @@
-import { useContext, useEffect } from "react";
-import { Container, Box, Button } from "@mui/material";
+import { useEffect, useMemo } from "react";
 import { useParams } from "react-router-dom";
+import { FieldValues } from "react-hook-form";
 
-import { FormBoxContext } from "./formbuilder";
 import { loadForm } from "../helpers/formrequest";
 import exampleFormJSON from "../exampleforms/jobposition.json";
+import { getInitialValues } from "../helpers/utils";
 
-import Typography from "@mui/material/Typography";
-import SaveAltIcon from "@mui/icons-material/SaveAlt";
-import { flattenFormJSON } from "../helpers/utils";
+// components
+import FormBoxContainer from "./container";
 
-const style = {
-  bgcolor: "background.paper",
-  borderRadius: "8px",
-  display: "grid",
-  padding: "12px 0 12px 0",
-  boxShadow: "4px 4px 12px #e0e0e0",
-};
+// types
+import { FormBoxProps } from "../types/componentType";
 
-const FormBox = ({ dispatchFormAction, setSnackbar, children }) => {
-  // const [values, setValues] = useState({});
-  const { formState } = useContext(FormBoxContext);
-  const { formJSON, formName } = formState;
+const FormBox = ({
+  formState,
+  dispatchFormAction,
+  setSnackbar,
+}: FormBoxProps) => {
+  const { formJSON } = formState;
 
   // handle form loading from url param for share links
   const { form } = useParams();
@@ -60,25 +56,26 @@ const FormBox = ({ dispatchFormAction, setSnackbar, children }) => {
     }
   }, [form, dispatchFormAction, setSnackbar]);
 
-  function processValues() {
-    const objects = flattenFormJSON(formJSON);
-    const values = {};
-    objects.forEach((object) => {
-      if (object.value !== undefined) {
-        values[object.name] = object.value;
-      }
-    });
+  const initialValues: FieldValues = useMemo(() => {
+    const values = getInitialValues(formState.formJSON);
     return values;
-  }
+  }, [formState.formJSON]);
 
-  function onSubmit() {
-    let formToSubmit = {
-      formName: formName,
-      ...processValues(),
-    };
-    console.log("submit", formToSubmit);
+  const onSubmit = (values, e) => {
+    e.preventDefault();
+    const formToSubmit = { formName: formState.formName, ...values };
+    console.log("Form submitted: ", formToSubmit);
     submitFormValues(formToSubmit);
-  }
+  };
+
+  const onError = (values) => {
+    console.error("Form submitted contains errors: ", values);
+    setSnackbar({
+      open: true,
+      message: "Error submitting form. Check form validation.",
+      type: "error",
+    });
+  };
 
   function submitFormValues(formToSubmit) {
     const requestOptions = {
@@ -104,40 +101,15 @@ const FormBox = ({ dispatchFormAction, setSnackbar, children }) => {
   }
 
   // console.log("FORMBOX render :", formJSON);
-  if (formJSON) {
+
+  if (formJSON !== undefined) {
     return (
-      <Container
-        sx={style}
-        maxWidth="sm"
-        component="form"
-        noValidate
-        autoComplete="off"
-        onSubmit={(e) => {
-          e.preventDefault();
-          onSubmit();
-          return false;
-        }}
-      >
-        <Typography sx={{ color: "text.primary", ml: 2 }} variant="h2">
-          {formJSON?.title}
-        </Typography>
-        {children}
-        <Box
-          display="flex"
-          justifyContent={"right"}
-          sx={{ m: 2, height: "40px" }}
-        >
-          <Button
-            id={"submit"}
-            type={"submit"}
-            variant="contained"
-            color="secondary"
-            startIcon={<SaveAltIcon />}
-          >
-            {"Submit"}
-          </Button>
-        </Box>
-      </Container>
+      <FormBoxContainer
+        formState={formState}
+        initialValues={initialValues}
+        onSubmit={onSubmit}
+        onError={onError}
+      />
     );
   } else {
     return <></>;

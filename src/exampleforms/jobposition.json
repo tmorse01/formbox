@@ -28,7 +28,7 @@
         {
           "name": "companyname",
           "title": "Company Name",
-          "help": "Name of the company you work for",
+          "help": "Your current companies name",
           "type": "textfield",
           "required": true
         },

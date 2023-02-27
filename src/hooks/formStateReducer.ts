@@ -39,7 +39,6 @@ function reducer(state, action) {
         name: action.payload.name,
         state: action.payload.state,
       });
-      // console.log("after comp update:", formJSON);
       return { ...state, formJSON: formJSON };
     }
     case "update_formName": {

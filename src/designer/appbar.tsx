@@ -30,26 +30,26 @@ export default function FormBoxAppBar({
   handleSetUser,
   setSnackbar,
   getUserFormList,
+  formName,
 }) {
-  const { user, formState } = useContext(FormBoxContext);
+  const { user } = useContext(FormBoxContext);
 
-  var isRespDisabled =
-    formState.formName === undefined || user.username === undefined;
+  var isRespDisabled = formName === undefined || user.username === undefined;
 
   const pages = [
     {
       key: "form",
       title: "Form",
-      path: "/form/" + formState.formName,
-      disabled: formState.formName === undefined,
+      path: "/form/" + formName,
+      disabled: formName === undefined,
       tooltip: "Select a form from the top right open menu.",
       icon: <DynamicFormIcon />,
     },
     {
       key: "responses",
       title: "Responses",
-      path: "/responses/" + formState.formName,
-      disabled: formState.formName === undefined || user.username === undefined,
+      path: "/responses/" + formName,
+      disabled: formName === undefined || user.username === undefined,
       tooltip: isRespDisabled
         ? "Please sign in to view your forms responses."
         : undefined,
@@ -58,10 +58,8 @@ export default function FormBoxAppBar({
     {
       key: "jsoneditor",
       title: "Editor",
-      path: formState.formName
-        ? "/jsoneditor/" + formState.formName
-        : "/jsoneditor/",
-      disabled: formState.formName === undefined,
+      path: formName ? "/jsoneditor/" + formName : "/jsoneditor/",
+      disabled: formName === undefined,
       tooltip: "Select a form to view the JSON that describes it.",
       icon: <DataArrayIcon />,
     },
@@ -187,8 +185,11 @@ export default function FormBoxAppBar({
           <Button color="inherit" key="example" onClick={handleExample}>
             Example
           </Button>
-          <SavedFormsModal getUserFormList={getUserFormList} />
-          <ShareModal setSnackbar={setSnackbar} />
+          <SavedFormsModal
+            formName={formName}
+            getUserFormList={getUserFormList}
+          />
+          <ShareModal formName={formName} setSnackbar={setSnackbar} />
           <Box sx={{ flexGrow: 0 }}>
             <ProfileMenu
               user={user}

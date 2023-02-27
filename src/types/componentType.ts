@@ -1,3 +1,14 @@
+import {
+  FieldValues,
+  UseFormRegister,
+  DeepMap,
+  FieldError,
+} from "react-hook-form";
+
+type Dispatch = React.Dispatch<Action>;
+
+type Action = { type: string; payload?: any };
+
 export type formBuilderProps = {};
 
 export type formDataProps = {
@@ -11,13 +22,20 @@ export type defaultProps = {
   title: string;
 };
 
+export type CompProps = {
+  key: string;
+  component: componentProps;
+  register: UseFormRegister<FieldValues>;
+  error: FieldError;
+};
+
 export type componentProps = defaultProps & {
   type: string;
   help?: string;
   required?: boolean;
   submit?: boolean;
   icon: string | undefined;
-  value: any | undefined;
+  defaultValue: any | undefined;
 };
 
 export type formBoxAppBarProps = {
@@ -27,24 +45,44 @@ export type formBoxAppBarProps = {
 };
 
 export type container = {
-  forms: FormProps[];
+  forms: form[];
   layout: string;
   title: string;
   name: string;
   type: string;
 };
 
-export type FormProps = defaultProps & {
-  children: JSX.Element[];
+export type FormBoxProps = {
+  formState: FormState;
+  dispatchFormAction: Dispatch;
+  setSnackbar: any;
+};
+
+export type ContainerProps = {
+  formState: FormState;
+  initialValues: FieldValues;
+  onSubmit: (values, e) => void;
+  onError: (values, e) => void;
+};
+
+export type FormProps = {
+  form: form;
+  register: UseFormRegister<FieldValues>;
+  errors: FieldErrors;
+};
+
+export type form = defaultProps & {
+  components: componentProps[];
   layout: string;
   type: string;
 };
 
+export type FormState = {
+  formJSON: container | undefined;
+  formName: string | undefined;
+};
+
 export type FormBoxContextType = {
-  formState: {
-    formJSON: container | undefined;
-    formName: string | undefined;
-  };
   user: {
     username: string | null | undefined;
     token: string | null | undefined;
@@ -52,6 +90,18 @@ export type FormBoxContextType = {
   listOfForms: formDataProps[];
 };
 
-export type dispatchType = {
-  dispatchFormAction: ({ type, payload }) => void;
+export type Error = {
+  message: String;
 };
+
+export type TextFieldProps = {
+  name: string;
+  title: string;
+  help: string | undefined;
+  required?: boolean;
+  register: UseFormRegister<FieldValues>;
+  error: FieldError;
+};
+
+export type FieldErrors<TFieldValues extends FieldValues = FieldValues> =
+  DeepMap<TFieldValues, FieldError>;

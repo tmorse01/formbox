@@ -1,37 +1,26 @@
 import TextField from "@mui/material/TextField";
-import { dispatchType } from "../types/componentType";
-
-type TextFieldProps = {
-  name: string;
-  title: string;
-  required?: boolean;
-  value: string | undefined;
-} & dispatchType;
+import { TextFieldProps } from "../types/componentType";
 
 const FormBoxTextField = ({
   name,
   title,
+  help,
   required,
-  dispatchFormAction,
-  value,
+  register,
+  error,
 }: TextFieldProps) => {
-  // console.log("render text field", name, value);
-
-  const handleChange = (e) => {
-    dispatchFormAction({
-      type: "update_componentProp",
-      payload: { name: name, state: { value: e.target.value } },
-    });
-  };
-
+  // console.log("render text field", name);
   return (
     <TextField
       id={name}
       label={title}
       required={required}
       variant="outlined"
-      onChange={handleChange}
-      value={value ?? ""}
+      {...register(name, {
+        required: title + " is required.",
+      })}
+      error={!!error}
+      helperText={error?.message ?? help}
     />
   );
 };

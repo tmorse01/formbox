@@ -31,11 +31,10 @@ const style = {
   width: "400px",
 };
 
-export default function SavedFormsModal({ getUserFormList }) {
+export default function SavedFormsModal({ getUserFormList, formName }) {
   const [open, setOpen] = useState(false);
 
-  const { listOfForms, formState, user } = useContext(FormBoxContext);
-  const { formName } = formState;
+  const { listOfForms, user } = useContext(FormBoxContext);
 
   const navigate = useNavigate();
 
