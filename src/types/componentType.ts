@@ -45,7 +45,7 @@ export type formBoxAppBarProps = {
 };
 
 export type container = {
-  forms: FormProps[];
+  forms: form[];
   layout: string;
   title: string;
   name: string;
@@ -65,17 +65,16 @@ export type ContainerProps = {
   onError: (values, e) => void;
 };
 
-export type form = {
-  form: FormProps;
+export type FormProps = {
+  form: form;
   register: UseFormRegister<FieldValues>;
   errors: FieldErrors;
 };
 
-export type FormProps = defaultProps & {
+export type form = defaultProps & {
   components: componentProps[];
   layout: string;
   type: string;
-  mode: "onChange" | "onBlur" | "onSubmit" | "onTouched" | "all" | undefined;
 };
 
 export type FormState = {

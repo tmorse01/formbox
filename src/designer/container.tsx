@@ -57,12 +57,7 @@ const FormBoxContainer = ({
           {formJSON.title}
         </Typography>
         {formJSON?.forms?.map((form) => (
-          <Form
-            key={form.name}
-            form={form}
-            register={register}
-            errors={errors}
-          />
+          <Form form={form} register={register} errors={errors} />
         ))}
         <Box
           display="flex"

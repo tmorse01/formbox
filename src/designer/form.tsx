@@ -1,5 +1,5 @@
 import Box from "@mui/material/Box";
-import { form } from "../types/componentType";
+import { FormProps } from "../types/componentType";
 import "../css/form.css";
 import Typography from "@mui/material/Typography";
 import FormBoxComponent from "./formboxcomponent";
@@ -13,7 +13,7 @@ const style = {
   m: 2,
 };
 
-const Form = ({ form, register, errors }: form) => {
+const Form = ({ form, register, errors }: FormProps) => {
   // console.log("form render: ", form.title);
 
   return (
