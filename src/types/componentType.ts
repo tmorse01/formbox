@@ -5,6 +5,10 @@ import {
   FieldError,
 } from "react-hook-form";
 
+type Dispatch = React.Dispatch<Action>;
+
+type Action = { type: string; payload?: any };
+
 export type formBuilderProps = {};
 
 export type formDataProps = {
@@ -48,6 +52,19 @@ export type container = {
   type: string;
 };
 
+export type FormBoxProps = {
+  formState: FormState;
+  dispatchFormAction: Dispatch;
+  setSnackbar: any;
+};
+
+export type ContainerProps = {
+  formState: FormState;
+  initialValues: FieldValues;
+  onSubmit: (values, e) => void;
+  onError: (values, e) => void;
+};
+
 export type form = {
   form: FormProps;
   register: UseFormRegister<FieldValues>;
@@ -72,10 +89,6 @@ export type FormBoxContextType = {
     token: string | null | undefined;
   };
   listOfForms: formDataProps[];
-};
-
-export type dispatchType = {
-  dispatchFormAction: ({ type, payload }) => void;
 };
 
 export type Error = {

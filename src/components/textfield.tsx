@@ -17,7 +17,7 @@ const FormBoxTextField = ({
       required={required}
       variant="outlined"
       {...register(name, {
-        required: name + " is required.",
+        required: title + " is required.",
       })}
       error={!!error}
       helperText={error?.message ?? help}

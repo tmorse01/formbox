@@ -35,9 +35,8 @@ export function getInitialValues(formJSON) {
   const values = {};
   const objects = flattenFormJSON(formJSON);
   objects.forEach((object) => {
-    if (object.defaultValue !== undefined) {
-      values[object.name] = object.defaultValue;
-    }
+    if (object.type !== "formbox" && object.type !== "form")
+      values[object.name] = object.defaultValue ?? "";
   });
   return values;
 }

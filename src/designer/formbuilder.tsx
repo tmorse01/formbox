@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
+// pages
 import ErrorPage from "./errorpage";
 import FormBox from "./formbox";
 import FormBoxAppBar from "./appbar";
@@ -8,14 +9,14 @@ import FormDataGridPage from "./formdatagridpage";
 import JSONEditorPage from "./jsoneditorpage";
 import FormBoxSnackbar from "./snackbar";
 
+// helpers
 import { getForms, connectToDb, disconnectDb } from "../helpers/formrequest";
 import { useFormStateReducer } from "../hooks/formStateReducer";
 import { FormBoxContextType } from "../types/componentType";
 
-import "../css/formbuilder.css";
-
 // css
 import "../App.css";
+import "../css/formbuilder.css";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
