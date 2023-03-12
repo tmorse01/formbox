@@ -57,19 +57,21 @@ export default function ProfileMenu({ user, handleSetUser, setSnackbar }) {
     });
   };
 
-  const submitSignup = (values) => {
-    userSignup(values).then((result) => {
-      console.log("Result from sign up", result);
-      if (result.success === true) {
-        setSnackbar({ open: true, type: "success", message: result.message });
-      } else {
-        setSnackbar({
-          open: true,
-          type: "error",
-          message: result.error.message,
-        });
-      }
-    });
+  const submitSignup = async (values) => {
+    try {
+      const result = await userSignup(values);
+      // console.log("Sign up result:", result);
+      if (!result.ok) throw new Error(result.message);
+      setSnackbar({ open: true, type: "success", message: result.message });
+    } catch (e: any) {
+      // why can't this be type Error?
+      console.error("error: ", typeof e, e);
+      setSnackbar({
+        open: true,
+        type: "error",
+        message: e.message,
+      });
+    }
   };
 
   const submitLogout = () => {

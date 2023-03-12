@@ -6,9 +6,15 @@ function apiRequest({ endpoint, method, data = {} }) {
   };
   return fetch(process.env.REACT_APP_FORMBOX_API + endpoint, requestOptions)
     .then((res) => {
+      console.log("fetch response: ", res);
       //handle errors
       if (res.status === 403) {
         throw new Error("Forbidden");
+      }
+      if (res.status === 400) {
+        return res.json().then((data) => {
+          throw new Error(data.error.message);
+        });
       }
       if (!res.ok) {
         throw new Error(`HTTP error! Status: ${res.status}`);
@@ -19,9 +25,10 @@ function apiRequest({ endpoint, method, data = {} }) {
       console.log("API request", { endpoint, requestOptions, res });
       return res;
     })
-    .catch((res) =>
-      console.error("API request ERROR", { endpoint, requestOptions, res })
-    );
+    .catch((error) => {
+      console.error("API request ERROR", { endpoint, requestOptions, error });
+      throw error;
+    });
 }
 
 export function connectToDb() {
@@ -71,26 +78,23 @@ export function getForms(token) {
     .catch((res) => console.log("error from getForms api: ", res));
 }
 
-export function userSignup(values) {
-  const body = {
-    username: values.username,
-    password: values.password,
-  };
-  const requestOptions = {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  };
-  return fetch(process.env.REACT_APP_FORMBOX_API + "/signup", requestOptions)
-    .then((res) => res.text())
-    .then((res) => {
-      console.log("result from signup api: ", res);
-      return JSON.parse(res);
-    })
-    .catch((res) => console.log("error from signup api: ", res));
+export async function userSignup(values) {
+  try {
+    const response = await apiRequest({
+      endpoint: "/signup",
+      method: "POST",
+      data: {
+        username: values.username,
+        password: values.password,
+      },
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
 }
 
-export function login(values): Promise<any> {
+export function login(values) {
   return apiRequest({
     endpoint: "/login",
     method: "POST",
