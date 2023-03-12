@@ -1,4 +1,9 @@
-function apiRequest(endpoint, requestOptions) {
+function apiRequest({ endpoint, method, data = {} }) {
+  const requestOptions = {
+    method: method,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  };
   return fetch(process.env.REACT_APP_FORMBOX_API + endpoint, requestOptions)
     .then((res) => {
       //handle errors
@@ -8,7 +13,7 @@ function apiRequest(endpoint, requestOptions) {
       if (!res.ok) {
         throw new Error(`HTTP error! Status: ${res.status}`);
       }
-      return res;
+      return res.json();
     })
     .then((res) => {
       console.log("API request", { endpoint, requestOptions, res });
@@ -20,19 +25,11 @@ function apiRequest(endpoint, requestOptions) {
 }
 
 export function connectToDb() {
-  return apiRequest("/connectToDb", undefined);
-  // fetch(process.env.REACT_APP_FORMBOX_API + "/connectToDb")
-  //   .then((res) => res.text())
-  //   .then((res) => console.log("result from connectToDb: ", res))
-  //   .catch((res) => console.log("error from connectToDb: ", res));
+  return apiRequest({ endpoint: "/connectToDb", method: "POST" });
 }
 
 export function disconnectDb() {
-  return apiRequest("/disconnectDb", undefined);
-  // fetch(process.env.REACT_APP_FORMBOX_API + "/disconnectDb")
-  //   .then((res) => res.text())
-  //   .then((res) => console.log("result from disconnectDb: ", res))
-  //   .catch((res) => console.log("error from disconnectDb: ", res));
+  return apiRequest({ endpoint: "/disconnectDb", method: "POST" });
 }
 
 export function loadForm(form) {
@@ -94,18 +91,12 @@ export function userSignup(values) {
 }
 
 export function login(values): Promise<any> {
-  const body = {
-    username: values.username,
-    password: values.password,
-  };
-  const requestOptions = {
+  return apiRequest({
+    endpoint: "/login",
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  };
-  return apiRequest("/login", requestOptions);
-  // return fetch(process.env.REACT_APP_FORMBOX_API + "/login", requestOptions)
-  //   .then((res) => res.text())
-  //   .then((res) => res)
-  //   .catch((res) => console.log("error from login api: ", res));
+    data: {
+      username: values.username,
+      password: values.password,
+    },
+  });
 }

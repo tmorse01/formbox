@@ -14,7 +14,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
 import LoginModal from "./loginmodal";
 
-import { userSignup } from "../helpers/formrequest";
+import { login, userSignup } from "../helpers/formrequest";
 
 export default function ProfileMenu({ user, handleSetUser, setSnackbar }) {
   const [open, setOpen] = useState(false);
@@ -41,29 +41,20 @@ export default function ProfileMenu({ user, handleSetUser, setSnackbar }) {
   };
 
   const submitLogin = (values) => {
-    const body = {
-      username: values.username,
-      password: values.password,
-    };
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    };
-    fetch(process.env.REACT_APP_FORMBOX_API + "/login", requestOptions)
-      .then((res) => res.text())
-      .then((res) => {
-        const result = JSON.parse(res);
-        // console.log("result from login api: ", result);
-        if (result.token !== undefined) {
-          handleSetUser({ token: result.token, username: result.username });
-          handleClose();
-          setSnackbar({ open: true, type: "success", message: result.message });
-        } else {
-          setSnackbar({ open: true, type: "error", message: result.message });
-        }
-      })
-      .catch((res) => console.log("error from login api: ", res));
+    login(values).then((result) => {
+      console.log("result from login api: ", result);
+      // const result = res.json();
+      if (result.token !== undefined) {
+        handleSetUser({
+          token: result.token.accessToken,
+          username: result.username,
+        });
+        handleClose();
+        setSnackbar({ open: true, type: "success", message: result.message });
+      } else {
+        setSnackbar({ open: true, type: "error", message: result.message });
+      }
+    });
   };
 
   const submitSignup = (values) => {

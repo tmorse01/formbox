@@ -97,8 +97,8 @@ const FormBuilder = () => {
 
   // Getters
   const getUserFormList = () => {
-    if (user.username) {
-      getForms(user.username).then((forms) => {
+    if (user.token) {
+      getForms(user.token).then((forms) => {
         setListOfForms(forms);
       });
     }
