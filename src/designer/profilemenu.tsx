@@ -14,7 +14,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
 import LoginModal from "./loginmodal";
 
-import { login, userSignup } from "../helpers/formrequest";
+import { login, logout, userSignup } from "../helpers/formrequest";
 
 export default function ProfileMenu({ user, handleSetUser, setSnackbar }) {
   const [open, setOpen] = useState(false);
@@ -46,7 +46,7 @@ export default function ProfileMenu({ user, handleSetUser, setSnackbar }) {
       // const result = res.json();
       if (result.token !== undefined) {
         handleSetUser({
-          token: result.token.accessToken,
+          token: result.token,
           username: result.username,
         });
         handleClose();
@@ -75,6 +75,7 @@ export default function ProfileMenu({ user, handleSetUser, setSnackbar }) {
   };
 
   const submitLogout = () => {
+    logout(user.username, user.token.refreshToken);
     handleSetUser({ token: undefined, username: undefined });
     handleCloseUserMenu();
   };

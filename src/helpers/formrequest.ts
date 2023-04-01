@@ -104,3 +104,14 @@ export function login(values) {
     },
   });
 }
+
+export function logout(username, refreshToken) {
+  return apiRequest({
+    endpoint: "/logout",
+    method: "DELETE",
+    data: {
+      username: username,
+      refreshToken: refreshToken,
+    },
+  });
+}

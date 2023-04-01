@@ -99,6 +99,7 @@ const FormBuilder = () => {
   const getUserFormList = () => {
     if (user.token) {
       getForms(user.token).then((forms) => {
+        console.log("response: ", forms);
         setListOfForms(forms);
       });
     }
