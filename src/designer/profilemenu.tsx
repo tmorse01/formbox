@@ -14,7 +14,12 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
 import LoginModal from "./loginmodal";
 
-import { login, logout, userSignup } from "../helpers/formrequest";
+import {
+  login,
+  logout,
+  setRefreshToken,
+  userSignup,
+} from "../helpers/formrequest";
 
 export default function ProfileMenu({ user, handleSetUser, setSnackbar }) {
   const [open, setOpen] = useState(false);
@@ -43,10 +48,10 @@ export default function ProfileMenu({ user, handleSetUser, setSnackbar }) {
   const submitLogin = (values) => {
     login(values).then((result) => {
       console.log("result from login api: ", result);
-      // const result = res.json();
+      setRefreshToken(result.token.refreshToken);
       if (result.token !== undefined) {
         handleSetUser({
-          token: result.token,
+          token: result.token.accessToken,
           username: result.username,
         });
         handleClose();
@@ -75,9 +80,15 @@ export default function ProfileMenu({ user, handleSetUser, setSnackbar }) {
   };
 
   const submitLogout = () => {
-    logout(user.username, user.token.refreshToken);
-    handleSetUser({ token: undefined, username: undefined });
-    handleCloseUserMenu();
+    console.log("submitLogout: ", user);
+    logout()
+      .then((result) => {
+        // if result good
+        console.log("Result from logout: ", result);
+        handleSetUser({ token: undefined, username: undefined });
+        handleCloseUserMenu();
+      })
+      .catch((error) => console.error("error logging out", error));
   };
 
   const profileMenuItems = [

@@ -1,8 +1,33 @@
-function apiRequest({ endpoint, method, data = {} }) {
-  const requestOptions = {
-    method: method,
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
+type FetchOptions = {
+  method: "GET" | "POST" | "PUT" | "DELETE";
+  credentials?: "omit" | "same-origin" | "include";
+  headers?: Record<string, string>;
+  body?: string | FormData;
+};
+
+type apiRequestParams = {
+  endpoint: string;
+  method: "GET" | "POST" | "PUT" | "DELETE";
+  credentials?: "omit" | "same-origin" | "include";
+  data?: object | undefined;
+  token?: string | undefined;
+};
+
+function apiRequest({
+  endpoint,
+  method,
+  credentials,
+  data,
+  token,
+}: apiRequestParams) {
+  const requestOptions: FetchOptions = {
+    method,
+    credentials,
+    headers: {
+      "Content-Type": "application/json",
+      ...(token !== undefined && { Authorization: "BEARER " + token }), // if auth is needed add auth header token
+    },
+    ...(data !== undefined && { body: JSON.stringify(data) }), // if request has data / body attached
   };
   return fetch(process.env.REACT_APP_FORMBOX_API + endpoint, requestOptions)
     .then((res) => {
@@ -39,6 +64,14 @@ export function disconnectDb() {
   return apiRequest({ endpoint: "/disconnectDb", method: "POST" });
 }
 
+export function generateAccessToken() {
+  return apiRequest({
+    endpoint: "/generate-access-token",
+    method: "GET",
+    credentials: "include",
+  });
+}
+
 export function loadForm(form) {
   const requestOptions = {
     method: "GET",
@@ -61,21 +94,11 @@ export function loadForm(form) {
 }
 
 export function getForms(token) {
-  const requestOptions = {
+  return apiRequest({
+    endpoint: "/getForms",
     method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "BEARER " + token,
-    },
-  };
-  return fetch(process.env.REACT_APP_FORMBOX_API + "/getForms", requestOptions)
-    .then((res) => res.text())
-    .then((res) => {
-      const response = JSON.parse(res);
-      console.log("result from getForms api: ", response);
-      return response.results;
-    })
-    .catch((res) => console.log("error from getForms api: ", res));
+    token: token,
+  });
 }
 
 export async function userSignup(values) {
@@ -105,13 +128,20 @@ export function login(values) {
   });
 }
 
-export function logout(username, refreshToken) {
+export function logout() {
   return apiRequest({
     endpoint: "/logout",
     method: "DELETE",
+    credentials: "include",
+  });
+}
+
+export function setRefreshToken(refreshToken) {
+  return apiRequest({
+    endpoint: "/set-refresh-token",
+    method: "POST",
     data: {
-      username: username,
-      refreshToken: refreshToken,
+      refreshToken,
     },
   });
 }

@@ -34,7 +34,7 @@ const FormBox = ({
       });
     } else if (form) {
       loadForm(form).then((response) => {
-        if (response.success === true) {
+        if (response.ok === true) {
           var results = response.results;
           dispatchFormAction({
             type: "update_formState",

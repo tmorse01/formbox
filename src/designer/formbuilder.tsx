@@ -10,7 +10,12 @@ import JSONEditorPage from "./jsoneditorpage";
 import FormBoxSnackbar from "./snackbar";
 
 // helpers
-import { getForms, connectToDb, disconnectDb } from "../helpers/formrequest";
+import {
+  getForms,
+  connectToDb,
+  disconnectDb,
+  generateAccessToken,
+} from "../helpers/formrequest";
 import { useFormStateReducer } from "../hooks/formStateReducer";
 import { FormBoxContextType } from "../types/componentType";
 
@@ -98,10 +103,30 @@ const FormBuilder = () => {
   // Getters
   const getUserFormList = () => {
     if (user.token) {
-      getForms(user.token).then((forms) => {
-        console.log("response: ", forms);
-        setListOfForms(forms);
-      });
+      getForms(user.token)
+        .then((response) => {
+          if (response.results?.length > 0) {
+            setListOfForms(response.results);
+          }
+        })
+        .catch((error) => {
+          console.error("getUserFormList error: ", error);
+          if (error.message === "Forbidden") {
+            generateAccessToken().then((result) => {
+              console.log("generateAccess token: ", result);
+              // handleSetUser({
+              //   token: result.token,
+              //   username: user.username,
+              // });
+              // // TODO try getting forms again
+              // getForms(user.token).then((response) => {
+              //   if (response.results?.length > 0) {
+              //     setListOfForms(response.results);
+              //   }
+              // });
+            });
+          }
+        });
     }
   };
 
