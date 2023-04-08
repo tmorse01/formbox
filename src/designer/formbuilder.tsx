@@ -79,7 +79,9 @@ const FormBuilder = () => {
   // Effects
 
   useEffect(() => {
-    connectToDb();
+    connectToDb().catch((e) =>
+      console.error("Error connecting to database", e.message)
+    );
     return () => {
       disconnectDb();
     };
@@ -112,19 +114,21 @@ const FormBuilder = () => {
         .catch((error) => {
           console.error("getUserFormList error: ", error);
           if (error.message === "Forbidden") {
-            generateAccessToken().then((result) => {
-              console.log("generateAccess token: ", result);
-              // handleSetUser({
-              //   token: result.token,
-              //   username: user.username,
-              // });
-              // // TODO try getting forms again
-              // getForms(user.token).then((response) => {
-              //   if (response.results?.length > 0) {
-              //     setListOfForms(response.results);
-              //   }
-              // });
-            });
+            generateAccessToken()
+              .then((result) => {
+                console.log("generateAccess token: ", result);
+                // handleSetUser({
+                //   token: result.token,
+                //   username: user.username,
+                // });
+                // // TODO try getting forms again
+                // getForms(user.token).then((response) => {
+                //   if (response.results?.length > 0) {
+                //     setListOfForms(response.results);
+                //   }
+                // });
+              })
+              .catch((error) => console.error(error));
           }
         });
     }

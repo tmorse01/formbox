@@ -31,10 +31,11 @@ function apiRequest({
   };
   return fetch(process.env.REACT_APP_FORMBOX_API + endpoint, requestOptions)
     .then((res) => {
-      console.log("fetch response: ", res);
       //handle errors
       if (res.status === 403) {
         throw new Error("Forbidden");
+      } else if (res.status === 404) {
+        throw new Error("Not found");
       }
       if (res.status === 400) {
         return res.json().then((data) => {
@@ -52,7 +53,18 @@ function apiRequest({
     })
     .catch((error) => {
       console.error("API request ERROR", { endpoint, requestOptions, error });
-      throw error;
+      if (error.message === "Forbidden") {
+        return generateAccessToken()
+          .then((newToken) => {
+            return newToken.accessToken;
+          })
+          .catch((e) => {
+            console.error("Error generating new access token ", e);
+            throw e;
+          });
+      } else {
+        throw error;
+      }
     });
 }
 
@@ -140,6 +152,7 @@ export function setRefreshToken(refreshToken) {
   return apiRequest({
     endpoint: "/set-refresh-token",
     method: "POST",
+    credentials: "include",
     data: {
       refreshToken,
     },

@@ -48,7 +48,11 @@ export default function ProfileMenu({ user, handleSetUser, setSnackbar }) {
   const submitLogin = (values) => {
     login(values).then((result) => {
       console.log("result from login api: ", result);
-      setRefreshToken(result.token.refreshToken);
+      setRefreshToken(result.token.refreshToken)
+        .then((result) => console.log("set refresh token", result))
+        .catch((e) =>
+          console.error("error setting refresh token: ", e.message)
+        );
       if (result.token !== undefined) {
         handleSetUser({
           token: result.token.accessToken,
@@ -88,7 +92,11 @@ export default function ProfileMenu({ user, handleSetUser, setSnackbar }) {
         handleSetUser({ token: undefined, username: undefined });
         handleCloseUserMenu();
       })
-      .catch((error) => console.error("error logging out", error));
+      .catch((error) => {
+        console.error("error logging out", error);
+        handleSetUser({ token: undefined, username: undefined });
+        handleCloseUserMenu();
+      });
   };
 
   const profileMenuItems = [
