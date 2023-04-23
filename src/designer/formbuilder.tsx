@@ -107,29 +107,13 @@ const FormBuilder = () => {
     if (user.token) {
       getForms(user.token)
         .then((response) => {
+          console.log("response of getUserFormList", response);
           if (response.results?.length > 0) {
             setListOfForms(response.results);
           }
         })
         .catch((error) => {
           console.error("getUserFormList error: ", error);
-          if (error.message === "Forbidden") {
-            generateAccessToken()
-              .then((result) => {
-                console.log("generateAccess token: ", result);
-                // handleSetUser({
-                //   token: result.token,
-                //   username: user.username,
-                // });
-                // // TODO try getting forms again
-                // getForms(user.token).then((response) => {
-                //   if (response.results?.length > 0) {
-                //     setListOfForms(response.results);
-                //   }
-                // });
-              })
-              .catch((error) => console.error(error));
-          }
         });
     }
   };

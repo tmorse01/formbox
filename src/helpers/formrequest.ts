@@ -12,6 +12,8 @@ type apiRequestParams = {
   data?: object | undefined;
   token?: string | undefined;
 };
+const maxRetries = 3;
+let retryCount = 0;
 
 function apiRequest({
   endpoint,
@@ -29,6 +31,14 @@ function apiRequest({
     },
     ...(data !== undefined && { body: JSON.stringify(data) }), // if request has data / body attached
   };
+  console.log("API REQUEST", {
+    endpoint,
+    method,
+    credentials,
+    data,
+    token,
+    requestOptions,
+  });
   return fetch(process.env.REACT_APP_FORMBOX_API + endpoint, requestOptions)
     .then((res) => {
       //handle errors
@@ -45,23 +55,47 @@ function apiRequest({
       if (!res.ok) {
         throw new Error(`HTTP error! Status: ${res.status}`);
       }
+      // retryCount = 0;
       return res.json();
     })
     .then((res) => {
-      console.log("API request", { endpoint, requestOptions, res });
+      console.log("API request 2nd then", {
+        endpoint,
+        requestOptions,
+        res,
+        token,
+      });
+      // TODO figure out how to set the token returned from the new one generated when a request fails
+      // const currentToken = sessionStorage.getItem("token");
+      // if (currentToken !== null && currentToken !== token) {
+      //   console.log("current token !== token", currentToken, token);
+      //   return { results: res.results, token: token };
+      // }
       return res;
     })
     .catch((error) => {
       console.error("API request ERROR", { endpoint, requestOptions, error });
       if (error.message === "Forbidden") {
-        return generateAccessToken()
-          .then((newToken) => {
-            return newToken.accessToken;
-          })
-          .catch((e) => {
-            console.error("Error generating new access token ", e);
-            throw e;
-          });
+        // invalid token, generate new token and retry request
+        if (retryCount < maxRetries) {
+          retryCount++;
+          return generateAccessToken()
+            .then((res) => {
+              const newToken = res.token;
+              retryCount++;
+              return apiRequest({
+                endpoint,
+                method,
+                credentials,
+                data,
+                token: newToken,
+              });
+            })
+            .catch((e) => {
+              console.error("Error generating new access token ", e);
+              throw e;
+            });
+        }
       } else {
         throw error;
       }
@@ -79,7 +113,7 @@ export function disconnectDb() {
 export function generateAccessToken() {
   return apiRequest({
     endpoint: "/generate-access-token",
-    method: "GET",
+    method: "POST",
     credentials: "include",
   });
 }
