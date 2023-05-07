@@ -14,6 +14,7 @@ const style = {
   bgcolor: "background.paper",
   borderRadius: "8px",
   display: "grid",
+  gridTemplateRows: "min-content auto",
   padding: "12px 0 12px 0",
   boxShadow: "4px 4px 12px #e0e0e0",
 };
@@ -31,20 +32,14 @@ const FormBoxContainer = ({
     mode: "onSubmit",
   });
 
-  const {
-    getValues,
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = methods;
+  const { getValues, handleSubmit, reset } = methods;
 
   const handleClear = () => {
     console.log("handleClear ", getValues(), initialValues);
     reset(initialValues);
   };
   //   console.log("container render :", values);
-
+  const forms = formJSON?.forms;
   if (formJSON !== undefined) {
     return (
       <FormProvider {...methods}>
@@ -59,8 +54,8 @@ const FormBoxContainer = ({
           <Typography sx={{ color: "text.primary", ml: 2 }} variant="h2">
             {formJSON.title}
           </Typography>
-          {formJSON?.forms?.map((form, index) => (
-            <Form key={index} form={form} register={register} errors={errors} />
+          {forms?.map((form, index) => (
+            <Form key={index} form={form} />
           ))}
           <Box
             display="flex"

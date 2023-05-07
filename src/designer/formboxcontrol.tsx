@@ -1,10 +1,13 @@
-import FormBoxButton from "../components/formboxbutton";
-import FormBoxSelect from "../components/formboxselect";
-import FormBoxSwitch from "../components/formboxswitch";
-import FormBoxTextField from "../components/formboxtextfield";
+import {
+  FormBoxTextField,
+  FormBoxButton,
+  FormBoxSelect,
+  FormBoxSwitch,
+} from "../components";
+import FormBoxCheckBox from "../components/formboxcheckbox";
 import { CompProps } from "../types/componentType";
 
-function FormBoxControl({ component, register, error }: CompProps) {
+function FormBoxControl({ component }: CompProps) {
   const { name, title, help, type, required, defaultValue } = component;
 
   if (type === "textfield") {
@@ -14,8 +17,7 @@ function FormBoxControl({ component, register, error }: CompProps) {
         title={title}
         help={help}
         required={required}
-        register={register}
-        error={error}
+        defaultValue={defaultValue as string}
       />
     );
   } else if (type === "button") {
@@ -34,8 +36,6 @@ function FormBoxControl({ component, register, error }: CompProps) {
         title={title}
         help={help}
         required={required}
-        register={register}
-        error={error}
         defaultValue={defaultValue as boolean}
       />
     );
@@ -47,9 +47,17 @@ function FormBoxControl({ component, register, error }: CompProps) {
         help={help}
         options={component.options}
         required={required}
-        register={register}
-        error={error}
         defaultValue={defaultValue as string}
+      />
+    );
+  } else if (type === "checkbox") {
+    return (
+      <FormBoxCheckBox
+        name={name}
+        title={title}
+        help={help}
+        required={required}
+        defaultValue={defaultValue as boolean}
       />
     );
   } else {

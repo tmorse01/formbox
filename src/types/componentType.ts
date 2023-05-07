@@ -1,9 +1,4 @@
-import {
-  FieldValues,
-  UseFormRegister,
-  DeepMap,
-  FieldError,
-} from "react-hook-form";
+import { FieldValues, DeepMap, FieldError } from "react-hook-form";
 
 type Dispatch = React.Dispatch<Action>;
 
@@ -25,8 +20,6 @@ export type defaultProps = {
 export type CompProps = {
   key: string;
   component: componentProps;
-  register: UseFormRegister<FieldValues>;
-  error: FieldError;
 };
 
 export type componentProps = defaultProps & {
@@ -68,8 +61,6 @@ export type ContainerProps = {
 
 export type FormProps = {
   form: form;
-  register: UseFormRegister<FieldValues>;
-  errors: FieldErrors;
 };
 
 export type form = defaultProps & {
@@ -100,8 +91,7 @@ export type TextFieldProps = {
   title: string;
   help: string | undefined;
   required?: boolean;
-  register: UseFormRegister<FieldValues>;
-  error: FieldError;
+  defaultValue: string;
 };
 
 export type FieldErrors<TFieldValues extends FieldValues = FieldValues> =
@@ -112,8 +102,6 @@ export type SwitchProps = {
   title: string;
   help?: string | undefined;
   required?: boolean;
-  register: UseFormRegister<FieldValues>;
-  error: FieldError;
   defaultValue: boolean;
 };
 
@@ -123,8 +111,6 @@ export type SelectProps = {
   help?: string;
   options?: Option[];
   required?: boolean;
-  register: UseFormRegister<FieldValues>;
-  error: FieldError;
   defaultValue: string;
 };
 

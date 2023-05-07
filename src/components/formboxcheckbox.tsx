@@ -1,9 +1,9 @@
-import { Switch, FormHelperText } from "@mui/material";
+import { Checkbox, FormHelperText } from "@mui/material";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { useFormContext, Controller } from "react-hook-form";
 import { SwitchProps } from "../types/componentType";
 
-const FormBoxSwitch = ({
+const FormBoxCheckBox = ({
   name,
   title,
   help,
@@ -23,7 +23,7 @@ const FormBoxSwitch = ({
           return (
             <FormControlLabel
               control={
-                <Switch
+                <Checkbox
                   id={name}
                   required={required}
                   {...register(name, {
@@ -42,4 +42,4 @@ const FormBoxSwitch = ({
   );
 };
 
-export default FormBoxSwitch;
+export default FormBoxCheckBox;

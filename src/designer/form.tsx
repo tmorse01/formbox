@@ -13,7 +13,7 @@ const style = {
   m: 2,
 };
 
-const Form = ({ form, register, errors }: FormProps) => {
+const Form = ({ form }: FormProps) => {
   // console.log("form render: ", form.title);
 
   return (
@@ -26,12 +26,7 @@ const Form = ({ form, register, errors }: FormProps) => {
         {form.title ?? "Form"}
       </Typography>
       {form.components?.map((component) => (
-        <FormBoxComponent
-          key={component.name}
-          component={component}
-          register={register}
-          error={errors[component.name]}
-        />
+        <FormBoxComponent key={component.name} component={component} />
       ))}
     </Box>
   );

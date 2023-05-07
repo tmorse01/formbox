@@ -15,11 +15,9 @@ const FormBoxSelect = ({
   options,
   defaultValue,
   required,
-  register,
-  error,
 }: SelectProps) => {
-  const { control } = useFormContext(); // Access form context
-
+  const { control, register, formState } = useFormContext(); // Access form context
+  const error = formState.errors[name];
   //   console.log("render select", name, control);
   return (
     <FormControl required={required} error={!!error}>

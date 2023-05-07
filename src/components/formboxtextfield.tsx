@@ -1,4 +1,10 @@
-import TextField from "@mui/material/TextField";
+import {
+  OutlinedInput,
+  InputLabel,
+  FormControl,
+  FormHelperText,
+} from "@mui/material/";
+import { Controller, useFormContext } from "react-hook-form";
 import { TextFieldProps } from "../types/componentType";
 
 const FormBoxTextField = ({
@@ -6,21 +12,34 @@ const FormBoxTextField = ({
   title,
   help,
   required,
-  register,
-  error,
+  defaultValue,
 }: TextFieldProps) => {
   // console.log("render text field", name);
+  const { control, register, formState } = useFormContext(); // Access form context
+  const error = formState.errors[name];
   return (
-    <TextField
-      id={name}
-      label={title}
-      required={required}
-      variant="outlined"
-      {...register(name, {
-        required: title + " is required.",
-      })}
-      error={!!error}
-      helperText={error?.message ?? help}
+    <Controller
+      control={control}
+      name={name}
+      defaultValue={defaultValue}
+      render={({ field }) => {
+        return (
+          <FormControl required={required} error={!!error}>
+            <InputLabel htmlFor={name}>{title}</InputLabel>
+            <OutlinedInput
+              id={name}
+              value={field.value}
+              {...register(name, {
+                required: title + " is required.",
+              })}
+              label={title}
+            />
+            {error && (
+              <FormHelperText error>{error?.message ?? help}</FormHelperText>
+            )}
+          </FormControl>
+        );
+      }}
     />
   );
 };
