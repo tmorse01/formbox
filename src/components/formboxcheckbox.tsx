@@ -1,4 +1,4 @@
-import { Checkbox, FormHelperText } from "@mui/material";
+import { Checkbox, FormHelperText, FormControl } from "@mui/material";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { useFormContext, Controller } from "react-hook-form";
 import { SwitchProps } from "../types/componentType";
@@ -21,23 +21,26 @@ const FormBoxCheckbox = ({
         defaultValue={defaultValue}
         render={({ field }) => {
           return (
-            <FormControlLabel
-              control={
-                <Checkbox
-                  id={name}
-                  required={required}
-                  {...register(name, {
-                    required: title + " is required.",
-                  })}
-                  checked={field.value}
-                />
-              }
-              label={title}
-            />
+            <FormControl>
+              <FormControlLabel
+                label={title}
+                control={
+                  <Checkbox
+                    id={name}
+                    {...register(name, {
+                      required: title + " is required.",
+                    })}
+                    checked={field.value}
+                  />
+                }
+              />
+              {error && (
+                <FormHelperText error>{error?.message ?? help}</FormHelperText>
+              )}
+            </FormControl>
           );
         }}
       />
-      {error && <FormHelperText error>{error?.message ?? help}</FormHelperText>}
     </>
   );
 };
