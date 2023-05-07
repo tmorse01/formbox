@@ -3,7 +3,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import { useFormContext, Controller } from "react-hook-form";
 import { SwitchProps } from "../types/componentType";
 
-const FormBoxCheckBox = ({
+const FormBoxCheckbox = ({
   name,
   title,
   help,
@@ -42,4 +42,4 @@ const FormBoxCheckBox = ({
   );
 };
 
-export default FormBoxCheckBox;
+export default FormBoxCheckbox;

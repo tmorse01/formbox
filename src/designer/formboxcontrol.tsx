@@ -2,9 +2,8 @@ import {
   FormBoxTextField,
   FormBoxButton,
   FormBoxSelect,
-  FormBoxSwitch,
+  FormBoxCheckbox,
 } from "../components";
-import FormBoxCheckBox from "../components/formboxcheckbox";
 import { CompProps } from "../types/componentType";
 
 function FormBoxControl({ component }: CompProps) {
@@ -29,16 +28,6 @@ function FormBoxControl({ component }: CompProps) {
         icon={component.icon}
       />
     );
-  } else if (type === "switch") {
-    return (
-      <FormBoxSwitch
-        name={name}
-        title={title}
-        help={help}
-        required={required}
-        defaultValue={defaultValue as boolean}
-      />
-    );
   } else if (type === "select") {
     return (
       <FormBoxSelect
@@ -52,7 +41,7 @@ function FormBoxControl({ component }: CompProps) {
     );
   } else if (type === "checkbox") {
     return (
-      <FormBoxCheckBox
+      <FormBoxCheckbox
         name={name}
         title={title}
         help={help}
