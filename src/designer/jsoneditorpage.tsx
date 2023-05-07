@@ -15,6 +15,7 @@ const style = {
   width: "auto",
   display: "grid",
   gridTemplateColumns: "200px 1fr 200px",
+  gridTemplateRows: "min-content auto",
 };
 
 export default function JSONEditorPage({
