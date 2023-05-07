@@ -108,7 +108,7 @@ const FormBuilder = () => {
       getForms(user.token)
         .then((response) => {
           console.log("response of getUserFormList", response);
-          if (response.results?.length > 0) {
+          if (response.ok && response.results?.length > 0) {
             setListOfForms(response.results);
           }
         })

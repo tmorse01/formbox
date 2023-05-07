@@ -51,12 +51,6 @@ export default function JSONEditorPage({
               },
             },
           });
-        } else {
-          setSnackbar({
-            open: true,
-            message: response.error.message,
-            type: "error",
-          });
         }
       });
     }

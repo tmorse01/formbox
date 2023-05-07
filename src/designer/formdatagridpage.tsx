@@ -26,28 +26,20 @@ export default function FormDataGridPage({
   const { form } = useParams();
   useEffect(() => {
     if (form) {
-      if (form) {
-        loadForm(form).then((response) => {
-          if (response.success === true) {
-            var results = response.results;
-            dispatchFormAction({
-              type: "update_formState",
-              payload: {
-                formState: {
-                  formJSON: results.formJSON,
-                  formName: results.formName,
-                },
+      loadForm(form).then((response) => {
+        if (response.success === true) {
+          var results = response.results;
+          dispatchFormAction({
+            type: "update_formState",
+            payload: {
+              formState: {
+                formJSON: results.formJSON,
+                formName: results.formName,
               },
-            });
-          } else {
-            setSnackbar({
-              open: true,
-              message: response.error.message,
-              type: "error",
-            });
-          }
-        });
-      }
+            },
+          });
+        }
+      });
     }
   }, [form, dispatchFormAction, setSnackbar]);
 

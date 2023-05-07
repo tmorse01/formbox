@@ -42,7 +42,6 @@ export default function FormBoxAppBar({
       title: "Form",
       path: "/form/" + formName,
       disabled: formName === undefined,
-      tooltip: "Select a form from the top right open menu.",
       icon: <DynamicFormIcon />,
     },
     {
@@ -50,9 +49,6 @@ export default function FormBoxAppBar({
       title: "Responses",
       path: "/responses/" + formName,
       disabled: formName === undefined || user.username === undefined,
-      tooltip: isRespDisabled
-        ? "Please sign in to view your forms responses."
-        : undefined,
       icon: <TableRowsIcon />,
     },
     {
@@ -60,7 +56,6 @@ export default function FormBoxAppBar({
       title: "Editor",
       path: formName ? "/jsoneditor/" + formName : "/jsoneditor/",
       disabled: formName === undefined,
-      tooltip: "Select a form to view the JSON that describes it.",
       icon: <DataArrayIcon />,
     },
   ];
@@ -152,12 +147,10 @@ export default function FormBoxAppBar({
                     disabled={page.disabled}
                     onClick={() => navigateToPath(page.path)}
                   >
-                    <Tooltip title={page.tooltip}>
-                      <Typography textAlign="center">
-                        {page.icon}
-                        {page.title}
-                      </Typography>
-                    </Tooltip>
+                    <Typography textAlign="center">
+                      {page.icon}
+                      {page.title}
+                    </Typography>
                   </MenuItem>
                 );
               })}
@@ -167,18 +160,16 @@ export default function FormBoxAppBar({
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => {
               return (
-                <Tooltip key={page.path} title={page.tooltip}>
-                  <Typography>
-                    <Button
-                      onClick={() => navigateToPath(page.path)}
-                      color="inherit"
-                      disabled={page.disabled}
-                    >
-                      {page.icon}
-                      {page.title}
-                    </Button>
-                  </Typography>
-                </Tooltip>
+                <Typography>
+                  <Button
+                    onClick={() => navigateToPath(page.path)}
+                    color="inherit"
+                    disabled={page.disabled}
+                  >
+                    {page.icon}
+                    {page.title}
+                  </Button>
+                </Typography>
               );
             })}
           </Box>
