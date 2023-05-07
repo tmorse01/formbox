@@ -1,5 +1,5 @@
 import { Container, Box, Button } from "@mui/material";
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm, useFormContext } from "react-hook-form";
 
 import Form from "./form";
 
@@ -26,16 +26,18 @@ const FormBoxContainer = ({
 }: ContainerProps) => {
   const { formJSON } = formState;
 
+  const methods = useForm({
+    defaultValues: initialValues,
+    mode: "onSubmit",
+  });
+
   const {
     getValues,
     register,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm({
-    defaultValues: initialValues,
-    mode: "onSubmit",
-  });
+  } = methods;
 
   const handleClear = () => {
     console.log("handleClear ", getValues(), initialValues);
@@ -45,37 +47,39 @@ const FormBoxContainer = ({
 
   if (formJSON !== undefined) {
     return (
-      <Container
-        sx={style}
-        maxWidth="sm"
-        component="form"
-        noValidate
-        autoComplete="off"
-        onSubmit={handleSubmit(onSubmit, onError)}
-      >
-        <Typography sx={{ color: "text.primary", ml: 2 }} variant="h2">
-          {formJSON.title}
-        </Typography>
-        {formJSON?.forms?.map((form) => (
-          <Form form={form} register={register} errors={errors} />
-        ))}
-        <Box
-          display="flex"
-          justifyContent={"right"}
-          sx={{ m: 2, height: "40px", gap: 4 }}
+      <FormProvider {...methods}>
+        <Container
+          sx={style}
+          maxWidth="sm"
+          component="form"
+          noValidate
+          autoComplete="off"
+          onSubmit={handleSubmit(onSubmit, onError)}
         >
-          <ClearButton onClear={handleClear} />
-          <Button
-            id={"submit"}
-            type={"submit"}
-            variant="contained"
-            color="secondary"
-            startIcon={<SaveAltIcon />}
+          <Typography sx={{ color: "text.primary", ml: 2 }} variant="h2">
+            {formJSON.title}
+          </Typography>
+          {formJSON?.forms?.map((form, index) => (
+            <Form key={index} form={form} register={register} errors={errors} />
+          ))}
+          <Box
+            display="flex"
+            justifyContent={"right"}
+            sx={{ m: 2, height: "40px", gap: 4 }}
           >
-            {"Submit"}
-          </Button>
-        </Box>
-      </Container>
+            <ClearButton onClear={handleClear} />
+            <Button
+              id={"submit"}
+              type={"submit"}
+              variant="contained"
+              color="secondary"
+              startIcon={<SaveAltIcon />}
+            >
+              {"Submit"}
+            </Button>
+          </Box>
+        </Container>
+      </FormProvider>
     );
   } else {
     return <></>;

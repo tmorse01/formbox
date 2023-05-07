@@ -35,7 +35,8 @@ export type componentProps = defaultProps & {
   required?: boolean;
   submit?: boolean;
   icon: string | undefined;
-  defaultValue: any | undefined;
+  defaultValue?: string | number | boolean | undefined;
+  options?: Option[];
 };
 
 export type formBoxAppBarProps = {
@@ -105,3 +106,29 @@ export type TextFieldProps = {
 
 export type FieldErrors<TFieldValues extends FieldValues = FieldValues> =
   DeepMap<TFieldValues, FieldError>;
+
+export type SwitchProps = {
+  name: string;
+  title: string;
+  help?: string | undefined;
+  required?: boolean;
+  register: UseFormRegister<FieldValues>;
+  error: FieldError;
+  defaultValue: boolean;
+};
+
+export type SelectProps = {
+  name: string;
+  title: string;
+  help?: string;
+  options?: Option[];
+  required?: boolean;
+  register: UseFormRegister<FieldValues>;
+  error: FieldError;
+  defaultValue: string;
+};
+
+export type Option = {
+  label: string;
+  value: string;
+};
