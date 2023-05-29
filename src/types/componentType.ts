@@ -85,7 +85,6 @@ export type FormState = {
 export type FormBoxContextType = {
   user: {
     username: string | null | undefined;
-    token: string | null | undefined;
   };
   listOfForms: formDataProps[];
 };

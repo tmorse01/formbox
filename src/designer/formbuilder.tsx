@@ -45,16 +45,15 @@ const theme = createTheme({
 export const FormBoxContext = React.createContext<FormBoxContextType>({
   user: {
     username: undefined,
-    token: undefined,
   },
   listOfForms: [],
 });
 
 // Global functions
 
-const getToken = () => {
-  return sessionStorage.getItem("token") ?? undefined;
-};
+// const getToken = () => {
+//   return sessionStorage.getItem("token") ?? undefined;
+// };
 
 const getUsername = () => {
   return sessionStorage.getItem("username") ?? undefined;
@@ -67,7 +66,7 @@ const FormBuilder = () => {
   // console.log("formBuilder", formState);
   const [user, setUser] = useState({
     username: getUsername(),
-    token: getToken(),
+    // token: getToken(),
   });
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -89,11 +88,11 @@ const FormBuilder = () => {
 
   // Setters
   const handleSetUser = (user) => {
-    if (user.token === undefined) {
-      sessionStorage.removeItem("token");
-    } else {
-      sessionStorage.setItem("token", user.token);
-    }
+    // if (user.token === undefined) {
+    //   sessionStorage.removeItem("token");
+    // } else {
+    //   sessionStorage.setItem("token", user.token);
+    // }
     if (user.username === undefined) {
       sessionStorage.removeItem("username");
     } else {
@@ -104,8 +103,7 @@ const FormBuilder = () => {
 
   // Getters
   const getUserFormList = () => {
-    if (user.token) {
-      getForms(user.token)
+      getForms()
         .then((response) => {
           console.log("response of getUserFormList", response);
           if (response.ok && response.results?.length > 0) {
@@ -115,7 +113,7 @@ const FormBuilder = () => {
         .catch((error) => {
           console.error("getUserFormList error: ", error);
         });
-    }
+    
   };
 
   // Router

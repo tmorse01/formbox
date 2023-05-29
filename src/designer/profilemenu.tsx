@@ -105,21 +105,21 @@ export default function ProfileMenu({ user, handleSetUser, setSnackbar }) {
       icon: <LoginIcon />,
       onClick: handleOpen,
       title: "Login",
-      disabled: user.token !== undefined,
+      disabled: user.username !== undefined,
     },
     {
       key: "profile",
       icon: <PersonIcon />,
       onClick: undefined,
       title: "Profile",
-      disabled: user.token === undefined,
+      disabled: user.username === undefined,
     },
     {
       key: "logout",
       icon: <LogoutIcon />,
       onClick: submitLogout,
       title: "Logout",
-      disabled: user.token === undefined,
+      disabled: user.username === undefined,
     },
   ];
   return (

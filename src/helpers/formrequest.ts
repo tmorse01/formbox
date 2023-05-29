@@ -139,11 +139,12 @@ export function loadForm(form) {
     });
 }
 
-export function getForms(token) {
+export function getForms() {
   return apiRequest({
     endpoint: "/getForms",
     method: "GET",
-    token: token,
+    credentials: "include"
+    // token: token,
   });
 }
 
