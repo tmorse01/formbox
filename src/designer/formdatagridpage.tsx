@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 import { useParams } from "react-router-dom";
 
 import FormDataGrid from "./formdatagrid";
-import { loadForm } from "../helpers/formrequest";
+import { getFormData, loadForm } from "../helpers/formrequest";
 
 const style = {
   bgcolor: "background.paper",
@@ -27,7 +27,8 @@ export default function FormDataGridPage({
   useEffect(() => {
     if (form) {
       loadForm(form).then((response) => {
-        if (response.success === true) {
+        console.log("loadForm response :", response);
+        if (response.ok === true) {
           var results = response.results;
           dispatchFormAction({
             type: "update_formState",
@@ -44,23 +45,17 @@ export default function FormDataGridPage({
   }, [form, dispatchFormAction, setSnackbar]);
 
   useEffect(() => {
-    // console.log("component did mount useEffect");
+    console.log("component did mount useEffect", formName);
     if (formName) {
-      getFormData(formName);
+      fetchFormData(formName);
     }
   }, [formName]);
 
-  const getFormData = (formName) => {
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ formName }),
-    };
-    fetch(process.env.REACT_APP_FORMBOX_API + "/getFormData", requestOptions)
-      .then((res) => res.text())
+  const fetchFormData = (formName) => {
+    getFormData(formName)
       .then((res) => {
-        // console.log("result from getFormData api: ", res);
-        setSelectedDocumentData(JSON.parse(res).results);
+        console.log("result from getFormData api: ", res);
+        setSelectedDocumentData(res.results);
       })
       .catch((res) => console.log("error from getFormData api: ", res));
   };

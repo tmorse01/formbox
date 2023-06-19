@@ -59,10 +59,7 @@ export default function ProfileMenu({ user, handleSetUser, setSnackbar }) {
           console.error("error setting refresh token: ", e.message)
         );
       if (result.token !== undefined) {
-        handleSetUser({
-          token: result.token.accessToken,
-          username: result.username,
-        });
+        handleSetUser({ username: result.username });
         handleClose();
         setSnackbar({ open: true, type: "success", message: result.message });
       } else {

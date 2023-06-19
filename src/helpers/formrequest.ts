@@ -24,14 +24,14 @@ function apiRequest({ endpoint, method, credentials, data }: apiRequestParams) {
     },
     ...(data !== undefined && { body: JSON.stringify(data) }), // if request has data / body attached
   };
-  console.log("API REQUEST", {
-    endpoint,
-    method,
-    credentials,
-    data,
-    requestOptions,
-    retryCount,
-  });
+  // console.log("API REQUEST", {
+  //   endpoint,
+  //   method,
+  //   credentials,
+  //   data,
+  //   requestOptions,
+  //   retryCount,
+  // });
   return fetch(process.env.REACT_APP_FORMBOX_API + endpoint, requestOptions)
     .then((res) => {
       //handle errors
@@ -99,24 +99,30 @@ export function generateAccessToken() {
 }
 
 export function loadForm(form) {
-  const requestOptions = {
+  console.log("loadForm: ", form);
+  return apiRequest({
+    endpoint: "/getForm?form=" + form,
     method: "GET",
-    headers: { "Content-Type": "application/json" },
-  };
-  return fetch(
-    process.env.REACT_APP_FORMBOX_API + "/getForm?form=" + form,
-    requestOptions
-  )
-    .then((res) => res.text())
-    .then((res) => {
-      const response = JSON.parse(res);
-      console.log("result from getForm api: ", response);
-      return response;
-    })
-    .catch((res) => {
-      console.error("error from getForm api: ", res);
-      return undefined;
-    });
+    credentials: "include",
+  });
+  // const requestOptions = {
+  //   method: "GET",
+  //   headers: { "Content-Type": "application/json" },
+  // };
+  // return fetch(
+  //   process.env.REACT_APP_FORMBOX_API + "/getForm?form=" + form,
+  //   requestOptions
+  // )
+  //   .then((res) => res.text())
+  //   .then((res) => {
+  //     const response = JSON.parse(res);
+  //     console.log("result from getForm api: ", response);
+  //     return response;
+  //   })
+  //   .catch((res) => {
+  //     console.error("error from getForm api: ", res);
+  //     return undefined;
+  //   });
 }
 
 export function getForms() {
@@ -124,7 +130,17 @@ export function getForms() {
     endpoint: "/getForms",
     method: "GET",
     credentials: "include",
-    // token: token,
+  });
+}
+
+export function getFormData(formName) {
+  return apiRequest({
+    endpoint: "/getFormData",
+    method: "POST",
+    credentials: "include",
+    data: {
+      formName,
+    },
   });
 }
 

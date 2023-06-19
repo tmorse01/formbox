@@ -185,6 +185,7 @@ const FormBuilder = () => {
       errorElement: <ErrorPage />,
     },
   ]);
+  console.log({ formState });
   // JSX element
   return (
     <FormBoxContext.Provider

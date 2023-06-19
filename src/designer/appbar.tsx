@@ -160,7 +160,7 @@ export default function FormBoxAppBar({
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => {
               return (
-                <Typography>
+                <Typography key={page.key}>
                   <Button
                     onClick={() => navigateToPath(page.path)}
                     color="inherit"
