@@ -103,17 +103,16 @@ const FormBuilder = () => {
 
   // Getters
   const getUserFormList = () => {
-      getForms()
-        .then((response) => {
-          console.log("response of getUserFormList", response);
-          if (response.ok && response.results?.length > 0) {
-            setListOfForms(response.results);
-          }
-        })
-        .catch((error) => {
-          console.error("getUserFormList error: ", error);
-        });
-    
+    getForms()
+      .then((response) => {
+        console.log("getUserFormList response: ", response);
+        if (response.ok && response.results?.length > 0) {
+          setListOfForms(response.results);
+        }
+      })
+      .catch((error) => {
+        console.error("getUserFormList error: ", error);
+      });
   };
 
   // Router
@@ -186,7 +185,6 @@ const FormBuilder = () => {
       errorElement: <ErrorPage />,
     },
   ]);
-
   // JSX element
   return (
     <FormBoxContext.Provider

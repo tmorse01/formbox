@@ -17,6 +17,7 @@ import LoginModal from "./loginmodal";
 import {
   login,
   logout,
+  setAccessToken,
   setRefreshToken,
   userSignup,
 } from "../helpers/formrequest";
@@ -48,6 +49,10 @@ export default function ProfileMenu({ user, handleSetUser, setSnackbar }) {
   const submitLogin = (values) => {
     login(values).then((result) => {
       console.log("result from login api: ", result);
+      setAccessToken(result.token.accessToken)
+        .then((result) => console.log("set access token", result))
+        .catch((e) => console.error("error setting access token: ", e.message));
+
       setRefreshToken(result.token.refreshToken)
         .then((result) => console.log("set refresh token", result))
         .catch((e) =>

@@ -59,7 +59,6 @@ export default function SavedFormsModal({ getUserFormList, formName }) {
       navigate("/form/" + formName);
     }
   };
-
   return (
     <>
       <IconButton
