@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -21,10 +21,15 @@ import {
   setRefreshToken,
   userSignup,
 } from "../helpers/formrequest";
+import { FormBoxContext } from "./formbuilder";
+import { useNavigate } from "react-router-dom";
 
-export default function ProfileMenu({ user, handleSetUser, setSnackbar }) {
+export default function ProfileMenu({ user, handleSetUser }) {
+  const { setSnackbar, dispatchFormAction } = useContext(FormBoxContext);
   const [open, setOpen] = useState(false);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+
+  const navigate = useNavigate();
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -48,22 +53,28 @@ export default function ProfileMenu({ user, handleSetUser, setSnackbar }) {
 
   const submitLogin = (values) => {
     login(values).then((result) => {
-      console.log("result from login api: ", result);
-      setAccessToken(result.token.accessToken)
-        .then((result) => console.log("set access token", result))
-        .catch((e) => console.error("error setting access token: ", e.message));
+      if (result.ok === true) {
+        console.log("result from login api: ", result);
+        setAccessToken(result.token.accessToken)
+          .then((result) => console.log("set access token", result))
+          .catch((e) =>
+            console.error("error setting access token: ", e.message)
+          );
 
-      setRefreshToken(result.token.refreshToken)
-        .then((result) => console.log("set refresh token", result))
-        .catch((e) =>
-          console.error("error setting refresh token: ", e.message)
-        );
-      if (result.token !== undefined) {
+        setRefreshToken(result.token.refreshToken)
+          .then((result) => console.log("set refresh token", result))
+          .catch((e) =>
+            console.error("error setting refresh token: ", e.message)
+          );
         handleSetUser({ username: result.username });
         handleClose();
         setSnackbar({ open: true, type: "success", message: result.message });
       } else {
-        setSnackbar({ open: true, type: "error", message: result.message });
+        setSnackbar({
+          open: true,
+          type: "error",
+          message: result.error.message,
+        });
       }
     });
   };
@@ -72,11 +83,10 @@ export default function ProfileMenu({ user, handleSetUser, setSnackbar }) {
     try {
       const result = await userSignup(values);
       // console.log("Sign up result:", result);
-      if (!result.ok) throw new Error(result.message);
+      if (!result.ok) throw new Error(result.error);
       setSnackbar({ open: true, type: "success", message: result.message });
+      handleCloseUserMenu();
     } catch (e: any) {
-      // why can't this be type Error?
-      console.error("error: ", typeof e, e);
       setSnackbar({
         open: true,
         type: "error",
@@ -88,16 +98,21 @@ export default function ProfileMenu({ user, handleSetUser, setSnackbar }) {
   const submitLogout = () => {
     console.log("submitLogout: ", user);
     logout()
-      .then((result) => {
-        // if result good
-        console.log("Result from logout: ", result);
+      .then((response) => {
+        console.log("Result from logout: ", response);
+        if (!response.ok) throw new Error(response.error);
+        setSnackbar({ open: true, type: "success", message: response.message });
         handleSetUser({ token: undefined, username: undefined });
+        dispatchFormAction({ type: "reset" });
         handleCloseUserMenu();
+        navigate("/");
       })
-      .catch((error) => {
-        console.error("error logging out", error);
-        handleSetUser({ token: undefined, username: undefined });
-        handleCloseUserMenu();
+      .catch((e) => {
+        setSnackbar({
+          open: true,
+          type: "error",
+          message: e.message,
+        });
       });
   };
 

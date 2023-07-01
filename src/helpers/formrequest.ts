@@ -99,30 +99,12 @@ export function generateAccessToken() {
 }
 
 export function loadForm(form) {
-  console.log("loadForm: ", form);
+  // console.log("loadForm: ", form);
   return apiRequest({
     endpoint: "/getForm?form=" + form,
     method: "GET",
     credentials: "include",
   });
-  // const requestOptions = {
-  //   method: "GET",
-  //   headers: { "Content-Type": "application/json" },
-  // };
-  // return fetch(
-  //   process.env.REACT_APP_FORMBOX_API + "/getForm?form=" + form,
-  //   requestOptions
-  // )
-  //   .then((res) => res.text())
-  //   .then((res) => {
-  //     const response = JSON.parse(res);
-  //     console.log("result from getForm api: ", response);
-  //     return response;
-  //   })
-  //   .catch((res) => {
-  //     console.error("error from getForm api: ", res);
-  //     return undefined;
-  //   });
 }
 
 export function getForms() {
@@ -153,6 +135,16 @@ export function saveForm(formName, formJSON, username) {
       formName,
       formJSON,
       username,
+    },
+  });
+}
+
+export function submitFormValues(formToSubmit) {
+  return apiRequest({
+    endpoint: "/submitFormValues",
+    method: "PUT",
+    data: {
+      formToSubmit,
     },
   });
 }

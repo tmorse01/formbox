@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { useParams } from "react-router-dom";
 
 import FormDataGrid from "./formdatagrid";
 import { getFormData, loadForm } from "../helpers/formrequest";
+import { FormBoxContext } from "./formbuilder";
 
 const style = {
   bgcolor: "background.paper",
@@ -16,12 +17,9 @@ const style = {
   gridTemplateRows: "min-content 1fr min-content",
 };
 
-export default function FormDataGridPage({
-  formName,
-  dispatchFormAction,
-  setSnackbar,
-}) {
+export default function FormDataGridPage({ formName }) {
   const [selectedDocumentData, setSelectedDocumentData] = useState([]);
+  const { dispatchFormAction, setSnackbar } = useContext(FormBoxContext);
 
   const { form } = useParams();
   useEffect(() => {
@@ -42,7 +40,7 @@ export default function FormDataGridPage({
         }
       });
     }
-  }, [form, dispatchFormAction, setSnackbar]);
+  }, [form, setSnackbar]);
 
   useEffect(() => {
     console.log("component did mount useEffect", formName);

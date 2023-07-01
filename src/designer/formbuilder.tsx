@@ -17,7 +17,11 @@ import {
   generateAccessToken,
 } from "../helpers/formrequest";
 import { useFormStateReducer } from "../hooks/formStateReducer";
-import { FormBoxContextType } from "../types/componentType";
+import {
+  FormBoxContextType,
+  formDataProps,
+  SnackbarProps,
+} from "../types/componentType";
 
 // css
 import "../App.css";
@@ -47,13 +51,14 @@ export const FormBoxContext = React.createContext<FormBoxContextType>({
     username: undefined,
   },
   listOfForms: [],
+  setListOfForms: () => {},
+  formState: { formJSON: undefined, formName: undefined },
+  dispatchFormAction: () => {},
+  snackbar: { open: false, message: "", type: "success" },
+  setSnackbar: () => {},
 });
 
 // Global functions
-
-// const getToken = () => {
-//   return sessionStorage.getItem("token") ?? undefined;
-// };
 
 const getUsername = () => {
   return sessionStorage.getItem("username") ?? undefined;
@@ -62,18 +67,15 @@ const getUsername = () => {
 const FormBuilder = () => {
   // State
   const [formState, dispatchFormAction] = useFormStateReducer();
-
-  // console.log("formBuilder", formState);
   const [user, setUser] = useState({
     username: getUsername(),
-    // token: getToken(),
   });
-  const [snackbar, setSnackbar] = useState({
+  const [snackbar, setSnackbar] = useState<SnackbarProps>({
     open: false,
     message: "",
     type: "success",
   });
-  const [listOfForms, setListOfForms] = useState([]);
+  const [listOfForms, setListOfForms] = useState<formDataProps[]>([]);
 
   // Effects
 
@@ -88,11 +90,6 @@ const FormBuilder = () => {
 
   // Setters
   const handleSetUser = (user) => {
-    // if (user.token === undefined) {
-    //   sessionStorage.removeItem("token");
-    // } else {
-    //   sessionStorage.setItem("token", user.token);
-    // }
     if (user.username === undefined) {
       sessionStorage.removeItem("username");
     } else {
@@ -105,7 +102,7 @@ const FormBuilder = () => {
   const getUserFormList = () => {
     getForms()
       .then((response) => {
-        console.log("getUserFormList response: ", response);
+        // console.log("getUserFormList response: ", response);
         if (response.ok && response.results?.length > 0) {
           setListOfForms(response.results);
         }
@@ -123,11 +120,10 @@ const FormBuilder = () => {
         <FormBoxAppBar
           formName={formState.formName}
           handleSetUser={handleSetUser}
-          setSnackbar={setSnackbar}
           getUserFormList={getUserFormList}
         />
         <div className="formBuilder">{control}</div>
-        <FormBoxSnackbar snackbar={snackbar} setSnackbar={setSnackbar} />
+        <FormBoxSnackbar />
       </div>
     );
   };
@@ -140,24 +136,12 @@ const FormBuilder = () => {
     },
     {
       path: "/form/:form",
-      element: wrapRoute(
-        <FormBox
-          formState={formState}
-          dispatchFormAction={dispatchFormAction}
-          setSnackbar={setSnackbar}
-        />
-      ),
+      element: wrapRoute(<FormBox formState={formState} />),
       errorElement: <ErrorPage />,
     },
     {
       path: "/responses/:form",
-      element: wrapRoute(
-        <FormDataGridPage
-          formName={formState.formName}
-          dispatchFormAction={dispatchFormAction}
-          setSnackbar={setSnackbar}
-        />
-      ),
+      element: wrapRoute(<FormDataGridPage formName={formState.formName} />),
       errorElement: <ErrorPage />,
     },
     {
@@ -165,8 +149,6 @@ const FormBuilder = () => {
       element: wrapRoute(
         <JSONEditorPage
           formState={formState}
-          dispatchFormAction={dispatchFormAction}
-          setSnackbar={setSnackbar}
           getUserFormList={getUserFormList}
         />
       ),
@@ -177,21 +159,24 @@ const FormBuilder = () => {
       element: wrapRoute(
         <JSONEditorPage
           formState={formState}
-          dispatchFormAction={dispatchFormAction}
-          setSnackbar={setSnackbar}
           getUserFormList={getUserFormList}
         />
       ),
       errorElement: <ErrorPage />,
     },
   ]);
-  console.log({ formState });
+
   // JSX element
   return (
     <FormBoxContext.Provider
       value={{
         user: user,
         listOfForms: listOfForms,
+        setListOfForms: setListOfForms,
+        formState: formState,
+        dispatchFormAction: dispatchFormAction,
+        snackbar: snackbar,
+        setSnackbar: setSnackbar,
       }}
     >
       <ThemeProvider theme={theme}>

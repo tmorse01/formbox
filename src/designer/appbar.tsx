@@ -28,13 +28,10 @@ import "../App.css";
 
 export default function FormBoxAppBar({
   handleSetUser,
-  setSnackbar,
   getUserFormList,
   formName,
 }) {
-  const { user } = useContext(FormBoxContext);
-
-  var isRespDisabled = formName === undefined || user.username === undefined;
+  const { user, setSnackbar } = useContext(FormBoxContext);
 
   const pages = [
     {
@@ -180,13 +177,9 @@ export default function FormBoxAppBar({
             formName={formName}
             getUserFormList={getUserFormList}
           />
-          <ShareModal formName={formName} setSnackbar={setSnackbar} />
+          <ShareModal formName={formName} />
           <Box sx={{ flexGrow: 0 }}>
-            <ProfileMenu
-              user={user}
-              setSnackbar={setSnackbar}
-              handleSetUser={handleSetUser}
-            />
+            <ProfileMenu user={user} handleSetUser={handleSetUser} />
           </Box>
         </Toolbar>
       </Container>

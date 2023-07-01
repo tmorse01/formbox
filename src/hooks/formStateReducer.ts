@@ -60,6 +60,12 @@ function reducer(state, action) {
         ...action.payload.formState,
       };
     }
+    case "reset": {
+      return {
+        ...state,
+        ...initialState,
+      };
+    }
     default: {
       console.error("Unknown action:", action);
       throw Error("Unknown action: " + action.type);

@@ -2,9 +2,9 @@ import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import FormBoxJSONEditor from "./jsoneditor";
 import { Button, TextField, Box, Typography } from "@mui/material";
-import { FormBoxContext } from "./formbuilder";
 import { loadForm, saveForm } from "../helpers/formrequest";
 import exampleFormJSON from "../exampleforms/jobposition.json";
+import { FormBoxContext } from "./formbuilder";
 
 const style = {
   bgcolor: "background.paper",
@@ -18,13 +18,8 @@ const style = {
   gridTemplateRows: "min-content auto",
 };
 
-export default function JSONEditorPage({
-  formState,
-  dispatchFormAction,
-  setSnackbar,
-  getUserFormList,
-}) {
-  const { user } = useContext(FormBoxContext);
+export default function JSONEditorPage({ formState, getUserFormList }) {
+  const { user, dispatchFormAction, setSnackbar } = useContext(FormBoxContext);
   const { formJSON, formName } = formState;
 
   const { form } = useParams();

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import {
   Box,
   Typography,
@@ -11,6 +11,7 @@ import {
 
 import ShareIcon from "@mui/icons-material/Share";
 import copy from "clipboard-copy";
+import { FormBoxContext } from "./formbuilder";
 
 const style = {
   position: "absolute" as "absolute",
@@ -27,7 +28,8 @@ const style = {
   width: "400px",
 };
 
-const ShareModal = ({ formName, setSnackbar }) => {
+const ShareModal = ({ formName }) => {
+  const { setSnackbar } = useContext(FormBoxContext);
   const [open, setOpen] = useState<boolean>(false);
   const [link, setLink] = useState<URL>();
 
