@@ -144,6 +144,21 @@ export function getFormData(formName) {
   });
 }
 
+export function saveForm(formName, formJSON, username) {
+  return apiRequest({
+    endpoint: "/saveForm",
+    method: "PUT",
+    credentials: "include",
+    data: {
+      formName,
+      formJSON,
+      username,
+    },
+  });
+}
+
+// AUTH SECTION //
+
 export async function userSignup(values) {
   try {
     const response = await apiRequest({

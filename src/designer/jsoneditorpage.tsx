@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import FormBoxJSONEditor from "./jsoneditor";
 import { Button, TextField, Box, Typography } from "@mui/material";
 import { FormBoxContext } from "./formbuilder";
-import { loadForm } from "../helpers/formrequest";
+import { loadForm, saveForm } from "../helpers/formrequest";
 import exampleFormJSON from "../exampleforms/jobposition.json";
 
 const style = {
@@ -73,33 +73,19 @@ export default function JSONEditorPage({
   function submitJSONChanges() {
     let formJSON = content.json;
     dispatchFormAction({ type: "update_JSON", payload: { formJSON } });
-    saveForm(formName, formJSON);
+    handleSaveForm(formName, formJSON, user.username);
   }
 
-  function saveForm(formName, formJSON) {
-    const body = {
-      formName,
-      formJSON,
-      username: user.username,
-    };
-    const requestOptions = {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    };
-    fetch(process.env.REACT_APP_FORMBOX_API + "/saveForm", requestOptions)
-      .then((res) => res.text())
-      .then((res) => {
-        // console.log("result from api: ", res);
-        const resObj = JSON.parse(res);
-        if (resObj?.error) {
-          setSnackbar({ open: true, type: "error", message: resObj.error });
-        } else {
-          setSnackbar({ open: true, type: "success", message: resObj.message });
-          getUserFormList();
-        }
-      })
-      .catch((res) => console.log("error from api: ", res));
+  function handleSaveForm(formName, formJSON, username) {
+    saveForm(formName, formJSON, username).then((response) => {
+      console.log("result from saveForm: ", response);
+      if (response?.error) {
+        setSnackbar({ open: true, type: "error", message: response.error });
+      } else {
+        setSnackbar({ open: true, type: "success", message: response.message });
+        getUserFormList();
+      }
+    });
   }
   return (
     <>
