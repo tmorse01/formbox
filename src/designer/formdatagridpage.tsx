@@ -40,7 +40,7 @@ export default function FormDataGridPage({ formName }) {
         }
       });
     }
-  }, [form, setSnackbar]);
+  }, [form, dispatchFormAction, setSnackbar]);
 
   useEffect(() => {
     console.log("component did mount useEffect", formName);

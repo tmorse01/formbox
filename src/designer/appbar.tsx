@@ -9,7 +9,6 @@ import {
   IconButton,
   Menu,
   MenuItem,
-  Tooltip,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
@@ -31,7 +30,7 @@ export default function FormBoxAppBar({
   getUserFormList,
   formName,
 }) {
-  const { user, setSnackbar } = useContext(FormBoxContext);
+  const { user } = useContext(FormBoxContext);
 
   const pages = [
     {

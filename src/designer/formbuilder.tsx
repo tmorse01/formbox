@@ -10,12 +10,7 @@ import JSONEditorPage from "./jsoneditorpage";
 import FormBoxSnackbar from "./snackbar";
 
 // helpers
-import {
-  getForms,
-  connectToDb,
-  disconnectDb,
-  generateAccessToken,
-} from "../helpers/formrequest";
+import { getForms, connectToDb, disconnectDb } from "../helpers/formrequest";
 import { useFormStateReducer } from "../hooks/formStateReducer";
 import {
   FormBoxContextType,
