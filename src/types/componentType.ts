@@ -1,3 +1,5 @@
+import { AlertColor } from "@mui/material";
+import { SetStateAction } from "react";
 import {
   FieldValues,
   UseFormRegister,
@@ -54,8 +56,6 @@ export type container = {
 
 export type FormBoxProps = {
   formState: FormState;
-  dispatchFormAction: Dispatch;
-  setSnackbar: any;
 };
 
 export type ContainerProps = {
@@ -83,11 +83,24 @@ export type FormState = {
 };
 
 export type FormBoxContextType = {
-  user: {
-    username: string | null | undefined;
-    token: string | null | undefined;
-  };
+  user: User;
+  handleSetUser: (user: User) => void;
   listOfForms: formDataProps[];
+  setListOfForms: React.Dispatch<SetStateAction<formDataProps[]>>;
+  formState: FormState;
+  dispatchFormAction: Dispatch;
+  snackbar: SnackbarProps;
+  setSnackbar: (params: SnackbarProps) => void;
+};
+
+export type User = {
+  username: string | undefined;
+};
+
+export type SnackbarProps = {
+  open: boolean;
+  message: string;
+  type: AlertColor | undefined;
 };
 
 export type Error = {

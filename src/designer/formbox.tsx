@@ -1,60 +1,19 @@
-import { useEffect, useMemo } from "react";
-import { useParams } from "react-router-dom";
+import { useMemo, useContext } from "react";
 import { FieldValues } from "react-hook-form";
 
-import { loadForm } from "../helpers/formrequest";
-import exampleFormJSON from "../exampleforms/jobposition.json";
+import { submitFormValues } from "../helpers/formrequest";
 import { getInitialValues } from "../helpers/utils";
 
+import { FormBoxContext } from "./formbuilder";
 // components
 import FormBoxContainer from "./container";
 
 // types
 import { FormBoxProps } from "../types/componentType";
 
-const FormBox = ({
-  formState,
-  dispatchFormAction,
-  setSnackbar,
-}: FormBoxProps) => {
+const FormBox = ({ formState }: FormBoxProps) => {
   const { formJSON } = formState;
-
-  // handle form loading from url param for share links
-  const { form } = useParams();
-  useEffect(() => {
-    if (form === "formBoxExample") {
-      dispatchFormAction({
-        type: "update_formState",
-        payload: {
-          formState: {
-            formJSON: exampleFormJSON,
-            formName: exampleFormJSON.name,
-          },
-        },
-      });
-    } else if (form) {
-      loadForm(form).then((response) => {
-        if (response.success === true) {
-          var results = response.results;
-          dispatchFormAction({
-            type: "update_formState",
-            payload: {
-              formState: {
-                formJSON: results.formJSON,
-                formName: results.formName,
-              },
-            },
-          });
-        } else {
-          setSnackbar({
-            open: true,
-            message: response.error.message,
-            type: "error",
-          });
-        }
-      });
-    }
-  }, [form, dispatchFormAction, setSnackbar]);
+  const { setSnackbar } = useContext(FormBoxContext);
 
   const initialValues: FieldValues = useMemo(() => {
     const values = getInitialValues(formState.formJSON);
@@ -65,7 +24,7 @@ const FormBox = ({
     e.preventDefault();
     const formToSubmit = { formName: formState.formName, ...values };
     console.log("Form submitted: ", formToSubmit);
-    submitFormValues(formToSubmit);
+    handleSubmit(formToSubmit);
   };
 
   const onError = (values) => {
@@ -77,27 +36,23 @@ const FormBox = ({
     });
   };
 
-  function submitFormValues(formToSubmit) {
-    const requestOptions = {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formToSubmit),
-    };
-    fetch(
-      process.env.REACT_APP_FORMBOX_API + "/submitFormValues",
-      requestOptions
-    )
-      .then((res) => res.text())
-      .then((res) => {
-        console.log("result from submitFormValues: ", res);
-        const resObj = JSON.parse(res);
-        if (resObj?.error) {
-          setSnackbar({ open: true, type: "error", message: resObj.error });
-        } else {
-          setSnackbar({ open: true, type: "success", message: resObj.message });
-        }
-      })
-      .catch((res) => console.log("error from api: ", res));
+  function handleSubmit(formToSubmit) {
+    submitFormValues(formToSubmit).then((response) => {
+      // console.log("submitFormValues response: ", response);
+      if (response.ok === true) {
+        setSnackbar({
+          open: true,
+          message: response.message,
+          type: "success",
+        });
+      } else {
+        setSnackbar({
+          open: true,
+          message: response.error.message,
+          type: "error",
+        });
+      }
+    });
   }
 
   // console.log("FORMBOX render :", formJSON);

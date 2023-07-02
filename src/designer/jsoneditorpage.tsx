@@ -1,10 +1,8 @@
 import { useEffect, useState, useContext } from "react";
-import { useParams } from "react-router-dom";
 import FormBoxJSONEditor from "./jsoneditor";
 import { Button, TextField, Box, Typography } from "@mui/material";
+import { saveForm } from "../helpers/formrequest";
 import { FormBoxContext } from "./formbuilder";
-import { loadForm } from "../helpers/formrequest";
-import exampleFormJSON from "../exampleforms/jobposition.json";
 
 const style = {
   bgcolor: "background.paper",
@@ -15,52 +13,12 @@ const style = {
   width: "auto",
   display: "grid",
   gridTemplateColumns: "200px 1fr 200px",
+  gridTemplateRows: "min-content auto",
 };
 
-export default function JSONEditorPage({
-  formState,
-  dispatchFormAction,
-  setSnackbar,
-  getUserFormList,
-}) {
-  const { user } = useContext(FormBoxContext);
+export default function JSONEditorPage({ formState, getUserFormList }) {
+  const { user, dispatchFormAction, setSnackbar } = useContext(FormBoxContext);
   const { formJSON, formName } = formState;
-
-  const { form } = useParams();
-  useEffect(() => {
-    if (form === "formBoxExample") {
-      dispatchFormAction({
-        type: "update_formState",
-        payload: {
-          formState: {
-            formJSON: exampleFormJSON,
-            formName: exampleFormJSON.name,
-          },
-        },
-      });
-    } else if (form) {
-      loadForm(form).then((response) => {
-        if (response.success === true) {
-          var results = response.results;
-          dispatchFormAction({
-            type: "update_formState",
-            payload: {
-              formState: {
-                formJSON: results.formJSON,
-                formName: results.formName,
-              },
-            },
-          });
-        } else {
-          setSnackbar({
-            open: true,
-            message: response.error.message,
-            type: "error",
-          });
-        }
-      });
-    }
-  }, [form, dispatchFormAction, setSnackbar]);
 
   useEffect(() => {
     setContent({ json: formJSON, text: undefined });
@@ -78,33 +36,18 @@ export default function JSONEditorPage({
   function submitJSONChanges() {
     let formJSON = content.json;
     dispatchFormAction({ type: "update_JSON", payload: { formJSON } });
-    saveForm(formName, formJSON);
+    handleSaveForm(formName, formJSON, user.username);
   }
 
-  function saveForm(formName, formJSON) {
-    const body = {
-      formName,
-      formJSON,
-      username: user.username,
-    };
-    const requestOptions = {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    };
-    fetch(process.env.REACT_APP_FORMBOX_API + "/saveForm", requestOptions)
-      .then((res) => res.text())
-      .then((res) => {
-        // console.log("result from api: ", res);
-        const resObj = JSON.parse(res);
-        if (resObj?.error) {
-          setSnackbar({ open: true, type: "error", message: resObj.error });
-        } else {
-          setSnackbar({ open: true, type: "success", message: resObj.message });
-          getUserFormList();
-        }
-      })
-      .catch((res) => console.log("error from api: ", res));
+  function handleSaveForm(formName, formJSON, username) {
+    saveForm(formName, formJSON, username).then((response) => {
+      if (response?.error) {
+        setSnackbar({ open: true, type: "error", message: response.error });
+      } else {
+        setSnackbar({ open: true, type: "success", message: response.message });
+        getUserFormList();
+      }
+    });
   }
   return (
     <>
