@@ -72,31 +72,39 @@ export default function LoginModal({ open, handleClose }) {
     };
 
   const submitLogin = (values) => {
-    login(values).then((result) => {
-      if (result.ok === true) {
-        // console.log("result from login api: ", result);
-        setAccessToken(result.token.accessToken)
-          .then((result) => console.log("set access token", result))
-          .catch((e) =>
-            console.error("error setting access token: ", e.message)
-          );
+    login(values)
+      .then((result) => {
+        if (
+          result.ok === true &&
+          result.token.accessToken !== undefined &&
+          result.token.refreshToken !== undefined
+        ) {
+          setAccessToken(result.token.accessToken)
+            .then((result) => console.log("set access token", result))
+            .catch((e) => {
+              throw new Error(e.message);
+            });
 
-        setRefreshToken(result.token.refreshToken)
-          .then((result) => console.log("set refresh token", result))
-          .catch((e) =>
-            console.error("error setting refresh token: ", e.message)
-          );
-        handleSetUser({ username: result.username });
-        handleClose();
-        setSnackbar({ open: true, type: "success", message: result.message });
-      } else {
+          setRefreshToken(result.token.refreshToken)
+            .then((result) => console.log("set refresh token", result))
+            .catch((e) => {
+              throw new Error(e.message);
+            });
+          handleSetUser({ username: result.username });
+          handleClose();
+          setSnackbar({ open: true, type: "success", message: result.message });
+        } else {
+          throw new Error("Failed creating access tokens.");
+        }
+      })
+      .catch((error) => {
+        console.error(error);
         setSnackbar({
           open: true,
           type: "error",
-          message: result.error.message,
+          message: error.message,
         });
-      }
-    });
+      });
   };
 
   const submitSignup = async (values) => {
