@@ -83,15 +83,18 @@ export type FormState = {
 };
 
 export type FormBoxContextType = {
-  user: {
-    username: string | null | undefined;
-  };
+  user: User;
+  handleSetUser: (user: User) => void;
   listOfForms: formDataProps[];
   setListOfForms: React.Dispatch<SetStateAction<formDataProps[]>>;
   formState: FormState;
   dispatchFormAction: Dispatch;
   snackbar: SnackbarProps;
   setSnackbar: (params: SnackbarProps) => void;
+};
+
+export type User = {
+  username: string | undefined;
 };
 
 export type SnackbarProps = {

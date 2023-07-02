@@ -25,7 +25,7 @@ export default function FormDataGridPage({ formName }) {
   useEffect(() => {
     if (form) {
       loadForm(form).then((response) => {
-        console.log("loadForm response :", response);
+        // console.log("loadForm response :", response);
         if (response.ok === true) {
           var results = response.results;
           dispatchFormAction({
@@ -43,7 +43,7 @@ export default function FormDataGridPage({ formName }) {
   }, [form, dispatchFormAction, setSnackbar]);
 
   useEffect(() => {
-    console.log("component did mount useEffect", formName);
+    // console.log("component did mount useEffect", formName);
     if (formName) {
       fetchFormData(formName);
     }
@@ -52,7 +52,6 @@ export default function FormDataGridPage({ formName }) {
   const fetchFormData = (formName) => {
     getFormData(formName)
       .then((res) => {
-        console.log("result from getFormData api: ", res);
         setSelectedDocumentData(res.results);
       })
       .catch((res) => console.log("error from getFormData api: ", res));

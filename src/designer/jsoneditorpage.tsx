@@ -73,7 +73,6 @@ export default function JSONEditorPage({ formState, getUserFormList }) {
 
   function handleSaveForm(formName, formJSON, username) {
     saveForm(formName, formJSON, username).then((response) => {
-      console.log("result from saveForm: ", response);
       if (response?.error) {
         setSnackbar({ open: true, type: "error", message: response.error });
       } else {

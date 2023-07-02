@@ -77,7 +77,7 @@ const FormBox = ({ formState }: FormBoxProps) => {
 
   function handleSubmit(formToSubmit) {
     submitFormValues(formToSubmit).then((response) => {
-      console.log("submitFormValues response: ", response);
+      // console.log("submitFormValues response: ", response);
       if (response.ok === true) {
         setSnackbar({
           open: true,

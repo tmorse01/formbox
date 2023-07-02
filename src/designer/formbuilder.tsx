@@ -23,6 +23,7 @@ import {
   FormBoxContextType,
   formDataProps,
   SnackbarProps,
+  User,
 } from "../types/componentType";
 
 // css
@@ -52,6 +53,7 @@ export const FormBoxContext = React.createContext<FormBoxContextType>({
   user: {
     username: undefined,
   },
+  handleSetUser: (user: User) => {},
   listOfForms: [],
   setListOfForms: () => {},
   formState: { formJSON: undefined, formName: undefined },
@@ -85,13 +87,14 @@ const FormBuilder = () => {
     connectToDb().catch((e) =>
       console.error("Error connecting to database", e.message)
     );
+    // Existing user has refresh token, generate access token and sign them back in
     getUser().then((response) => {
-      generateAccessToken().then((res) => {
-        const newToken = res.token;
-        setAccessToken(newToken);
-      });
       if (response.user) {
-        handleSetUser(response.user);
+        generateAccessToken().then((res) => {
+          const newToken = res.token;
+          setAccessToken(newToken);
+          handleSetUser(response.user);
+        });
       }
     });
     return () => {
@@ -100,7 +103,7 @@ const FormBuilder = () => {
   }, []);
 
   // Setters
-  const handleSetUser = (user) => {
+  const handleSetUser = (user: User) => {
     if (user.username === undefined) {
       sessionStorage.removeItem("username");
     } else {
@@ -182,6 +185,7 @@ const FormBuilder = () => {
     <FormBoxContext.Provider
       value={{
         user: user,
+        handleSetUser: handleSetUser,
         listOfForms: listOfForms,
         setListOfForms: setListOfForms,
         formState: formState,

@@ -38,7 +38,6 @@ const FormBoxContainer = ({
   });
 
   const handleClear = () => {
-    console.log("handleClear ", getValues(), initialValues);
     reset(initialValues);
   };
   //   console.log("container render :", values);

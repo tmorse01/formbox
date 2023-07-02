@@ -74,7 +74,6 @@ export default function FormBoxAppBar({
   };
 
   const handleExample = () => {
-    console.log("handleExample");
     navigateToPath("/form/formBoxExample");
   };
 
@@ -178,7 +177,7 @@ export default function FormBoxAppBar({
           />
           <ShareModal formName={formName} />
           <Box sx={{ flexGrow: 0 }}>
-            <ProfileMenu user={user} handleSetUser={handleSetUser} />
+            <ProfileMenu />
           </Box>
         </Toolbar>
       </Container>

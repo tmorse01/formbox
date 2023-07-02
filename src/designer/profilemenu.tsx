@@ -14,18 +14,13 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
 import LoginModal from "./loginmodal";
 
-import {
-  login,
-  logout,
-  setAccessToken,
-  setRefreshToken,
-  userSignup,
-} from "../helpers/formrequest";
+import { logout } from "../helpers/formrequest";
 import { FormBoxContext } from "./formbuilder";
 import { useNavigate } from "react-router-dom";
 
-export default function ProfileMenu({ user, handleSetUser }) {
-  const { setSnackbar, dispatchFormAction } = useContext(FormBoxContext);
+export default function ProfileMenu() {
+  const { setSnackbar, dispatchFormAction, user, handleSetUser } =
+    useContext(FormBoxContext);
   const [open, setOpen] = useState(false);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
@@ -51,58 +46,14 @@ export default function ProfileMenu({ user, handleSetUser }) {
     setOpen(false);
   };
 
-  const submitLogin = (values) => {
-    login(values).then((result) => {
-      if (result.ok === true) {
-        console.log("result from login api: ", result);
-        setAccessToken(result.token.accessToken)
-          .then((result) => console.log("set access token", result))
-          .catch((e) =>
-            console.error("error setting access token: ", e.message)
-          );
-
-        setRefreshToken(result.token.refreshToken)
-          .then((result) => console.log("set refresh token", result))
-          .catch((e) =>
-            console.error("error setting refresh token: ", e.message)
-          );
-        handleSetUser({ username: result.username });
-        handleClose();
-        setSnackbar({ open: true, type: "success", message: result.message });
-      } else {
-        setSnackbar({
-          open: true,
-          type: "error",
-          message: result.error.message,
-        });
-      }
-    });
-  };
-
-  const submitSignup = async (values) => {
-    try {
-      const result = await userSignup(values);
-      // console.log("Sign up result:", result);
-      if (!result.ok) throw new Error(result.error);
-      setSnackbar({ open: true, type: "success", message: result.message });
-      handleCloseUserMenu();
-    } catch (e: any) {
-      setSnackbar({
-        open: true,
-        type: "error",
-        message: e.message,
-      });
-    }
-  };
-
   const submitLogout = () => {
-    console.log("submitLogout: ", user);
+    // console.log("submitLogout: ", user);
     logout()
       .then((response) => {
-        console.log("Result from logout: ", response);
+        // console.log("Result from logout: ", response);
         if (!response.ok) throw new Error(response.error);
         setSnackbar({ open: true, type: "success", message: response.message });
-        handleSetUser({ token: undefined, username: undefined });
+        handleSetUser({ username: undefined });
         dispatchFormAction({ type: "reset" });
         handleCloseUserMenu();
         navigate("/");
@@ -113,7 +64,7 @@ export default function ProfileMenu({ user, handleSetUser }) {
           type: "error",
           message: e.message,
         });
-        handleSetUser({ token: undefined, username: undefined });
+        handleSetUser({ username: undefined });
         dispatchFormAction({ type: "reset" });
         handleCloseUserMenu();
         navigate("/");
@@ -181,12 +132,7 @@ export default function ProfileMenu({ user, handleSetUser }) {
           );
         })}
       </Menu>
-      <LoginModal
-        open={open}
-        handleClose={handleClose}
-        submitLogin={submitLogin}
-        submitSignup={submitSignup}
-      />
+      <LoginModal open={open} handleClose={handleClose} />
     </Box>
   );
 }
