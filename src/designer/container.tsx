@@ -27,7 +27,6 @@ const FormBoxContainer = ({
   const { formJSON } = formState;
 
   const {
-    getValues,
     register,
     handleSubmit,
     formState: { errors },

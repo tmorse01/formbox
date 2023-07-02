@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  createBrowserRouter,
-  RouterProvider,
-  useParams,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 // pages
 import ErrorPage from "./errorpage";
@@ -21,7 +17,6 @@ import {
   getUser,
   generateAccessToken,
   setAccessToken,
-  loadForm,
 } from "../helpers/formrequest";
 import { useFormStateReducer } from "../hooks/formStateReducer";
 import {

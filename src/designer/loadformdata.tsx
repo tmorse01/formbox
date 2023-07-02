@@ -7,36 +7,34 @@ const LoadFormData = ({ children }) => {
   const { form } = useParams();
 
   useEffect(() => {
-    if (form) handleFormLoad(form);
-  }, [form]);
-
-  const handleFormLoad = (form) => {
-    loadForm(form)
-      .then((response) => {
-        console.log("loadForm response :", response);
-        if (response.ok === true) {
-          var results = response.results;
-          dispatchFormAction({
-            type: "update_formState",
-            payload: {
-              formState: {
-                formJSON: results.formJSON,
-                formName: results.formName,
+    if (form) {
+      loadForm(form)
+        .then((response) => {
+          console.log("loadForm response :", response);
+          if (response.ok === true) {
+            var results = response.results;
+            dispatchFormAction({
+              type: "update_formState",
+              payload: {
+                formState: {
+                  formJSON: results.formJSON,
+                  formName: results.formName,
+                },
               },
-            },
+            });
+          }
+        })
+        .catch((error) => {
+          console.error("Error loading form: ", error);
+          setSnackbar({
+            open: true,
+            message:
+              "Error loading form by that name. Check the url to see if the form name matches",
+            type: "error",
           });
-        }
-      })
-      .catch((error) => {
-        console.error("Error loading form: ", error);
-        setSnackbar({
-          open: true,
-          message:
-            "Error loading form by that name. Check the url to see if the form name matches",
-          type: "error",
         });
-      });
-  };
+    }
+  }, [form, dispatchFormAction, setSnackbar]);
 
   return children;
 };

@@ -1,9 +1,7 @@
-import { useEffect, useMemo, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useMemo, useContext } from "react";
 import { FieldValues } from "react-hook-form";
 
-import { loadForm, submitFormValues } from "../helpers/formrequest";
-import exampleFormJSON from "../exampleforms/jobposition.json";
+import { submitFormValues } from "../helpers/formrequest";
 import { getInitialValues } from "../helpers/utils";
 
 import { FormBoxContext } from "./formbuilder";
