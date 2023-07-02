@@ -1,9 +1,7 @@
 import { useEffect, useState, useContext } from "react";
-import { useParams } from "react-router-dom";
 import FormBoxJSONEditor from "./jsoneditor";
 import { Button, TextField, Box, Typography } from "@mui/material";
-import { loadForm, saveForm } from "../helpers/formrequest";
-import exampleFormJSON from "../exampleforms/jobposition.json";
+import { saveForm } from "../helpers/formrequest";
 import { FormBoxContext } from "./formbuilder";
 
 const style = {
@@ -21,36 +19,6 @@ const style = {
 export default function JSONEditorPage({ formState, getUserFormList }) {
   const { user, dispatchFormAction, setSnackbar } = useContext(FormBoxContext);
   const { formJSON, formName } = formState;
-
-  const { form } = useParams();
-  useEffect(() => {
-    if (form === "formBoxExample") {
-      dispatchFormAction({
-        type: "update_formState",
-        payload: {
-          formState: {
-            formJSON: exampleFormJSON,
-            formName: exampleFormJSON.name,
-          },
-        },
-      });
-    } else if (form) {
-      loadForm(form).then((response) => {
-        if (response.ok === true) {
-          var results = response.results;
-          dispatchFormAction({
-            type: "update_formState",
-            payload: {
-              formState: {
-                formJSON: results.formJSON,
-                formName: results.formName,
-              },
-            },
-          });
-        }
-      });
-    }
-  }, [form, dispatchFormAction, setSnackbar]);
 
   useEffect(() => {
     setContent({ json: formJSON, text: undefined });

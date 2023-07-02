@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  useParams,
+} from "react-router-dom";
 
 // pages
 import ErrorPage from "./errorpage";
@@ -17,6 +21,7 @@ import {
   getUser,
   generateAccessToken,
   setAccessToken,
+  loadForm,
 } from "../helpers/formrequest";
 import { useFormStateReducer } from "../hooks/formStateReducer";
 import {
@@ -31,6 +36,7 @@ import "../App.css";
 import "../css/formbuilder.css";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import LoadFormData from "./loadformdata";
 
 const theme = createTheme({
   palette: {
@@ -130,15 +136,17 @@ const FormBuilder = () => {
 
   const wrapRoute = (control) => {
     return (
-      <div className="formBuilderWrapper">
-        <FormBoxAppBar
-          formName={formState.formName}
-          handleSetUser={handleSetUser}
-          getUserFormList={getUserFormList}
-        />
-        <div className="formBuilder">{control}</div>
-        <FormBoxSnackbar />
-      </div>
+      <LoadFormData>
+        <div className="formBuilderWrapper">
+          <FormBoxAppBar
+            formName={formState.formName}
+            handleSetUser={handleSetUser}
+            getUserFormList={getUserFormList}
+          />
+          <div className="formBuilder">{control}</div>
+          <FormBoxSnackbar />\
+        </div>
+      </LoadFormData>
     );
   };
 

@@ -5,7 +5,6 @@ import { useParams } from "react-router-dom";
 
 import FormDataGrid from "./formdatagrid";
 import { getFormData, loadForm } from "../helpers/formrequest";
-import { FormBoxContext } from "./formbuilder";
 
 const style = {
   bgcolor: "background.paper",
@@ -19,28 +18,6 @@ const style = {
 
 export default function FormDataGridPage({ formName }) {
   const [selectedDocumentData, setSelectedDocumentData] = useState([]);
-  const { dispatchFormAction, setSnackbar } = useContext(FormBoxContext);
-
-  const { form } = useParams();
-  useEffect(() => {
-    if (form) {
-      loadForm(form).then((response) => {
-        // console.log("loadForm response :", response);
-        if (response.ok === true) {
-          var results = response.results;
-          dispatchFormAction({
-            type: "update_formState",
-            payload: {
-              formState: {
-                formJSON: results.formJSON,
-                formName: results.formName,
-              },
-            },
-          });
-        }
-      });
-    }
-  }, [form, dispatchFormAction, setSnackbar]);
 
   useEffect(() => {
     // console.log("component did mount useEffect", formName);

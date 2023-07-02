@@ -15,44 +15,7 @@ import { FormBoxProps } from "../types/componentType";
 
 const FormBox = ({ formState }: FormBoxProps) => {
   const { formJSON } = formState;
-  const { dispatchFormAction, setSnackbar } = useContext(FormBoxContext);
-
-  // handle form loading from url param for share links
-  const { form } = useParams();
-  useEffect(() => {
-    if (form === "formBoxExample") {
-      dispatchFormAction({
-        type: "update_formState",
-        payload: {
-          formState: {
-            formJSON: exampleFormJSON,
-            formName: exampleFormJSON.name,
-          },
-        },
-      });
-    } else if (form) {
-      loadForm(form).then((response) => {
-        if (response.ok === true) {
-          var results = response.results;
-          dispatchFormAction({
-            type: "update_formState",
-            payload: {
-              formState: {
-                formJSON: results.formJSON,
-                formName: results.formName,
-              },
-            },
-          });
-        } else {
-          setSnackbar({
-            open: true,
-            message: response.error.message,
-            type: "error",
-          });
-        }
-      });
-    }
-  }, [form, dispatchFormAction, setSnackbar]);
+  const { setSnackbar } = useContext(FormBoxContext);
 
   const initialValues: FieldValues = useMemo(() => {
     const values = getInitialValues(formState.formJSON);
