@@ -152,7 +152,7 @@ export function submitFormValues(formToSubmit) {
     endpoint: "/submitFormValues",
     method: "PUT",
     data: {
-      formToSubmit,
+      ...formToSubmit,
     },
   });
 }
