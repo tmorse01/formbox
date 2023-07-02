@@ -10,7 +10,14 @@ import JSONEditorPage from "./jsoneditorpage";
 import FormBoxSnackbar from "./snackbar";
 
 // helpers
-import { getForms, connectToDb, disconnectDb } from "../helpers/formrequest";
+import {
+  getForms,
+  connectToDb,
+  disconnectDb,
+  getUser,
+  generateAccessToken,
+  setAccessToken,
+} from "../helpers/formrequest";
 import { useFormStateReducer } from "../hooks/formStateReducer";
 import {
   FormBoxContextType,
@@ -78,6 +85,15 @@ const FormBuilder = () => {
     connectToDb().catch((e) =>
       console.error("Error connecting to database", e.message)
     );
+    getUser().then((response) => {
+      generateAccessToken().then((res) => {
+        const newToken = res.token;
+        setAccessToken(newToken);
+      });
+      if (response.user) {
+        handleSetUser(response.user);
+      }
+    });
     return () => {
       disconnectDb();
     };

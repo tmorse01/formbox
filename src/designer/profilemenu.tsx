@@ -113,6 +113,10 @@ export default function ProfileMenu({ user, handleSetUser }) {
           type: "error",
           message: e.message,
         });
+        handleSetUser({ token: undefined, username: undefined });
+        dispatchFormAction({ type: "reset" });
+        handleCloseUserMenu();
+        navigate("/");
       });
   };
 

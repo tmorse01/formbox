@@ -90,6 +90,14 @@ export function disconnectDb() {
   return apiRequest({ endpoint: "/disconnectDb", method: "POST" });
 }
 
+export function getUser() {
+  return apiRequest({
+    endpoint: "/getUser",
+    method: "GET",
+    credentials: "include",
+  });
+}
+
 export function generateAccessToken() {
   return apiRequest({
     endpoint: "/generate-access-token",
