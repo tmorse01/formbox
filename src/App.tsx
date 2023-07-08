@@ -1,4 +1,4 @@
-import FormBoxBuilder from "./designer/formbuilder";
+import FormBoxBuilder from "./formbuilder";
 
 function App() {
   return (

@@ -1,6 +1,6 @@
-import FormBoxButton from "../components/button";
-import FormBoxTextField from "../components/textfield";
-import { CompProps } from "../types/componentType";
+import FormBoxButton from "../../components/general/button";
+import FormBoxTextField from "../../components/data-input/textfield";
+import { CompProps } from "../../types/componentType";
 
 function FormBoxControl({ component, register, error }: CompProps) {
   const { name, title, help, type, required, submit, icon } = component;

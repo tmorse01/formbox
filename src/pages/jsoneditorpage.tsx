@@ -1,8 +1,8 @@
 import { useEffect, useState, useContext } from "react";
-import FormBoxJSONEditor from "./jsoneditor";
+import FormBoxJSONEditor from "../features/jsoneditor";
 import { Button, TextField, Box, Typography } from "@mui/material";
 import { saveForm } from "../helpers/formrequest";
-import { FormBoxContext } from "./formbuilder";
+import { FormBoxContext } from "../formbuilder";
 
 const style = {
   bgcolor: "background.paper",

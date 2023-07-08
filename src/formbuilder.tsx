@@ -2,12 +2,16 @@ import React, { useState, useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 // pages
-import ErrorPage from "./errorpage";
-import FormBox from "./formbox";
-import FormBoxAppBar from "./appbar";
-import FormDataGridPage from "./formdatagridpage";
-import JSONEditorPage from "./jsoneditorpage";
-import FormBoxSnackbar from "./snackbar";
+import {
+  ErrorPage,
+  FormBoxPage,
+  FormDataGridPage,
+  JSONEditorPage,
+} from "./pages";
+
+// feature components
+import FormBoxSnackbar from "./features/snackbar";
+import FormBoxAppBar from "./features/appbar";
 
 // helpers
 import {
@@ -17,21 +21,23 @@ import {
   getUser,
   generateAccessToken,
   setAccessToken,
-} from "../helpers/formrequest";
-import { useFormStateReducer } from "../hooks/formStateReducer";
+} from "./helpers/formrequest";
+import { useFormStateReducer } from "./hooks/formStateReducer";
+import LoadFormData from "./features/loadformdata";
+
+// types
 import {
   FormBoxContextType,
   formDataProps,
   SnackbarProps,
   User,
-} from "../types/componentType";
+} from "./types/componentType";
 
 // css
-import "../App.css";
-import "../css/formbuilder.css";
+import "./App.css";
+import "./css/formbuilder.css";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import LoadFormData from "./loadformdata";
 
 const theme = createTheme({
   palette: {
@@ -153,7 +159,7 @@ const FormBuilder = () => {
     },
     {
       path: "/form/:form",
-      element: wrapRoute(<FormBox formState={formState} />),
+      element: wrapRoute(<FormBoxPage formState={formState} />),
       errorElement: <ErrorPage />,
     },
     {
