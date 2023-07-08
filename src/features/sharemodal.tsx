@@ -11,7 +11,7 @@ import {
 
 import ShareIcon from "@mui/icons-material/Share";
 import copy from "clipboard-copy";
-import { FormBoxContext } from "./formbuilder";
+import { FormBoxContext } from "./../formbuilder";
 
 const style = {
   position: "absolute" as "absolute",

@@ -1,5 +1,5 @@
-import { CompProps } from "../types/componentType";
-import FormBoxControl from "../designer/formboxcontrol";
+import { CompProps } from "../../types/componentType";
+import FormBoxControl from "./formboxcontrol";
 
 const FormBoxComponent: React.FC<CompProps> = ({
   component,

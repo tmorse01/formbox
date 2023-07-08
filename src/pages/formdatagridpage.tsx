@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
-import FormDataGrid from "./formdatagrid";
+import FormDataGrid from "../features/formdatagrid";
 import { getFormData } from "../helpers/formrequest";
 
 const style = {

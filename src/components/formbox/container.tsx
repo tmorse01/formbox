@@ -5,10 +5,10 @@ import Form from "./form";
 
 import Typography from "@mui/material/Typography";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
-import ClearButton from "./clearbutton";
+import ClearButton from "../../features/clearbutton";
 
 // types
-import { ContainerProps } from "../types/componentType";
+import { ContainerProps } from "../../types/componentType";
 
 const style = {
   bgcolor: "background.paper",

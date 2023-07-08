@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { Snackbar, Alert } from "@mui/material";
-import { FormBoxContext } from "./formbuilder";
+import { FormBoxContext } from "./../formbuilder";
 
 export default function FormBoxSnackbar() {
   const { snackbar, setSnackbar } = useContext(FormBoxContext);

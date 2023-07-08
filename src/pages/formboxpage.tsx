@@ -1,12 +1,13 @@
 import { useMemo, useContext } from "react";
 import { FieldValues } from "react-hook-form";
 
+// helpers
 import { submitFormValues } from "../helpers/formrequest";
 import { getInitialValues } from "../helpers/utils";
 
-import { FormBoxContext } from "./formbuilder";
+import { FormBoxContext } from "../formbuilder";
 // components
-import FormBoxContainer from "./container";
+import FormBoxContainer from "../components/formbox/container";
 
 // types
 import { FormBoxProps } from "../types/componentType";

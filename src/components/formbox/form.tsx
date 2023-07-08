@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
-import { FormProps } from "../types/componentType";
-import "../css/form.css";
+import { FormProps } from "../../types/componentType";
+import "../../css/form.css";
 import Typography from "@mui/material/Typography";
 import FormBoxComponent from "./formboxcomponent";
 

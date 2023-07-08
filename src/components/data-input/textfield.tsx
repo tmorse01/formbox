@@ -1,5 +1,5 @@
 import TextField from "@mui/material/TextField";
-import { TextFieldProps } from "../types/componentType";
+import { TextFieldProps } from "../../types/componentType";
 
 const FormBoxTextField = ({
   name,
