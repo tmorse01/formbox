@@ -13,7 +13,7 @@ const style = {
   m: 2,
 };
 
-const Form = ({ form }: FormProps) => {
+const Form = (props: FormProps) => {
   // console.log("form render: ", form.title);
 
   return (
@@ -23,10 +23,10 @@ const Form = ({ form }: FormProps) => {
         sx={{ color: "text.primary" }}
         variant="h5"
       >
-        {form.title ?? "Form"}
+        {props.title ?? "Form"}
       </Typography>
-      {form.components?.map((component) => (
-        <Component key={component.name} component={component} />
+      {props.components?.map((componentProps) => (
+        <Component key={componentProps.name} {...componentProps} />
       ))}
     </Box>
   );

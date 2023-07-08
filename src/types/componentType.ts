@@ -1,5 +1,5 @@
 import { AlertColor } from "@mui/material";
-import { SetStateAction } from "react";
+import { Ref, SetStateAction } from "react";
 import { FieldValues, DeepMap, FieldError } from "react-hook-form";
 
 type Dispatch = React.Dispatch<Action>;
@@ -14,34 +14,39 @@ export type formDataProps = {
   username: string;
 };
 
-export type defaultProps = {
+export type DefaultProps = {
   name: string;
   title: string;
 };
 
-export type CompProps = {
-  key: string;
-  component: componentProps;
-};
+export type ComponentProps = {
+  type: "textfield" | "switch" | "select" | "radiogroup";
+} & ControlTypes;
 
-export type componentProps = defaultProps & {
-  type: string;
-  help?: string;
-  required?: boolean;
-  submit?: boolean;
-  icon: string | undefined;
-  defaultValue?: string | number | boolean | undefined;
-  options?: Option[];
-};
+export type ControlTypes =
+  | TextFieldProps
+  | CheckboxProps
+  | SelectProps
+  | RadioGroupProps;
 
-export type formBoxAppBarProps = {
+// export type componentProps = defaultProps & {
+//   type: string;
+//   help?: string;
+//   required?: boolean;
+//   submit?: boolean;
+//   icon: string | undefined;
+//   defaultValue?: string | number | boolean | undefined;
+//   options?: Option[];
+// };
+
+export type FormBoxAppBarProps = {
   completeForm: container | undefined;
   formName: string;
   onChange: ({ value }) => void;
 };
 
 export type container = {
-  forms: form[];
+  forms: FormProps[];
   layout: string;
   title: string;
   name: string;
@@ -59,12 +64,8 @@ export type ContainerProps = {
   onError: (values, e) => void;
 };
 
-export type FormProps = {
-  form: form;
-};
-
-export type form = defaultProps & {
-  components: componentProps[];
+export type FormProps = DefaultProps & {
+  components: ComponentProps[];
   layout: string;
   type: string;
 };
@@ -105,29 +106,49 @@ export type TextFieldProps = {
   help: string | undefined;
   required?: boolean;
   defaultValue: string;
+  value: string | undefined;
 };
 
 export type FieldErrors<TFieldValues extends FieldValues = FieldValues> =
   DeepMap<TFieldValues, FieldError>;
 
-export type SwitchProps = {
+export type CheckboxProps = {
   name: string;
   title: string;
   help?: string | undefined;
   required?: boolean;
   defaultValue: boolean;
+  value: boolean | undefined;
 };
 
 export type SelectProps = {
   name: string;
   title: string;
   help?: string;
-  options?: Option[];
+  options: Option[];
   required?: boolean;
   defaultValue: string;
+  value: string | undefined;
 };
 
 export type Option = {
   label: string;
   value: string;
+};
+
+export type RadioGroupProps = {
+  name: string;
+  title: string;
+  help?: string;
+  options: Option[];
+  required?: boolean;
+  defaultValue: string;
+  value: string | undefined;
+};
+
+export type ButtonProps = {
+  name: string;
+  title: string;
+  submit?: boolean;
+  icon: string | undefined;
 };

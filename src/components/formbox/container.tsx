@@ -8,7 +8,7 @@ import SaveAltIcon from "@mui/icons-material/SaveAlt";
 import ClearButton from "../../features/clearbutton";
 
 // types
-import { ContainerProps } from "../../types/componentType";
+import { ContainerProps, FormProps } from "../../types/componentType";
 
 const style = {
   bgcolor: "background.paper",
@@ -53,8 +53,8 @@ const FormBoxContainer = ({
           <Typography sx={{ color: "text.primary", ml: 2 }} variant="h2">
             {formJSON.title}
           </Typography>
-          {forms?.map((form, index) => (
-            <Form key={index} form={form} />
+          {forms?.map((formProps, index) => (
+            <Form key={index} {...(formProps as FormProps)} />
           ))}
           <Box
             display="flex"

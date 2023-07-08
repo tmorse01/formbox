@@ -1,53 +1,25 @@
-import { TextField, Select, Checkbox } from "../data-input";
-import { Button } from "../general";
-import { CompProps } from "../../types/componentType";
+import { TextField, Select, Checkbox, RadioGroup } from "../data-input";
+import { ComponentProps } from "../../types/componentType";
+import { createElement } from "react";
+import { useFormContext } from "react-hook-form";
 
-const Control = ({ component }: CompProps) => {
-  const { name, title, help, type, required, defaultValue } = component;
+const controlTypes = {
+  textfield: TextField,
+  select: Select,
+  checkbox: Checkbox,
+  radiogroup: RadioGroup,
+};
 
-  if (type === "textfield") {
-    return (
-      <TextField
-        name={name}
-        title={title}
-        help={help}
-        required={required}
-        defaultValue={defaultValue as string}
-      />
-    );
-  } else if (type === "button") {
-    return (
-      <Button
-        name={name}
-        title={title}
-        submit={component.submit}
-        icon={component.icon}
-      />
-    );
-  } else if (type === "select") {
-    return (
-      <Select
-        name={name}
-        title={title}
-        help={help}
-        options={component.options}
-        required={required}
-        defaultValue={defaultValue as string}
-      />
-    );
-  } else if (type === "checkbox") {
-    return (
-      <Checkbox
-        name={name}
-        title={title}
-        help={help}
-        required={required}
-        defaultValue={defaultValue as boolean}
-      />
-    );
-  } else {
+const Control: React.FC<ComponentProps> = (props) => {
+  const { register } = useFormContext(); // Access form context
+
+  if (controlTypes[props.type] === undefined)
     return <div>Undefined component type</div>;
-  }
+  const { type, ...componentProps } = props;
+
+  return createElement(controlTypes[type], {
+    ...componentProps,
+  });
 };
 
 export default Control;

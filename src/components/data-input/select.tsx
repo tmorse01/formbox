@@ -1,50 +1,42 @@
 import {
   FormControl,
+  FormHelperText,
   InputLabel,
   Select as MUISelect,
-  FormHelperText,
   MenuItem,
 } from "@mui/material";
-import { useFormContext, Controller } from "react-hook-form";
 import { SelectProps } from "../../types/componentType";
+import { useFormContext } from "react-hook-form";
 
 const Select = ({
   name,
   title,
   help,
-  options,
-  defaultValue,
   required,
+  options,
+  value,
 }: SelectProps) => {
-  const { control, register, formState } = useFormContext(); // Access form context
+  const { register, formState } = useFormContext(); // Access form context
   const error = formState.errors[name];
-  //   console.log("render select", name, control);
+
   return (
-    <Controller
-      control={control}
-      name={name}
-      defaultValue={defaultValue}
-      render={({ field }) => (
-        <FormControl required={required} error={!!error}>
-          <InputLabel id={title}>{title}</InputLabel>
-          <MUISelect
-            label={title}
-            defaultValue={defaultValue}
-            {...register(name, {
-              required: title + " is required.",
-            })}
-            value={field.value}
-          >
-            {options?.map((option, index) => (
-              <MenuItem key={index} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </MUISelect>
-          <FormHelperText>{error?.message ?? help}</FormHelperText>
-        </FormControl>
-      )}
-    />
+    <FormControl required={required} error={!!error}>
+      <InputLabel id={title}>{title}</InputLabel>
+      <MUISelect
+        label={title}
+        value={value}
+        {...register(name, {
+          required: required ? title + " is required." : false,
+        })}
+      >
+        {options?.map((option, index) => (
+          <MenuItem key={index} value={option.value}>
+            {option.label}
+          </MenuItem>
+        ))}
+      </MUISelect>
+      <FormHelperText>{error?.message ?? help}</FormHelperText>
+    </FormControl>
   );
 };
 

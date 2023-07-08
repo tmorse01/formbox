@@ -1,12 +1,6 @@
 import { Button as MUIButton } from "@mui/material";
 import { Icon } from "@mui/material";
-
-type ButtonProps = {
-  name: string;
-  title: string;
-  submit?: boolean;
-  icon: string | undefined;
-};
+import { ButtonProps } from "../../types/componentType";
 
 const Button = ({ name, title, submit, icon }: ButtonProps) => {
   let buttonType: "submit" | "button" = submit ? "submit" : "button";

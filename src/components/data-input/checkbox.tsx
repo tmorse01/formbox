@@ -2,50 +2,32 @@ import {
   Checkbox as MUICheckbox,
   FormHelperText,
   FormControl,
+  FormControlLabel,
 } from "@mui/material";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import { useFormContext, Controller } from "react-hook-form";
-import { SwitchProps } from "../../types/componentType";
+import { CheckboxProps } from "../../types/componentType";
+import { useFormContext } from "react-hook-form";
 
-const Checkbox = ({
-  name,
-  title,
-  help,
-  required,
-  defaultValue,
-}: SwitchProps) => {
-  // console.log("render text field", name);
-  const { control, register, formState } = useFormContext(); // Access form context
+const Checkbox = ({ name, title, help, required, value }: CheckboxProps) => {
+  // console.log("render checkbox field", value);
+  const { register, formState } = useFormContext(); // Access form context
   const error = formState.errors[name];
+
   return (
-    <>
-      <Controller
-        control={control}
-        name={name}
-        defaultValue={defaultValue}
-        render={({ field }) => {
-          return (
-            <FormControl>
-              <FormControlLabel
-                label={title}
-                control={
-                  <MUICheckbox
-                    id={name}
-                    {...register(name, {
-                      required: title + " is required.",
-                    })}
-                    checked={field.value}
-                  />
-                }
-              />
-              {error && (
-                <FormHelperText error>{error?.message ?? help}</FormHelperText>
-              )}
-            </FormControl>
-          );
-        }}
+    <FormControl>
+      <FormControlLabel
+        label={title}
+        control={
+          <MUICheckbox
+            id={name}
+            checked={value}
+            {...register(name, {
+              required: required ? title + " is required." : false,
+            })}
+          />
+        }
       />
-    </>
+      {error && <FormHelperText error>{error?.message ?? help}</FormHelperText>}
+    </FormControl>
   );
 };
 
