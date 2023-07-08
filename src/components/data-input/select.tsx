@@ -1,14 +1,14 @@
 import {
   FormControl,
   InputLabel,
-  Select,
+  Select as MUISelect,
   FormHelperText,
   MenuItem,
 } from "@mui/material";
 import { useFormContext, Controller } from "react-hook-form";
-import { SelectProps } from "../types/componentType";
+import { SelectProps } from "../../types/componentType";
 
-const FormBoxSelect = ({
+const Select = ({
   name,
   title,
   help,
@@ -27,7 +27,7 @@ const FormBoxSelect = ({
       render={({ field }) => (
         <FormControl required={required} error={!!error}>
           <InputLabel id={title}>{title}</InputLabel>
-          <Select
+          <MUISelect
             label={title}
             defaultValue={defaultValue}
             {...register(name, {
@@ -40,7 +40,7 @@ const FormBoxSelect = ({
                 {option.label}
               </MenuItem>
             ))}
-          </Select>
+          </MUISelect>
           <FormHelperText>{error?.message ?? help}</FormHelperText>
         </FormControl>
       )}
@@ -48,4 +48,4 @@ const FormBoxSelect = ({
   );
 };
 
-export default FormBoxSelect;
+export default Select;

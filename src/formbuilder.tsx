@@ -2,21 +2,40 @@ import React, { useState, useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 // pages
-import ErrorPage from "./errorpage";
-import FormBox from "./formbox";
-import FormBoxAppBar from "./appbar";
-import FormDataGridPage from "./formdatagridpage";
-import JSONEditorPage from "./jsoneditorpage";
-import FormBoxSnackbar from "./snackbar";
+import {
+  ErrorPage,
+  FormBoxPage,
+  FormDataGridPage,
+  JSONEditorPage,
+} from "./pages";
+
+// feature components
+import FormBoxSnackbar from "./features/snackbar";
+import FormBoxAppBar from "./features/appbar";
 
 // helpers
-import { getForms, connectToDb, disconnectDb } from "../helpers/formrequest";
-import { useFormStateReducer } from "../hooks/formStateReducer";
-import { FormBoxContextType } from "../types/componentType";
+import {
+  getForms,
+  connectToDb,
+  disconnectDb,
+  getUser,
+  generateAccessToken,
+  setAccessToken,
+} from "./helpers/formrequest";
+import { useFormStateReducer } from "./hooks/formStateReducer";
+import LoadFormData from "./features/loadformdata";
+
+// types
+import {
+  FormBoxContextType,
+  formDataProps,
+  SnackbarProps,
+  User,
+} from "./types/componentType";
 
 // css
-import "../App.css";
-import "../css/formbuilder.css";
+import "./App.css";
+import "./css/formbuilder.css";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
@@ -40,16 +59,17 @@ const theme = createTheme({
 export const FormBoxContext = React.createContext<FormBoxContextType>({
   user: {
     username: undefined,
-    token: undefined,
   },
+  handleSetUser: (user: User) => {},
   listOfForms: [],
+  setListOfForms: () => {},
+  formState: { formJSON: undefined, formName: undefined },
+  dispatchFormAction: () => {},
+  snackbar: { open: false, message: "", type: "success" },
+  setSnackbar: () => {},
 });
 
 // Global functions
-
-const getToken = () => {
-  return sessionStorage.getItem("token") ?? undefined;
-};
 
 const getUsername = () => {
   return sessionStorage.getItem("username") ?? undefined;
@@ -58,35 +78,39 @@ const getUsername = () => {
 const FormBuilder = () => {
   // State
   const [formState, dispatchFormAction] = useFormStateReducer();
-
-  // console.log("formBuilder", formState);
   const [user, setUser] = useState({
     username: getUsername(),
-    token: getToken(),
   });
-  const [snackbar, setSnackbar] = useState({
+  const [snackbar, setSnackbar] = useState<SnackbarProps>({
     open: false,
     message: "",
     type: "success",
   });
-  const [listOfForms, setListOfForms] = useState([]);
+  const [listOfForms, setListOfForms] = useState<formDataProps[]>([]);
 
   // Effects
 
   useEffect(() => {
-    connectToDb();
+    connectToDb().catch((e) =>
+      console.error("Error connecting to database", e.message)
+    );
+    // Existing user has refresh token, generate access token and sign them back in
+    getUser().then((response) => {
+      if (response.user) {
+        generateAccessToken().then((res) => {
+          const newToken = res.token;
+          setAccessToken(newToken);
+          handleSetUser(response.user);
+        });
+      }
+    });
     return () => {
       disconnectDb();
     };
   }, []);
 
   // Setters
-  const handleSetUser = (user) => {
-    if (user.token === undefined) {
-      sessionStorage.removeItem("token");
-    } else {
-      sessionStorage.setItem("token", user.token);
-    }
+  const handleSetUser = (user: User) => {
     if (user.username === undefined) {
       sessionStorage.removeItem("username");
     } else {
@@ -97,27 +121,33 @@ const FormBuilder = () => {
 
   // Getters
   const getUserFormList = () => {
-    if (user.username) {
-      getForms(user.username).then((forms) => {
-        setListOfForms(forms);
+    getForms()
+      .then((response) => {
+        // console.log("getUserFormList response: ", response);
+        if (response.ok && response.results?.length > 0) {
+          setListOfForms(response.results);
+        }
+      })
+      .catch((error) => {
+        console.error("getUserFormList error: ", error);
       });
-    }
   };
 
   // Router
 
   const wrapRoute = (control) => {
     return (
-      <div className="formBuilderWrapper">
-        <FormBoxAppBar
-          formName={formState.formName}
-          handleSetUser={handleSetUser}
-          setSnackbar={setSnackbar}
-          getUserFormList={getUserFormList}
-        />
-        <div className="formBuilder">{control}</div>
-        <FormBoxSnackbar snackbar={snackbar} setSnackbar={setSnackbar} />
-      </div>
+      <LoadFormData>
+        <div className="formBuilderWrapper">
+          <FormBoxAppBar
+            formName={formState.formName}
+            handleSetUser={handleSetUser}
+            getUserFormList={getUserFormList}
+          />
+          <div className="formBuilder">{control}</div>
+          <FormBoxSnackbar />\
+        </div>
+      </LoadFormData>
     );
   };
 
@@ -129,24 +159,12 @@ const FormBuilder = () => {
     },
     {
       path: "/form/:form",
-      element: wrapRoute(
-        <FormBox
-          formState={formState}
-          dispatchFormAction={dispatchFormAction}
-          setSnackbar={setSnackbar}
-        />
-      ),
+      element: wrapRoute(<FormBoxPage formState={formState} />),
       errorElement: <ErrorPage />,
     },
     {
       path: "/responses/:form",
-      element: wrapRoute(
-        <FormDataGridPage
-          formName={formState.formName}
-          dispatchFormAction={dispatchFormAction}
-          setSnackbar={setSnackbar}
-        />
-      ),
+      element: wrapRoute(<FormDataGridPage formName={formState.formName} />),
       errorElement: <ErrorPage />,
     },
     {
@@ -154,8 +172,6 @@ const FormBuilder = () => {
       element: wrapRoute(
         <JSONEditorPage
           formState={formState}
-          dispatchFormAction={dispatchFormAction}
-          setSnackbar={setSnackbar}
           getUserFormList={getUserFormList}
         />
       ),
@@ -166,8 +182,6 @@ const FormBuilder = () => {
       element: wrapRoute(
         <JSONEditorPage
           formState={formState}
-          dispatchFormAction={dispatchFormAction}
-          setSnackbar={setSnackbar}
           getUserFormList={getUserFormList}
         />
       ),
@@ -180,7 +194,13 @@ const FormBuilder = () => {
     <FormBoxContext.Provider
       value={{
         user: user,
+        handleSetUser: handleSetUser,
         listOfForms: listOfForms,
+        setListOfForms: setListOfForms,
+        formState: formState,
+        dispatchFormAction: dispatchFormAction,
+        snackbar: snackbar,
+        setSnackbar: setSnackbar,
       }}
     >
       <ThemeProvider theme={theme}>

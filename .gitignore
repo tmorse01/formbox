@@ -4,6 +4,7 @@
 /node_modules
 /.pnp
 .pnp.js
+.vscode
 
 # testing
 /coverage
@@ -13,6 +14,7 @@
 
 # misc
 .DS_Store
+.env
 .env.local
 .env.development.local
 .env.test.local
@@ -22,3 +24,4 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .vscode/tasks.json
+formbox.code-workspace

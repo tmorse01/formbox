@@ -9,7 +9,6 @@ import {
   IconButton,
   Menu,
   MenuItem,
-  Tooltip,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
@@ -23,18 +22,15 @@ import ShareModal from "./sharemodal";
 import SavedFormsModal from "./savedformsmodal";
 import ProfileMenu from "./profilemenu";
 
-import { FormBoxContext } from "./formbuilder";
+import { FormBoxContext } from "./../formbuilder";
 import "../App.css";
 
 export default function FormBoxAppBar({
   handleSetUser,
-  setSnackbar,
   getUserFormList,
   formName,
 }) {
   const { user } = useContext(FormBoxContext);
-
-  var isRespDisabled = formName === undefined || user.username === undefined;
 
   const pages = [
     {
@@ -42,7 +38,6 @@ export default function FormBoxAppBar({
       title: "Form",
       path: "/form/" + formName,
       disabled: formName === undefined,
-      tooltip: "Select a form from the top right open menu.",
       icon: <DynamicFormIcon />,
     },
     {
@@ -50,9 +45,6 @@ export default function FormBoxAppBar({
       title: "Responses",
       path: "/responses/" + formName,
       disabled: formName === undefined || user.username === undefined,
-      tooltip: isRespDisabled
-        ? "Please sign in to view your forms responses."
-        : undefined,
       icon: <TableRowsIcon />,
     },
     {
@@ -60,7 +52,6 @@ export default function FormBoxAppBar({
       title: "Editor",
       path: formName ? "/jsoneditor/" + formName : "/jsoneditor/",
       disabled: formName === undefined,
-      tooltip: "Select a form to view the JSON that describes it.",
       icon: <DataArrayIcon />,
     },
   ];
@@ -83,7 +74,6 @@ export default function FormBoxAppBar({
   };
 
   const handleExample = () => {
-    console.log("handleExample");
     navigateToPath("/form/formBoxExample");
   };
 
@@ -152,12 +142,10 @@ export default function FormBoxAppBar({
                     disabled={page.disabled}
                     onClick={() => navigateToPath(page.path)}
                   >
-                    <Tooltip title={page.tooltip}>
-                      <Typography textAlign="center">
-                        {page.icon}
-                        {page.title}
-                      </Typography>
-                    </Tooltip>
+                    <Typography textAlign="center">
+                      {page.icon}
+                      {page.title}
+                    </Typography>
                   </MenuItem>
                 );
               })}
@@ -167,18 +155,16 @@ export default function FormBoxAppBar({
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => {
               return (
-                <Tooltip key={page.path} title={page.tooltip}>
-                  <Typography>
-                    <Button
-                      onClick={() => navigateToPath(page.path)}
-                      color="inherit"
-                      disabled={page.disabled}
-                    >
-                      {page.icon}
-                      {page.title}
-                    </Button>
-                  </Typography>
-                </Tooltip>
+                <Typography key={page.key}>
+                  <Button
+                    onClick={() => navigateToPath(page.path)}
+                    color="inherit"
+                    disabled={page.disabled}
+                  >
+                    {page.icon}
+                    {page.title}
+                  </Button>
+                </Typography>
               );
             })}
           </Box>
@@ -189,13 +175,9 @@ export default function FormBoxAppBar({
             formName={formName}
             getUserFormList={getUserFormList}
           />
-          <ShareModal formName={formName} setSnackbar={setSnackbar} />
+          <ShareModal formName={formName} />
           <Box sx={{ flexGrow: 0 }}>
-            <ProfileMenu
-              user={user}
-              setSnackbar={setSnackbar}
-              handleSetUser={handleSetUser}
-            />
+            <ProfileMenu />
           </Box>
         </Toolbar>
       </Container>

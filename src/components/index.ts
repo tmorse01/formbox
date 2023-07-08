@@ -1,6 +1,6 @@
-export { default as FormBoxTextField } from "./formboxtextfield";
-export { default as FormBoxButton } from "./formboxbutton";
+export { default as TextField } from "./data-input/textfield";
+export { default as Button } from "./general/button";
 
-export { default as FormBoxCheckbox } from "./formboxcheckbox";
+export { default as Checkbox } from "./data-input/checkbox";
 
-export { default as FormBoxSelect } from "./formboxselect";
+export { default as FormBoxSelect } from "./data-input/select";

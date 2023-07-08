@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -14,11 +14,17 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
 import LoginModal from "./loginmodal";
 
-import { userSignup } from "../helpers/formrequest";
+import { logout } from "../helpers/formrequest";
+import { FormBoxContext } from "./../formbuilder";
+import { useNavigate } from "react-router-dom";
 
-export default function ProfileMenu({ user, handleSetUser, setSnackbar }) {
+export default function ProfileMenu() {
+  const { setSnackbar, dispatchFormAction, user, handleSetUser } =
+    useContext(FormBoxContext);
   const [open, setOpen] = useState(false);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+
+  const navigate = useNavigate();
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -40,50 +46,29 @@ export default function ProfileMenu({ user, handleSetUser, setSnackbar }) {
     setOpen(false);
   };
 
-  const submitLogin = (values) => {
-    const body = {
-      username: values.username,
-      password: values.password,
-    };
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    };
-    fetch(process.env.REACT_APP_FORMBOX_API + "/login", requestOptions)
-      .then((res) => res.text())
-      .then((res) => {
-        const result = JSON.parse(res);
-        // console.log("result from login api: ", result);
-        if (result.token !== undefined) {
-          handleSetUser({ token: result.token, username: result.username });
-          handleClose();
-          setSnackbar({ open: true, type: "success", message: result.message });
-        } else {
-          setSnackbar({ open: true, type: "error", message: result.message });
-        }
+  const submitLogout = () => {
+    // console.log("submitLogout: ", user);
+    logout()
+      .then((response) => {
+        // console.log("Result from logout: ", response);
+        if (!response.ok) throw new Error(response.error);
+        setSnackbar({ open: true, type: "success", message: response.message });
+        handleSetUser({ username: undefined });
+        dispatchFormAction({ type: "reset" });
+        handleCloseUserMenu();
+        navigate("/");
       })
-      .catch((res) => console.log("error from login api: ", res));
-  };
-
-  const submitSignup = (values) => {
-    userSignup(values).then((result) => {
-      console.log("Result from sign up", result);
-      if (result.success === true) {
-        setSnackbar({ open: true, type: "success", message: result.message });
-      } else {
+      .catch((e) => {
         setSnackbar({
           open: true,
           type: "error",
-          message: result.error.message,
+          message: e.message,
         });
-      }
-    });
-  };
-
-  const submitLogout = () => {
-    handleSetUser({ token: undefined, username: undefined });
-    handleCloseUserMenu();
+        handleSetUser({ username: undefined });
+        dispatchFormAction({ type: "reset" });
+        handleCloseUserMenu();
+        navigate("/");
+      });
   };
 
   const profileMenuItems = [
@@ -92,21 +77,21 @@ export default function ProfileMenu({ user, handleSetUser, setSnackbar }) {
       icon: <LoginIcon />,
       onClick: handleOpen,
       title: "Login",
-      disabled: user.token !== undefined,
+      disabled: user.username !== undefined,
     },
     {
       key: "profile",
       icon: <PersonIcon />,
       onClick: undefined,
       title: "Profile",
-      disabled: user.token === undefined,
+      disabled: user.username === undefined,
     },
     {
       key: "logout",
       icon: <LogoutIcon />,
       onClick: submitLogout,
       title: "Logout",
-      disabled: user.token === undefined,
+      disabled: user.username === undefined,
     },
   ];
   return (
@@ -147,12 +132,7 @@ export default function ProfileMenu({ user, handleSetUser, setSnackbar }) {
           );
         })}
       </Menu>
-      <LoginModal
-        open={open}
-        handleClose={handleClose}
-        submitLogin={submitLogin}
-        submitSignup={submitSignup}
-      />
+      <LoginModal open={open} handleClose={handleClose} />
     </Box>
   );
 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   Box,
   Button,
@@ -13,6 +13,14 @@ import {
 
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+
+import {
+  login,
+  setAccessToken,
+  setRefreshToken,
+  userSignup,
+} from "../helpers/formrequest";
+import { FormBoxContext } from "./../formbuilder";
 
 const style = {
   position: "absolute" as "absolute",
@@ -36,12 +44,9 @@ interface State {
   showPassword: boolean;
 }
 
-export default function LoginModal({
-  open,
-  handleClose,
-  submitLogin,
-  submitSignup,
-}) {
+export default function LoginModal({ open, handleClose }) {
+  const { setSnackbar, handleSetUser } = useContext(FormBoxContext);
+
   const [values, setValues] = useState<State>({
     username: "",
     password: "",
@@ -65,6 +70,57 @@ export default function LoginModal({
     (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
       setValues({ ...values, [prop]: event.target.value });
     };
+
+  const submitLogin = (values) => {
+    login(values)
+      .then((result) => {
+        if (
+          result.ok === true &&
+          result.token.accessToken !== undefined &&
+          result.token.refreshToken !== undefined
+        ) {
+          setAccessToken(result.token.accessToken)
+            .then((result) => console.log("set access token", result))
+            .catch((e) => {
+              throw new Error(e.message);
+            });
+
+          setRefreshToken(result.token.refreshToken)
+            .then((result) => console.log("set refresh token", result))
+            .catch((e) => {
+              throw new Error(e.message);
+            });
+          handleSetUser({ username: result.username });
+          handleClose();
+          setSnackbar({ open: true, type: "success", message: result.message });
+        } else {
+          throw new Error("Failed creating access tokens.");
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        setSnackbar({
+          open: true,
+          type: "error",
+          message: error.message,
+        });
+      });
+  };
+
+  const submitSignup = async (values) => {
+    try {
+      const result = await userSignup(values);
+      // console.log("Sign up result:", result);
+      if (!result.ok) throw new Error(result.error);
+      setSnackbar({ open: true, type: "success", message: result.message });
+    } catch (e: any) {
+      setSnackbar({
+        open: true,
+        type: "error",
+        message: e.message,
+      });
+    }
+  };
 
   const loginForm = (
     <Box component="form" sx={style}>

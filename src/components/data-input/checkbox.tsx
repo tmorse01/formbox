@@ -1,9 +1,13 @@
-import { Checkbox, FormHelperText, FormControl } from "@mui/material";
+import {
+  Checkbox as MUICheckbox,
+  FormHelperText,
+  FormControl,
+} from "@mui/material";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { useFormContext, Controller } from "react-hook-form";
-import { SwitchProps } from "../types/componentType";
+import { SwitchProps } from "../../types/componentType";
 
-const FormBoxCheckbox = ({
+const Checkbox = ({
   name,
   title,
   help,
@@ -25,7 +29,7 @@ const FormBoxCheckbox = ({
               <FormControlLabel
                 label={title}
                 control={
-                  <Checkbox
+                  <MUICheckbox
                     id={name}
                     {...register(name, {
                       required: title + " is required.",
@@ -45,4 +49,4 @@ const FormBoxCheckbox = ({
   );
 };
 
-export default FormBoxCheckbox;
+export default Checkbox;

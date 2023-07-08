@@ -1,8 +1,8 @@
 import Box from "@mui/material/Box";
-import { FormProps } from "../types/componentType";
-import "../css/form.css";
+import { FormProps } from "../../types/componentType";
+import "../../css/form.css";
 import Typography from "@mui/material/Typography";
-import FormBoxComponent from "./formboxcomponent";
+import Component from "./component";
 
 const style = {
   "& .MuiTextField-root": { mt: 1, mb: 1, width: "25ch" },
@@ -26,7 +26,7 @@ const Form = ({ form }: FormProps) => {
         {form.title ?? "Form"}
       </Typography>
       {form.components?.map((component) => (
-        <FormBoxComponent key={component.name} component={component} />
+        <Component key={component.name} component={component} />
       ))}
     </Box>
   );

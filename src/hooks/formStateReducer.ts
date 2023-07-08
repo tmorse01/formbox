@@ -31,6 +31,7 @@ function updateComponentByName({ formJSON, name, state }) {
 }
 
 function reducer(state, action) {
+  // console.log("reducer: ", state, action);
   switch (action.type) {
     case "update_componentProp": {
       var formJSON = state.formJSON;
@@ -57,6 +58,12 @@ function reducer(state, action) {
       return {
         ...state,
         ...action.payload.formState,
+      };
+    }
+    case "reset": {
+      return {
+        ...state,
+        ...initialState,
       };
     }
     default: {

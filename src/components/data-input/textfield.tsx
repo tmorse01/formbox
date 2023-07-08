@@ -5,9 +5,9 @@ import {
   FormHelperText,
 } from "@mui/material/";
 import { Controller, useFormContext } from "react-hook-form";
-import { TextFieldProps } from "../types/componentType";
+import { TextFieldProps } from "../../types/componentType";
 
-const FormBoxTextField = ({
+const TextField = ({
   name,
   title,
   help,
@@ -44,4 +44,4 @@ const FormBoxTextField = ({
   );
 };
 
-export default FormBoxTextField;
+export default TextField;

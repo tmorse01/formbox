@@ -1,17 +1,13 @@
-import {
-  FormBoxTextField,
-  FormBoxButton,
-  FormBoxSelect,
-  FormBoxCheckbox,
-} from "../components";
-import { CompProps } from "../types/componentType";
+import { TextField, Select, Checkbox } from "../data-input";
+import { Button } from "../general";
+import { CompProps } from "../../types/componentType";
 
-function FormBoxControl({ component }: CompProps) {
+const Control = ({ component }: CompProps) => {
   const { name, title, help, type, required, defaultValue } = component;
 
   if (type === "textfield") {
     return (
-      <FormBoxTextField
+      <TextField
         name={name}
         title={title}
         help={help}
@@ -21,7 +17,7 @@ function FormBoxControl({ component }: CompProps) {
     );
   } else if (type === "button") {
     return (
-      <FormBoxButton
+      <Button
         name={name}
         title={title}
         submit={component.submit}
@@ -30,7 +26,7 @@ function FormBoxControl({ component }: CompProps) {
     );
   } else if (type === "select") {
     return (
-      <FormBoxSelect
+      <Select
         name={name}
         title={title}
         help={help}
@@ -41,7 +37,7 @@ function FormBoxControl({ component }: CompProps) {
     );
   } else if (type === "checkbox") {
     return (
-      <FormBoxCheckbox
+      <Checkbox
         name={name}
         title={title}
         help={help}
@@ -50,8 +46,8 @@ function FormBoxControl({ component }: CompProps) {
       />
     );
   } else {
-    return <div>FormBoxComponent</div>;
+    return <div>Undefined component type</div>;
   }
-}
+};
 
-export default FormBoxControl;
+export default Control;

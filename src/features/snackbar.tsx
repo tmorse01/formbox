@@ -1,6 +1,9 @@
+import { useContext } from "react";
 import { Snackbar, Alert } from "@mui/material";
+import { FormBoxContext } from "./../formbuilder";
 
-export default function FormBoxSnackbar({ snackbar, setSnackbar }) {
+export default function FormBoxSnackbar() {
+  const { snackbar, setSnackbar } = useContext(FormBoxContext);
   function handleClose(event: React.SyntheticEvent | Event, reason?: string) {
     if (reason === "clickaway") {
       return;
