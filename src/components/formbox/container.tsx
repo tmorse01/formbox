@@ -47,7 +47,7 @@ const Container = ({
       <EditorProvider>
         <EditableComponent
           editable={editable}
-          component={{ name, title, type, layout, forms }}
+          component={{ name, title, type, layout }}
         >
           <MUIContainer
             sx={style}
@@ -61,7 +61,11 @@ const Container = ({
               {title}
             </Typography>
             {forms?.map((formProps, index) => (
-              <Form key={index} {...(formProps as FormProps)} />
+              <Form
+                key={index}
+                {...(formProps as FormProps)}
+                editable={editable}
+              />
             ))}
             <Box
               display="flex"

@@ -1,3 +1,4 @@
 .selected-component {
   outline: 2px solid #ffa733;
+  z-index: 999;
 }

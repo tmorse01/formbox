@@ -31,6 +31,7 @@ export type DefaultComponentProps = {
 export type EditableComponents = ComponentProps | FormProps | ContainerProps;
 
 export type ComponentProps = {
+  editable: boolean;
   type: "textfield" | "switch" | "select" | "radiogroup";
 } & ComponentTypes;
 
