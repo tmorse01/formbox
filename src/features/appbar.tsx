@@ -51,7 +51,7 @@ export default function FormBoxAppBar({
       key: "jsoneditor",
       title: "Editor",
       path: formName ? "/jsoneditor/" + formName : "/jsoneditor/",
-      disabled: formName === undefined,
+      disabled: formName === undefined || user.username === undefined,
       icon: <DataArrayIcon />,
     },
   ];
