@@ -6,7 +6,7 @@ import {
 } from "@mui/material";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { RadioGroupProps } from "../../types/componentType";
-import { useFormContext } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 
 const RadioGroup = ({
   name,
@@ -14,30 +14,35 @@ const RadioGroup = ({
   required,
   title,
   options,
-  value,
+  defaultValue,
 }: RadioGroupProps) => {
-  // console.log("render text field", name);
-  const { register, formState } = useFormContext(); // Access form context
+  // console.log("render radigroup field", name);
+  const { formState, control } = useFormContext();
   const error = formState.errors[name];
   return (
-    <FormControl>
-      <MUIRadioGroup
-        id={name}
-        value={value}
-        {...register(name, {
-          required: required ? title + " is required." : false,
-        })}
-      >
-        {options.map((option) => (
-          <FormControlLabel
-            value={option.value}
-            control={<Radio />}
-            label={option.label}
-          />
-        ))}
-      </MUIRadioGroup>
-      {error && <FormHelperText error>{error?.message ?? help}</FormHelperText>}
-    </FormControl>
+    <Controller
+      control={control}
+      name={name}
+      defaultValue={defaultValue}
+      rules={{ required: required ? title + " is required." : false }}
+      render={({ field }) => (
+        <FormControl>
+          <MUIRadioGroup id={name} {...field}>
+            {options.map((option) => (
+              <FormControlLabel
+                key={option.value}
+                value={option.value}
+                control={<Radio />}
+                label={option.label}
+              />
+            ))}
+          </MUIRadioGroup>
+          {error && (
+            <FormHelperText error>{error?.message ?? help}</FormHelperText>
+          )}
+        </FormControl>
+      )}
+    />
   );
 };
 

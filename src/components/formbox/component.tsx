@@ -1,25 +1,22 @@
-import { Controller, useFormContext } from "react-hook-form";
+import { TextField, Select, Checkbox, RadioGroup } from "../data-input";
 import { ComponentProps } from "../../types/componentType";
+import { createElement } from "react";
 
-import Control from "./control";
+const ComponentTypes = {
+  textfield: TextField,
+  select: Select,
+  checkbox: Checkbox,
+  radiogroup: RadioGroup,
+};
 
 const Component: React.FC<ComponentProps> = (props) => {
-  // console.log("component render:", component.name);
-  const { name, defaultValue } = props;
-  const { control } = useFormContext(); // Access form context
+  if (ComponentTypes[props.type] === undefined)
+    return <div>Undefined component type</div>;
+  const { type, ...componentProps } = props;
 
-  return (
-    <>
-      <Controller
-        control={control}
-        name={name}
-        defaultValue={defaultValue}
-        render={({ field }) => (
-          <Control key={props.name} {...props} value={field.value} />
-        )}
-      />
-    </>
-  );
+  return createElement(ComponentTypes[type], {
+    ...componentProps,
+  });
 };
 
 export default Component;

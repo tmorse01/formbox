@@ -3,31 +3,48 @@ import {
   FormHelperText,
   FormControl,
   FormControlLabel,
+  Radio,
 } from "@mui/material";
 import { CheckboxProps } from "../../types/componentType";
-import { useFormContext } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 
-const Checkbox = ({ name, title, help, required, value }: CheckboxProps) => {
+const Checkbox = ({
+  name,
+  title,
+  help,
+  required,
+  defaultValue,
+}: CheckboxProps) => {
   // console.log("render checkbox field", value);
-  const { register, formState } = useFormContext(); // Access form context
+  const { control, formState } = useFormContext(); // Access form context
   const error = formState.errors[name];
 
   return (
-    <FormControl>
-      <FormControlLabel
-        label={title}
-        control={
-          <MUICheckbox
-            id={name}
-            checked={value}
-            {...register(name, {
-              required: required ? title + " is required." : false,
-            })}
+    <Controller
+      control={control}
+      name={name}
+      defaultValue={defaultValue}
+      rules={{ required: required ? title + " is required." : false }}
+      render={({ field }) => (
+        <FormControl>
+          <FormControlLabel
+            label={title}
+            control={
+              <MUICheckbox
+                id={name}
+                ref={field.ref}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+                checked={field.value}
+              />
+            }
           />
-        }
-      />
-      {error && <FormHelperText error>{error?.message ?? help}</FormHelperText>}
-    </FormControl>
+          {error && (
+            <FormHelperText error>{error?.message ?? help}</FormHelperText>
+          )}
+        </FormControl>
+      )}
+    />
   );
 };
 

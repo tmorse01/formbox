@@ -6,7 +6,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import { SelectProps } from "../../types/componentType";
-import { useFormContext } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 
 const Select = ({
   name,
@@ -14,29 +14,31 @@ const Select = ({
   help,
   required,
   options,
-  value,
+  defaultValue,
 }: SelectProps) => {
-  const { register, formState } = useFormContext(); // Access form context
+  const { control, formState } = useFormContext(); // Access form context
   const error = formState.errors[name];
 
   return (
-    <FormControl required={required} error={!!error}>
-      <InputLabel id={title}>{title}</InputLabel>
-      <MUISelect
-        label={title}
-        value={value}
-        {...register(name, {
-          required: required ? title + " is required." : false,
-        })}
-      >
-        {options?.map((option, index) => (
-          <MenuItem key={index} value={option.value}>
-            {option.label}
-          </MenuItem>
-        ))}
-      </MUISelect>
-      <FormHelperText>{error?.message ?? help}</FormHelperText>
-    </FormControl>
+    <Controller
+      control={control}
+      name={name}
+      defaultValue={defaultValue}
+      rules={{ required: required ? title + " is required." : false }}
+      render={({ field }) => (
+        <FormControl required={required} error={!!error}>
+          <InputLabel id={title}>{title}</InputLabel>
+          <MUISelect label={title} {...field}>
+            {options?.map((option, index) => (
+              <MenuItem key={index} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </MUISelect>
+          <FormHelperText>{error?.message ?? help}</FormHelperText>
+        </FormControl>
+      )}
+    />
   );
 };
 
