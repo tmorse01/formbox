@@ -106,7 +106,6 @@ export type TextFieldProps = {
   help: string | undefined;
   required?: boolean;
   defaultValue: string;
-  value: string | undefined;
 };
 
 export type FieldErrors<TFieldValues extends FieldValues = FieldValues> =
@@ -118,7 +117,6 @@ export type CheckboxProps = {
   help?: string | undefined;
   required?: boolean;
   defaultValue: boolean;
-  value: boolean | undefined;
 };
 
 export type SelectProps = {
@@ -128,7 +126,6 @@ export type SelectProps = {
   options: Option[];
   required?: boolean;
   defaultValue: string;
-  value: string | undefined;
 };
 
 export type Option = {
@@ -143,7 +140,6 @@ export type RadioGroupProps = {
   options: Option[];
   required?: boolean;
   defaultValue: string;
-  value: string | undefined;
 };
 
 export type ButtonProps = {
