@@ -17,27 +17,28 @@ export type formDataProps = {
 export type DefaultProps = {
   name: string;
   title: string;
+  editable: boolean;
 };
+
+export type DefaultComponentProps = {
+  name: string;
+  title: string;
+  help: string | undefined;
+  required?: boolean;
+  defaultValue: string;
+};
+
+export type EditableComponents = ComponentProps | FormProps | ContainerProps;
 
 export type ComponentProps = {
   type: "textfield" | "switch" | "select" | "radiogroup";
-} & ControlTypes;
+} & ComponentTypes;
 
-export type ControlTypes =
+export type ComponentTypes =
   | TextFieldProps
   | CheckboxProps
   | SelectProps
   | RadioGroupProps;
-
-// export type componentProps = defaultProps & {
-//   type: string;
-//   help?: string;
-//   required?: boolean;
-//   submit?: boolean;
-//   icon: string | undefined;
-//   defaultValue?: string | number | boolean | undefined;
-//   options?: Option[];
-// };
 
 export type FormBoxAppBarProps = {
   completeForm: container | undefined;
@@ -55,19 +56,21 @@ export type container = {
 
 export type FormBoxProps = {
   formState: FormState;
+  editable: boolean;
 };
 
-export type ContainerProps = {
-  formState: FormState;
-  initialValues: FieldValues;
-  onSubmit: (values, e) => void;
-  onError: (values, e) => void;
-};
+export type ContainerProps = DefaultProps &
+  container & {
+    initialValues: FieldValues;
+    onSubmit: (values, e) => void;
+    onError: (values, e) => void;
+  };
 
 export type FormProps = DefaultProps & {
   components: ComponentProps[];
   layout: string;
   type: string;
+  editable: boolean;
 };
 
 export type FormState = {
@@ -100,32 +103,15 @@ export type Error = {
   message: String;
 };
 
-export type TextFieldProps = {
-  name: string;
-  title: string;
-  help: string | undefined;
-  required?: boolean;
-  defaultValue: string;
-};
+export type TextFieldProps = DefaultComponentProps;
 
 export type FieldErrors<TFieldValues extends FieldValues = FieldValues> =
   DeepMap<TFieldValues, FieldError>;
 
-export type CheckboxProps = {
-  name: string;
-  title: string;
-  help?: string | undefined;
-  required?: boolean;
-  defaultValue: boolean;
-};
+export type CheckboxProps = DefaultComponentProps;
 
-export type SelectProps = {
-  name: string;
-  title: string;
-  help?: string;
+export type SelectProps = DefaultComponentProps & {
   options: Option[];
-  required?: boolean;
-  defaultValue: string;
 };
 
 export type Option = {
@@ -133,13 +119,8 @@ export type Option = {
   value: string;
 };
 
-export type RadioGroupProps = {
-  name: string;
-  title: string;
-  help?: string;
+export type RadioGroupProps = DefaultComponentProps & {
   options: Option[];
-  required?: boolean;
-  defaultValue: string;
 };
 
 export type ButtonProps = {

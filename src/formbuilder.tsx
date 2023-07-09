@@ -2,12 +2,7 @@ import React, { useState, useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 // pages
-import {
-  ErrorPage,
-  FormBoxPage,
-  FormDataGridPage,
-  JSONEditorPage,
-} from "./pages";
+import { ErrorPage, FormBoxPage, FormDataGridPage, EditorPage } from "./pages";
 
 // feature components
 import FormBoxSnackbar from "./features/snackbar";
@@ -159,7 +154,9 @@ const FormBuilder = () => {
     },
     {
       path: "/form/:form",
-      element: wrapRoute(<FormBoxPage formState={formState} />),
+      element: wrapRoute(
+        <FormBoxPage formState={formState} editable={false} />
+      ),
       errorElement: <ErrorPage />,
     },
     {
@@ -168,23 +165,8 @@ const FormBuilder = () => {
       errorElement: <ErrorPage />,
     },
     {
-      path: "/jsoneditor/:form",
-      element: wrapRoute(
-        <JSONEditorPage
-          formState={formState}
-          getUserFormList={getUserFormList}
-        />
-      ),
-      errorElement: <ErrorPage />,
-    },
-    {
-      path: "/jsoneditor/",
-      element: wrapRoute(
-        <JSONEditorPage
-          formState={formState}
-          getUserFormList={getUserFormList}
-        />
-      ),
+      path: "/editor/:form",
+      element: wrapRoute(<EditorPage />),
       errorElement: <ErrorPage />,
     },
   ]);

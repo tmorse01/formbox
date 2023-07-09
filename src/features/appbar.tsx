@@ -48,9 +48,9 @@ export default function FormBoxAppBar({
       icon: <TableRowsIcon />,
     },
     {
-      key: "jsoneditor",
+      key: "editor",
       title: "Editor",
-      path: formName ? "/jsoneditor/" + formName : "/jsoneditor/",
+      path: formName ? "/editor/" + formName : "/editor/",
       disabled: formName === undefined || user.username === undefined,
       icon: <DataArrayIcon />,
     },

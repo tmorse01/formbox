@@ -7,12 +7,12 @@ import { getInitialValues } from "../helpers/utils";
 
 import { FormBoxContext } from "../formbuilder";
 // components
-import FormBoxContainer from "../components/formbox/container";
+import Container from "../components/formbox/container";
 
 // types
 import { FormBoxProps } from "../types/componentType";
 
-const FormBox = ({ formState }: FormBoxProps) => {
+const FormBox = ({ formState, editable }: FormBoxProps) => {
   const { formJSON } = formState;
   const { setSnackbar } = useContext(FormBoxContext);
 
@@ -60,11 +60,12 @@ const FormBox = ({ formState }: FormBoxProps) => {
 
   if (formJSON !== undefined) {
     return (
-      <FormBoxContainer
-        formState={formState}
+      <Container
+        {...formJSON}
         initialValues={initialValues}
         onSubmit={onSubmit}
         onError={onError}
+        editable={editable}
       />
     );
   } else {

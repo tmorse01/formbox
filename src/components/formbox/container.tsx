@@ -1,6 +1,6 @@
-import { Container, Box, Button } from "@mui/material";
-import { FormProvider, useForm, useFormContext } from "react-hook-form";
-
+import { Container as MUIContainer, Box, Button } from "@mui/material";
+import { FormProvider, useForm } from "react-hook-form";
+import { EditorProvider } from "../../context/EditorContext";
 import Form from "./form";
 
 import Typography from "@mui/material/Typography";
@@ -9,6 +9,7 @@ import ClearButton from "../../features/clearbutton";
 
 // types
 import { ContainerProps, FormProps } from "../../types/componentType";
+import EditableComponent from "./editableComponent";
 
 const style = {
   bgcolor: "background.paper",
@@ -19,14 +20,17 @@ const style = {
   boxShadow: "4px 4px 12px #e0e0e0",
 };
 
-const FormBoxContainer = ({
-  formState,
+const Container = ({
+  name,
+  title,
+  forms,
+  layout,
+  type,
   initialValues,
   onSubmit,
   onError,
+  editable,
 }: ContainerProps) => {
-  const { formJSON } = formState;
-
   const methods = useForm({
     defaultValues: initialValues,
     mode: "onSubmit",
@@ -38,46 +42,48 @@ const FormBoxContainer = ({
     reset(initialValues);
   };
   //   console.log("container render :", values);
-  const forms = formJSON?.forms;
-  if (formJSON !== undefined) {
-    return (
-      <FormProvider {...methods}>
-        <Container
-          sx={style}
-          maxWidth="sm"
-          component="form"
-          noValidate
-          autoComplete="off"
-          onSubmit={handleSubmit(onSubmit, onError)}
+  return (
+    <FormProvider {...methods}>
+      <EditorProvider>
+        <EditableComponent
+          editable={editable}
+          component={{ name, title, type, layout, forms }}
         >
-          <Typography sx={{ color: "text.primary", ml: 2 }} variant="h2">
-            {formJSON.title}
-          </Typography>
-          {forms?.map((formProps, index) => (
-            <Form key={index} {...(formProps as FormProps)} />
-          ))}
-          <Box
-            display="flex"
-            justifyContent={"right"}
-            sx={{ m: 2, height: "40px", gap: 4 }}
+          <MUIContainer
+            sx={style}
+            maxWidth="sm"
+            component="form"
+            noValidate
+            autoComplete="off"
+            onSubmit={handleSubmit(onSubmit, onError)}
           >
-            <ClearButton onClear={handleClear} />
-            <Button
-              id={"submit"}
-              type={"submit"}
-              variant="contained"
-              color="secondary"
-              startIcon={<SaveAltIcon />}
+            <Typography sx={{ color: "text.primary", ml: 2 }} variant="h2">
+              {title}
+            </Typography>
+            {forms?.map((formProps, index) => (
+              <Form key={index} {...(formProps as FormProps)} />
+            ))}
+            <Box
+              display="flex"
+              justifyContent={"right"}
+              sx={{ m: 2, height: "40px", gap: 4 }}
             >
-              {"Submit"}
-            </Button>
-          </Box>
-        </Container>
-      </FormProvider>
-    );
-  } else {
-    return <></>;
-  }
+              <ClearButton onClear={handleClear} />
+              <Button
+                id={"submit"}
+                type={"submit"}
+                variant="contained"
+                color="secondary"
+                startIcon={<SaveAltIcon />}
+              >
+                {"Submit"}
+              </Button>
+            </Box>
+          </MUIContainer>
+        </EditableComponent>
+      </EditorProvider>
+    </FormProvider>
+  );
 };
 
-export default FormBoxContainer;
+export default Container;
