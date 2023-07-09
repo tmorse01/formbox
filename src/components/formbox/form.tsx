@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import { FormProps } from "../../types/componentType";
 import "../../css/form.css";
 import Typography from "@mui/material/Typography";
-import FormBoxComponent from "./formboxcomponent";
+import Component from "./component";
 
 const style = {
   "& .MuiTextField-root": { mt: 1, mb: 1, width: "25ch" },
@@ -13,7 +13,7 @@ const style = {
   m: 2,
 };
 
-const Form = ({ form, register, errors }: FormProps) => {
+const Form = (props: FormProps) => {
   // console.log("form render: ", form.title);
 
   return (
@@ -23,15 +23,10 @@ const Form = ({ form, register, errors }: FormProps) => {
         sx={{ color: "text.primary" }}
         variant="h5"
       >
-        {form.title ?? "Form"}
+        {props.title ?? "Form"}
       </Typography>
-      {form.components?.map((component) => (
-        <FormBoxComponent
-          key={component.name}
-          component={component}
-          register={register}
-          error={errors[component.name]}
-        />
+      {props.components?.map((componentProps) => (
+        <Component key={componentProps.name} {...componentProps} />
       ))}
     </Box>
   );

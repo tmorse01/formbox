@@ -1,27 +1,21 @@
-import Button from "@mui/material/Button";
+import { Button as MUIButton } from "@mui/material";
 import { Icon } from "@mui/material";
+import { ButtonProps } from "../../types/componentType";
 
-type ButtonProps = {
-  name: string;
-  title: string;
-  submit?: boolean;
-  icon: string | undefined;
-};
-
-const FormBoxButton = ({ name, title, submit, icon }: ButtonProps) => {
+const Button = ({ name, title, submit, icon }: ButtonProps) => {
   let buttonType: "submit" | "button" = submit ? "submit" : "button";
   // TODO
   // figure out how to dynamically pass in icon names to buttons
   return (
-    <Button
+    <MUIButton
       id={name}
       type={buttonType}
       variant="contained"
       startIcon={icon ? <Icon>{icon}</Icon> : undefined}
     >
       {title}
-    </Button>
+    </MUIButton>
   );
 };
 
-export default FormBoxButton;
+export default Button;

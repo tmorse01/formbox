@@ -1,5 +1,5 @@
 import { Container, Box, Button } from "@mui/material";
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm, useFormContext } from "react-hook-form";
 
 import Form from "./form";
 
@@ -8,12 +8,13 @@ import SaveAltIcon from "@mui/icons-material/SaveAlt";
 import ClearButton from "../../features/clearbutton";
 
 // types
-import { ContainerProps } from "../../types/componentType";
+import { ContainerProps, FormProps } from "../../types/componentType";
 
 const style = {
   bgcolor: "background.paper",
   borderRadius: "8px",
   display: "grid",
+  gridTemplateRows: "min-content auto",
   padding: "12px 0 12px 0",
   boxShadow: "4px 4px 12px #e0e0e0",
 };
@@ -26,54 +27,53 @@ const FormBoxContainer = ({
 }: ContainerProps) => {
   const { formJSON } = formState;
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm({
+  const methods = useForm({
     defaultValues: initialValues,
     mode: "onSubmit",
   });
+
+  const { getValues, handleSubmit, reset } = methods;
 
   const handleClear = () => {
     reset(initialValues);
   };
   //   console.log("container render :", values);
-
+  const forms = formJSON?.forms;
   if (formJSON !== undefined) {
     return (
-      <Container
-        sx={style}
-        maxWidth="sm"
-        component="form"
-        noValidate
-        autoComplete="off"
-        onSubmit={handleSubmit(onSubmit, onError)}
-      >
-        <Typography sx={{ color: "text.primary", ml: 2 }} variant="h2">
-          {formJSON.title}
-        </Typography>
-        {formJSON?.forms?.map((form, i) => (
-          <Form key={i} form={form} register={register} errors={errors} /> // TODO add form.key
-        ))}
-        <Box
-          display="flex"
-          justifyContent={"right"}
-          sx={{ m: 2, height: "40px", gap: 4 }}
+      <FormProvider {...methods}>
+        <Container
+          sx={style}
+          maxWidth="sm"
+          component="form"
+          noValidate
+          autoComplete="off"
+          onSubmit={handleSubmit(onSubmit, onError)}
         >
-          <ClearButton onClear={handleClear} />
-          <Button
-            id={"submit"}
-            type={"submit"}
-            variant="contained"
-            color="secondary"
-            startIcon={<SaveAltIcon />}
+          <Typography sx={{ color: "text.primary", ml: 2 }} variant="h2">
+            {formJSON.title}
+          </Typography>
+          {forms?.map((formProps, index) => (
+            <Form key={index} {...(formProps as FormProps)} />
+          ))}
+          <Box
+            display="flex"
+            justifyContent={"right"}
+            sx={{ m: 2, height: "40px", gap: 4 }}
           >
-            {"Submit"}
-          </Button>
-        </Box>
-      </Container>
+            <ClearButton onClear={handleClear} />
+            <Button
+              id={"submit"}
+              type={"submit"}
+              variant="contained"
+              color="secondary"
+              startIcon={<SaveAltIcon />}
+            >
+              {"Submit"}
+            </Button>
+          </Box>
+        </Container>
+      </FormProvider>
     );
   } else {
     return <></>;

@@ -1,28 +1,35 @@
-import TextField from "@mui/material/TextField";
+import {
+  FormControl,
+  FormHelperText,
+  InputLabel,
+  OutlinedInput,
+} from "@mui/material/";
 import { TextFieldProps } from "../../types/componentType";
+import { Controller, useFormContext } from "react-hook-form";
 
-const FormBoxTextField = ({
-  name,
-  title,
-  help,
-  required,
-  register,
-  error,
-}: TextFieldProps) => {
+const TextField = (props: TextFieldProps) => {
   // console.log("render text field", name);
+  const { name, title, value, help, defaultValue, required } = props;
+  const { control, formState } = useFormContext(); // Access form context
+  const error = formState.errors[name];
+
   return (
-    <TextField
-      id={name}
-      label={title}
-      required={required}
-      variant="outlined"
-      {...register(name, {
-        required: title + " is required.",
-      })}
-      error={!!error}
-      helperText={error?.message ?? help}
+    <Controller
+      control={control}
+      name={name}
+      defaultValue={defaultValue}
+      rules={{ required: required ? title + " is required." : false }}
+      render={({ field }) => (
+        <FormControl>
+          <InputLabel id={title}>{title}</InputLabel>
+          <OutlinedInput id={name} label={title} {...field} />
+          {error && (
+            <FormHelperText error>{error?.message ?? help}</FormHelperText>
+          )}
+        </FormControl>
+      )}
     />
   );
 };
 
-export default FormBoxTextField;
+export default TextField;
