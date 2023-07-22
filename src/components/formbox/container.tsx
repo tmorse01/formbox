@@ -45,46 +45,41 @@ const Container = ({
   return (
     <FormProvider {...methods}>
       <EditorProvider>
-        <EditableComponent
-          editable={editable}
-          component={{ name, title, type, layout }}
+        <MUIContainer
+          sx={style}
+          maxWidth="sm"
+          component="form"
+          noValidate
+          autoComplete="off"
+          onSubmit={handleSubmit(onSubmit, onError)}
         >
-          <MUIContainer
-            sx={style}
-            maxWidth="sm"
-            component="form"
-            noValidate
-            autoComplete="off"
-            onSubmit={handleSubmit(onSubmit, onError)}
+          <Typography sx={{ color: "text.primary", ml: 2 }} variant="h2">
+            {title}
+          </Typography>
+          {forms?.map((formProps, index) => (
+            <Form
+              key={index}
+              {...(formProps as FormProps)}
+              editable={editable}
+            />
+          ))}
+          <Box
+            display="flex"
+            justifyContent={"right"}
+            sx={{ m: 2, height: "40px", gap: 4 }}
           >
-            <Typography sx={{ color: "text.primary", ml: 2 }} variant="h2">
-              {title}
-            </Typography>
-            {forms?.map((formProps, index) => (
-              <Form
-                key={index}
-                {...(formProps as FormProps)}
-                editable={editable}
-              />
-            ))}
-            <Box
-              display="flex"
-              justifyContent={"right"}
-              sx={{ m: 2, height: "40px", gap: 4 }}
+            <ClearButton onClear={handleClear} />
+            <Button
+              id={"submit"}
+              type={"submit"}
+              variant="contained"
+              color="secondary"
+              startIcon={<SaveAltIcon />}
             >
-              <ClearButton onClear={handleClear} />
-              <Button
-                id={"submit"}
-                type={"submit"}
-                variant="contained"
-                color="secondary"
-                startIcon={<SaveAltIcon />}
-              >
-                {"Submit"}
-              </Button>
-            </Box>
-          </MUIContainer>
-        </EditableComponent>
+              {"Submit"}
+            </Button>
+          </Box>
+        </MUIContainer>
       </EditorProvider>
     </FormProvider>
   );

@@ -4,6 +4,11 @@ import "../../css/form.css";
 import Typography from "@mui/material/Typography";
 import Component from "./component";
 import EditableComponent from "./editableComponent";
+import { useDroppable } from "@dnd-kit/core";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 
 const style = {
   "& .MuiTextField-root": { mt: 1, mb: 1, width: "25ch" },
@@ -23,30 +28,35 @@ const Form = ({
   editable,
 }: FormProps) => {
   // console.log("form render: ", form.title);
-
+  const { setNodeRef } = useDroppable({
+    id: name,
+  });
   return (
-    <EditableComponent
-      editable={editable}
-      component={{ name, title, type, layout }}
+    <SortableContext
+      id={name}
+      items={components.map((component) => component.name)}
+      strategy={verticalListSortingStrategy}
     >
-      <Box component="div" display="grid" justifyContent="center" sx={style}>
-        <Typography
-          className="form-header"
-          sx={{ color: "text.primary" }}
-          variant="h5"
-        >
-          {title ?? "Form"}
-        </Typography>
-        {components?.map((child) => (
-          <Component
-            key={child.name}
-            type={child.type}
-            editable={editable}
-            {...(child as ComponentTypes)}
-          />
-        ))}
-      </Box>
-    </EditableComponent>
+      <div id={name} ref={setNodeRef}>
+        <Box component="div" display="grid" justifyContent="center" sx={style}>
+          <Typography
+            className="form-header"
+            sx={{ color: "text.primary" }}
+            variant="h5"
+          >
+            {title ?? "Form"}
+          </Typography>
+          {components?.map((child) => (
+            <Component
+              key={child.name}
+              type={child.type}
+              editable={editable}
+              {...(child as ComponentTypes)}
+            />
+          ))}
+        </Box>
+      </div>
+    </SortableContext>
   );
 };
 
