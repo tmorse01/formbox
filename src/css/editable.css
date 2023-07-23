@@ -2,3 +2,12 @@
   outline: 2px solid #ffa733;
   z-index: 999;
 }
+
+.draggable-component {
+  display: grid;
+  grid-template-columns: auto min-content;
+}
+
+.drag-handler {
+  width: 30px;
+}

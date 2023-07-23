@@ -1,5 +1,5 @@
 import { AlertColor } from "@mui/material";
-import { Ref, SetStateAction } from "react";
+import { CSSProperties, Ref, SetStateAction } from "react";
 import { FieldValues, DeepMap, FieldError } from "react-hook-form";
 
 type Dispatch = React.Dispatch<Action>;
@@ -17,15 +17,13 @@ export type formDataProps = {
 export type DefaultProps = {
   name: string;
   title: string;
-  editable: boolean;
 };
 
-export type DefaultComponentProps = {
-  name: string;
-  title: string;
+export type DefaultComponentProps = DefaultProps & {
   help: string | undefined;
   required?: boolean;
   defaultValue: string;
+  style: CSSProperties;
 };
 
 export type EditableComponents = ComponentProps | FormProps | ContainerProps;
@@ -65,6 +63,7 @@ export type ContainerProps = DefaultProps &
     initialValues: FieldValues;
     onSubmit: (values, e) => void;
     onError: (values, e) => void;
+    editable: boolean;
   };
 
 export type FormProps = DefaultProps & {
@@ -104,7 +103,9 @@ export type Error = {
   message: String;
 };
 
-export type TextFieldProps = DefaultComponentProps;
+export type TextFieldProps = DefaultComponentProps & {
+  editable: boolean;
+};
 
 export type FieldErrors<TFieldValues extends FieldValues = FieldValues> =
   DeepMap<TFieldValues, FieldError>;
