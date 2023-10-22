@@ -2,6 +2,9 @@ import { useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { loadForm } from "../helpers/formrequest";
 import { FormBoxContext } from "../formbuilder";
+
+const exampleFormName = "termsofservice.json";
+
 const LoadFormData = ({ children }) => {
   const { dispatchFormAction, setSnackbar } = useContext(FormBoxContext);
   const { form } = useParams();
@@ -14,7 +17,7 @@ const LoadFormData = ({ children }) => {
           type: "update_formState",
           payload: {
             formState: {
-              formJSON: require("../exampleforms/jobposition.json"),
+              formJSON: require("../exampleforms/" + exampleFormName),
               formName: "formBoxExample",
             },
           },

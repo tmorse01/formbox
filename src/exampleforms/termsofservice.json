@@ -1,0 +1,82 @@
+{
+  "forms": [
+    {
+      "name": "content",
+      "components": [
+        {
+          "name": "age",
+          "title": "Age range",
+          "help": "Enter your age",
+          "type": "radiogroup",
+          "required": true,
+          "options": [
+            {
+              "value": "18-25",
+              "label": "18-25"
+            },
+            {
+              "value": "25-30",
+              "label": "25-30"
+            },
+            {
+              "value": "30+",
+              "label": "30+"
+            }
+          ]
+        },
+        {
+          "name": "state",
+          "title": "State",
+          "help": "Enter your state",
+          "type": "select",
+          "required": true,
+          "options": [
+            {
+              "value": "WA",
+              "label": "Washington"
+            },
+            {
+              "value": "OR",
+              "label": "Oregon"
+            },
+            {
+              "value": "CA",
+              "label": "California"
+            }
+          ],
+          "defaultValue": "WA"
+        }
+      ],
+      "title": "Age and Location",
+      "layout": "vertical",
+      "type": "form"
+    },
+    {
+      "name": "footer",
+      "components": [
+        {
+          "name": "name",
+          "title": "Full Name",
+          "help": "e-signature",
+          "type": "textfield",
+          "required": true
+        },
+        {
+          "name": "agree",
+          "title": "Agree to the terms of service",
+          "help": "Terms of service can be found online at ...",
+          "type": "checkbox",
+          "required": true,
+          "defaultValue": false
+        }
+      ],
+      "title": "Signature",
+      "layout": "vertical",
+      "type": "form"
+    }
+  ],
+  "layout": "vertical",
+  "title": "Terms of Service",
+  "name": "agelocationform",
+  "type": "formbox"
+}
