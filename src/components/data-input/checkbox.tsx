@@ -3,7 +3,6 @@ import {
   FormHelperText,
   FormControl,
   FormControlLabel,
-  Radio,
 } from "@mui/material";
 import { CheckboxProps } from "../../types/componentType";
 import { Controller, useFormContext } from "react-hook-form";

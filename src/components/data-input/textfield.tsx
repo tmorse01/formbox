@@ -9,7 +9,7 @@ import { Controller, useFormContext } from "react-hook-form";
 
 const TextField = (props: TextFieldProps) => {
   // console.log("render text field", name);
-  const { name, title, value, help, defaultValue, required } = props;
+  const { name, title, help, defaultValue, required } = props;
   const { control, formState } = useFormContext(); // Access form context
   const error = formState.errors[name];
 

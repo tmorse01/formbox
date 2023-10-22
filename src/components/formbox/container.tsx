@@ -1,5 +1,5 @@
 import { Container, Box, Button } from "@mui/material";
-import { FormProvider, useForm, useFormContext } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 
 import Form from "./form";
 
@@ -32,7 +32,7 @@ const FormBoxContainer = ({
     mode: "onSubmit",
   });
 
-  const { getValues, handleSubmit, reset } = methods;
+  const { handleSubmit, reset } = methods;
 
   const handleClear = () => {
     reset(initialValues);
