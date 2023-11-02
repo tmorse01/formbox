@@ -38,6 +38,8 @@ import "./App.css";
 import "./css/formbuilder.css";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import Hero from "./features/hero";
+import HeroImages from "./features/heroimages";
 
 const theme = createTheme({
   palette: {
@@ -87,6 +89,7 @@ const FormBuilder = () => {
     type: "success",
   });
   const [listOfForms, setListOfForms] = useState<formDataProps[]>([]);
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
 
   // Effects
 
@@ -143,9 +146,11 @@ const FormBuilder = () => {
             formName={formState.formName}
             handleSetUser={handleSetUser}
             getUserFormList={getUserFormList}
+            loginModalOpen={loginModalOpen}
+            setLoginModalOpen={setLoginModalOpen}
           />
           <div className="formBuilder">{control}</div>
-          <FormBoxSnackbar />\
+          <FormBoxSnackbar />
         </div>
       </LoadFormData>
     );
@@ -154,7 +159,12 @@ const FormBuilder = () => {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: wrapRoute(<></>),
+      element: wrapRoute(
+        <>
+          <Hero setLoginModalOpen={setLoginModalOpen} />
+          <HeroImages />
+        </>
+      ),
       errorElement: <ErrorPage />,
     },
     {

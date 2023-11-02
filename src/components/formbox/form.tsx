@@ -11,6 +11,7 @@ const style = {
   borderRadius: "4px",
   p: 4,
   m: 2,
+  gap: 2,
 };
 
 const Form = (props: FormProps) => {

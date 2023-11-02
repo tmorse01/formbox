@@ -35,7 +35,9 @@ const Select = ({
               </MenuItem>
             ))}
           </MUISelect>
-          <FormHelperText>{error?.message ?? help}</FormHelperText>
+          <FormHelperText error={error?.message ? true : false}>
+            {error?.message ?? help}
+          </FormHelperText>
         </FormControl>
       )}
     />

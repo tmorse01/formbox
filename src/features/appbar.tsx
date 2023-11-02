@@ -29,9 +29,10 @@ export default function FormBoxAppBar({
   handleSetUser,
   getUserFormList,
   formName,
+  loginModalOpen,
+  setLoginModalOpen,
 }) {
   const { user } = useContext(FormBoxContext);
-
   const pages = [
     {
       key: "form",
@@ -51,7 +52,7 @@ export default function FormBoxAppBar({
       key: "jsoneditor",
       title: "Editor",
       path: formName ? "/jsoneditor/" + formName : "/jsoneditor/",
-      disabled: formName === undefined || user.username === undefined,
+      disabled: user.username === undefined,
       icon: <DataArrayIcon />,
     },
   ];
@@ -71,10 +72,6 @@ export default function FormBoxAppBar({
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
-  };
-
-  const handleExample = () => {
-    navigateToPath("/form/formBoxExample");
   };
 
   return (
@@ -168,16 +165,13 @@ export default function FormBoxAppBar({
               );
             })}
           </Box>
-          <Button color="inherit" key="example" onClick={handleExample}>
-            Example
-          </Button>
           <SavedFormsModal
             formName={formName}
             getUserFormList={getUserFormList}
           />
           <ShareModal formName={formName} />
           <Box sx={{ flexGrow: 0 }}>
-            <ProfileMenu />
+            <ProfileMenu open={loginModalOpen} setOpen={setLoginModalOpen} />
           </Box>
         </Toolbar>
       </Container>

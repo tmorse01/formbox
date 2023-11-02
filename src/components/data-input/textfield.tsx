@@ -23,9 +23,9 @@ const TextField = (props: TextFieldProps) => {
         <FormControl>
           <InputLabel id={title}>{title}</InputLabel>
           <OutlinedInput id={name} label={title} {...field} />
-          {error && (
-            <FormHelperText error>{error?.message ?? help}</FormHelperText>
-          )}
+          <FormHelperText error={error?.message ? true : false}>
+            {error?.message ?? help}
+          </FormHelperText>
         </FormControl>
       )}
     />
