@@ -73,10 +73,6 @@ export default function FormBoxAppBar({
     setAnchorElNav(null);
   };
 
-  const handleExample = () => {
-    navigateToPath("/form/formBoxExample");
-  };
-
   return (
     <AppBar position="sticky">
       <Container maxWidth="xl">
@@ -168,9 +164,6 @@ export default function FormBoxAppBar({
               );
             })}
           </Box>
-          <Button color="inherit" key="example" onClick={handleExample}>
-            Example
-          </Button>
           <SavedFormsModal
             formName={formName}
             getUserFormList={getUserFormList}

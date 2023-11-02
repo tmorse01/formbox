@@ -38,6 +38,7 @@ import "./App.css";
 import "./css/formbuilder.css";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import Hero from "./features/hero";
 
 const theme = createTheme({
   palette: {
@@ -154,7 +155,11 @@ const FormBuilder = () => {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: wrapRoute(<></>),
+      element: wrapRoute(
+        <>
+          <Hero />
+        </>
+      ),
       errorElement: <ErrorPage />,
     },
     {
