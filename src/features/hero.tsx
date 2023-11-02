@@ -19,7 +19,7 @@ const Hero = () => {
         justifyContent: "center",
         background: "#f5f5f5",
         borderRadius: "8px",
-        mt: 12,
+        mt: 4,
       }}
     >
       <Typography

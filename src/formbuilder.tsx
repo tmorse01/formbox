@@ -39,6 +39,7 @@ import "./css/formbuilder.css";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Hero from "./features/hero";
+import HeroImages from "./features/heroimages";
 
 const theme = createTheme({
   palette: {
@@ -158,6 +159,7 @@ const FormBuilder = () => {
       element: wrapRoute(
         <>
           <Hero />
+          <HeroImages />
         </>
       ),
       errorElement: <ErrorPage />,
