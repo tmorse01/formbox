@@ -34,7 +34,14 @@ export default function JSONEditorPage({ formState, getUserFormList }) {
   }
 
   function submitJSONChanges() {
-    let formJSON = content.json;
+    let formJSON;
+    if (content.json) {
+      formJSON = content.json;
+    } else if (content.text) {
+      formJSON = JSON.parse(content.text);
+    } else {
+      throw new Error("Invalid JSON");
+    }
     dispatchFormAction({ type: "update_JSON", payload: { formJSON } });
     handleSaveForm(formName, formJSON, user.username);
   }

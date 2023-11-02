@@ -31,7 +31,6 @@ export default function FormBoxAppBar({
   formName,
 }) {
   const { user } = useContext(FormBoxContext);
-
   const pages = [
     {
       key: "form",
@@ -51,7 +50,7 @@ export default function FormBoxAppBar({
       key: "jsoneditor",
       title: "Editor",
       path: formName ? "/jsoneditor/" + formName : "/jsoneditor/",
-      disabled: formName === undefined || user.username === undefined,
+      disabled: user.username === undefined,
       icon: <DataArrayIcon />,
     },
   ];
