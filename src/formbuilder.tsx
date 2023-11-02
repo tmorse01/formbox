@@ -89,6 +89,7 @@ const FormBuilder = () => {
     type: "success",
   });
   const [listOfForms, setListOfForms] = useState<formDataProps[]>([]);
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
 
   // Effects
 
@@ -145,9 +146,11 @@ const FormBuilder = () => {
             formName={formState.formName}
             handleSetUser={handleSetUser}
             getUserFormList={getUserFormList}
+            loginModalOpen={loginModalOpen}
+            setLoginModalOpen={setLoginModalOpen}
           />
           <div className="formBuilder">{control}</div>
-          <FormBoxSnackbar />\
+          <FormBoxSnackbar />
         </div>
       </LoadFormData>
     );
@@ -158,7 +161,7 @@ const FormBuilder = () => {
       path: "/",
       element: wrapRoute(
         <>
-          <Hero />
+          <Hero setLoginModalOpen={setLoginModalOpen} />
           <HeroImages />
         </>
       ),

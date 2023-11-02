@@ -29,6 +29,8 @@ export default function FormBoxAppBar({
   handleSetUser,
   getUserFormList,
   formName,
+  loginModalOpen,
+  setLoginModalOpen,
 }) {
   const { user } = useContext(FormBoxContext);
   const pages = [
@@ -169,7 +171,7 @@ export default function FormBoxAppBar({
           />
           <ShareModal formName={formName} />
           <Box sx={{ flexGrow: 0 }}>
-            <ProfileMenu />
+            <ProfileMenu open={loginModalOpen} setOpen={setLoginModalOpen} />
           </Box>
         </Toolbar>
       </Container>

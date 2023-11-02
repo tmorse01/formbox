@@ -18,10 +18,9 @@ import { logout } from "../helpers/formrequest";
 import { FormBoxContext } from "./../formbuilder";
 import { useNavigate } from "react-router-dom";
 
-export default function ProfileMenu() {
+export default function ProfileMenu({ open, setOpen }) {
   const { setSnackbar, dispatchFormAction, user, handleSetUser } =
     useContext(FormBoxContext);
-  const [open, setOpen] = useState(false);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
   const navigate = useNavigate();

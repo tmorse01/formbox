@@ -37,12 +37,13 @@ export default function SavedFormsModal({ getUserFormList, formName }) {
   const { listOfForms, user } = useContext(FormBoxContext);
 
   const navigate = useNavigate();
-
+  console.log({ open });
   const handleOpen = () => {
     getUserFormList();
     setOpen(true);
   };
   const handleClose = () => {
+    console.log("handleClose");
     setOpen(false);
   };
 

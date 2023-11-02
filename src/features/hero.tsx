@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Typography, Container, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-const Hero = () => {
+const Hero = ({ setLoginModalOpen }) => {
   const navigate = useNavigate();
 
   const handleExample = () => {
@@ -67,7 +67,11 @@ const Hero = () => {
         <Button variant="contained" color="primary" onClick={handleExample}>
           View an Example
         </Button>
-        <Button variant="contained" color="secondary">
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={setLoginModalOpen}
+        >
           Sign Up
         </Button>
       </Box>
