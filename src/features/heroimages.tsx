@@ -12,6 +12,7 @@ export default function HeroImages() {
       }&fit=crop&auto=format&dpr=2 2x`,
     };
   }
+  // TODO make dynamic to smaller screens
   return (
     <Box display="flex" sx={{ m: "auto" }}>
       <ImageList

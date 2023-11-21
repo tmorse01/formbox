@@ -8,6 +8,8 @@ const Hero = ({ setLoginModalOpen }) => {
   const handleExample = () => {
     navigate("/form/formBoxExample");
   };
+
+  // TODO make dynamic for smaller screens
   return (
     <Container
       maxWidth="md"
